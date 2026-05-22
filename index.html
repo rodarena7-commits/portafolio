@@ -1,0 +1,1093 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Rodrigo Arena — Desarrollador Full Stack</title>
+  <meta name="description" content="Portfolio de Rodrigo Arena - Desarrollador Full Stack, creador de apps web, bots de WhatsApp y soluciones empresariales." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg: #0a0a0f;
+      --bg2: #111118;
+      --bg3: #1a1a24;
+      --card: #16161f;
+      --card2: #1e1e2a;
+      --border: rgba(255,255,255,0.07);
+      --border2: rgba(255,255,255,0.12);
+      --text: #f0f0f8;
+      --text2: #9898b0;
+      --text3: #5a5a72;
+      --accent: #6c63ff;
+      --accent2: #8b5cf6;
+      --accent3: #a78bfa;
+      --green: #22d3a0;
+      --pink: #f472b6;
+      --orange: #fb923c;
+      --yellow: #fbbf24;
+      --blue: #38bdf8;
+      --red: #f87171;
+      --glow: rgba(108,99,255,0.15);
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    /* ─── SCROLLBAR ─── */
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: var(--bg); }
+    ::-webkit-scrollbar-thumb { background: var(--accent); border-radius: 3px; }
+
+    /* ─── NAV ─── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 1rem 2rem;
+      background: rgba(10,10,15,0.85);
+      backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--border);
+      transition: all 0.3s;
+    }
+    .nav-logo {
+      font-family: 'Space Grotesk', sans-serif;
+      font-weight: 700; font-size: 1.25rem;
+      background: linear-gradient(135deg, var(--accent3), var(--blue));
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .nav-links { display: flex; gap: 2rem; list-style: none; }
+    .nav-links a {
+      color: var(--text2); text-decoration: none; font-size: 0.9rem;
+      font-weight: 500; transition: color 0.2s;
+    }
+    .nav-links a:hover { color: var(--accent3); }
+    .nav-cta {
+      background: var(--accent); color: white; border: none;
+      padding: 0.5rem 1.25rem; border-radius: 8px;
+      font-size: 0.875rem; font-weight: 600; cursor: pointer;
+      text-decoration: none; transition: all 0.2s;
+    }
+    .nav-cta:hover { background: var(--accent2); transform: translateY(-1px); }
+    .nav-menu-btn { display: none; background: none; border: none; color: var(--text); cursor: pointer; font-size: 1.5rem; }
+    .nav-mobile { display: none; }
+
+    /* ─── HERO ─── */
+    .hero {
+      min-height: 100vh;
+      display: flex; align-items: center; justify-content: center;
+      padding: 8rem 2rem 4rem;
+      position: relative; overflow: hidden;
+    }
+    .hero-bg {
+      position: absolute; inset: 0; pointer-events: none;
+      background:
+        radial-gradient(ellipse 60% 50% at 20% 40%, rgba(108,99,255,0.12) 0%, transparent 60%),
+        radial-gradient(ellipse 40% 40% at 80% 60%, rgba(139,92,246,0.08) 0%, transparent 60%),
+        radial-gradient(ellipse 30% 30% at 50% 80%, rgba(56,189,248,0.06) 0%, transparent 60%);
+    }
+    .hero-grid {
+      position: absolute; inset: 0;
+      background-image:
+        linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px);
+      background-size: 60px 60px;
+    }
+    .hero-content {
+      max-width: 900px; width: 100%;
+      text-align: center; position: relative; z-index: 1;
+    }
+    .hero-badge {
+      display: inline-flex; align-items: center; gap: 0.5rem;
+      background: rgba(108,99,255,0.15); border: 1px solid rgba(108,99,255,0.3);
+      color: var(--accent3); padding: 0.4rem 1rem; border-radius: 99px;
+      font-size: 0.8rem; font-weight: 600; letter-spacing: 0.05em;
+      text-transform: uppercase; margin-bottom: 1.5rem;
+    }
+    .hero-badge::before { content: '●'; font-size: 0.5rem; animation: blink 2s infinite; }
+    @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.3} }
+    .hero-title {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: clamp(2.8rem, 7vw, 5.5rem);
+      font-weight: 800; line-height: 1.05; margin-bottom: 1.5rem;
+      letter-spacing: -0.02em;
+    }
+    .hero-title .name { color: var(--text); }
+    .hero-title .role {
+      background: linear-gradient(135deg, var(--accent3) 0%, var(--blue) 50%, var(--green) 100%);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      background-clip: text; display: block;
+    }
+    .hero-desc {
+      color: var(--text2); font-size: 1.1rem; max-width: 600px;
+      margin: 0 auto 2.5rem; line-height: 1.7;
+    }
+    .hero-actions {
+      display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; margin-bottom: 3.5rem;
+    }
+    .btn-primary {
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      color: white; border: none; padding: 0.85rem 2rem;
+      border-radius: 12px; font-size: 1rem; font-weight: 600;
+      cursor: pointer; text-decoration: none; transition: all 0.3s;
+      box-shadow: 0 0 30px rgba(108,99,255,0.3);
+    }
+    .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 0 40px rgba(108,99,255,0.5); }
+    .btn-secondary {
+      background: var(--card2); color: var(--text);
+      border: 1px solid var(--border2); padding: 0.85rem 2rem;
+      border-radius: 12px; font-size: 1rem; font-weight: 600;
+      cursor: pointer; text-decoration: none; transition: all 0.3s;
+    }
+    .btn-secondary:hover { border-color: var(--accent); color: var(--accent3); transform: translateY(-2px); }
+    .hero-stats {
+      display: flex; justify-content: center; gap: 3rem; flex-wrap: wrap;
+    }
+    .stat { text-align: center; }
+    .stat-num {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 2rem; font-weight: 800;
+      background: linear-gradient(135deg, var(--accent3), var(--blue));
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .stat-label { color: var(--text3); font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.08em; }
+
+    /* ─── SECTIONS ─── */
+    section { padding: 5rem 2rem; }
+    .section-inner { max-width: 1100px; margin: 0 auto; }
+    .section-tag {
+      display: inline-block; color: var(--accent3); font-size: 0.8rem;
+      font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase;
+      margin-bottom: 0.75rem;
+    }
+    .section-title {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: clamp(1.8rem, 4vw, 2.8rem);
+      font-weight: 700; margin-bottom: 1rem; letter-spacing: -0.02em;
+    }
+    .section-desc { color: var(--text2); font-size: 1rem; max-width: 600px; }
+
+    /* ─── ABOUT ─── */
+    .about-grid {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 3rem; align-items: center; margin-top: 3rem;
+    }
+    .about-text p { color: var(--text2); margin-bottom: 1rem; line-height: 1.8; }
+    .about-skills { display: flex; flex-wrap: wrap; gap: 0.6rem; margin-top: 1.5rem; }
+    .skill-chip {
+      background: var(--card2); border: 1px solid var(--border2);
+      color: var(--text2); padding: 0.35rem 0.9rem;
+      border-radius: 99px; font-size: 0.8rem; font-weight: 500;
+      transition: all 0.2s;
+    }
+    .skill-chip:hover { border-color: var(--accent); color: var(--accent3); }
+    .about-visual {
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: 24px; padding: 2rem; position: relative; overflow: hidden;
+    }
+    .about-visual::before {
+      content: '';
+      position: absolute; top: -50%; right: -20%;
+      width: 200px; height: 200px;
+      background: var(--glow); border-radius: 50%;
+    }
+    .timeline { position: relative; }
+    .timeline-item {
+      display: flex; gap: 1rem; margin-bottom: 1.5rem; position: relative;
+    }
+    .timeline-dot {
+      width: 10px; height: 10px; border-radius: 50%;
+      background: var(--accent); flex-shrink: 0; margin-top: 0.4rem;
+      box-shadow: 0 0 10px var(--accent);
+    }
+    .timeline-content { }
+    .timeline-title { font-weight: 600; font-size: 0.95rem; }
+    .timeline-sub { color: var(--text3); font-size: 0.8rem; margin-top: 0.2rem; }
+
+    /* ─── YOUTUBE ─── */
+    .youtube-card {
+      background: linear-gradient(135deg, #1a0a0a 0%, #1f0d1a 100%);
+      border: 1px solid rgba(255,0,0,0.2);
+      border-radius: 24px; padding: 3rem;
+      display: flex; align-items: center; gap: 3rem;
+      margin-top: 3rem; position: relative; overflow: hidden;
+      transition: all 0.3s; text-decoration: none; color: inherit;
+      flex-wrap: wrap;
+    }
+    .youtube-card:hover { border-color: rgba(255,0,0,0.5); transform: translateY(-3px); box-shadow: 0 20px 60px rgba(255,0,0,0.1); }
+    .youtube-card::before {
+      content: '';
+      position: absolute; top: -40%; right: -10%;
+      width: 300px; height: 300px;
+      background: radial-gradient(circle, rgba(255,0,0,0.08) 0%, transparent 60%);
+    }
+    .yt-icon {
+      width: 80px; height: 80px; flex-shrink: 0;
+      background: #ff0000; border-radius: 18px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 2.5rem; box-shadow: 0 0 30px rgba(255,0,0,0.4);
+    }
+    .yt-info { flex: 1; position: relative; z-index: 1; }
+    .yt-title { font-family: 'Space Grotesk', sans-serif; font-size: 1.6rem; font-weight: 700; margin-bottom: 0.5rem; }
+    .yt-desc { color: var(--text2); margin-bottom: 1rem; }
+    .yt-stats { display: flex; gap: 2rem; flex-wrap: wrap; }
+    .yt-stat { }
+    .yt-stat-num { font-size: 1.4rem; font-weight: 800; color: #ff0000; }
+    .yt-stat-label { color: var(--text3); font-size: 0.75rem; }
+    .yt-btn {
+      background: #ff0000; color: white; padding: 0.7rem 1.5rem;
+      border-radius: 99px; font-weight: 700; text-decoration: none;
+      display: inline-flex; align-items: center; gap: 0.5rem;
+      transition: all 0.2s; flex-shrink: 0;
+    }
+    .yt-btn:hover { background: #cc0000; transform: scale(1.05); }
+
+    /* ─── PROJECTS ─── */
+    .filter-row {
+      display: flex; gap: 0.75rem; flex-wrap: wrap; margin: 2rem 0;
+    }
+    .filter-btn {
+      background: var(--card2); border: 1px solid var(--border2);
+      color: var(--text2); padding: 0.4rem 1.1rem;
+      border-radius: 99px; font-size: 0.85rem; font-weight: 500;
+      cursor: pointer; transition: all 0.2s;
+    }
+    .filter-btn.active, .filter-btn:hover { background: var(--accent); border-color: var(--accent); color: white; }
+    .projects-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: 1.5rem;
+    }
+    .project-card {
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: 20px; overflow: hidden;
+      transition: all 0.3s; cursor: pointer;
+      position: relative;
+    }
+    .project-card:hover { border-color: var(--border2); transform: translateY(-4px); box-shadow: 0 20px 60px rgba(0,0,0,0.4); }
+    .project-card.hidden { display: none; }
+    .project-header {
+      padding: 1.5rem; display: flex; align-items: flex-start; gap: 1rem;
+    }
+    .project-logo {
+      width: 52px; height: 52px; border-radius: 14px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.6rem; flex-shrink: 0; font-weight: 700;
+    }
+    .project-meta { flex: 1; }
+    .project-name { font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 1.05rem; margin-bottom: 0.3rem; }
+    .project-owner { color: var(--text3); font-size: 0.75rem; }
+    .project-type {
+      font-size: 0.7rem; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 0.08em; padding: 0.25rem 0.6rem;
+      border-radius: 6px; align-self: flex-start; flex-shrink: 0;
+    }
+    .project-body { padding: 0 1.5rem 1.5rem; }
+    .project-desc { color: var(--text2); font-size: 0.875rem; line-height: 1.6; margin-bottom: 1rem; }
+    .project-tags { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-bottom: 1.25rem; }
+    .project-tag {
+      background: var(--bg3); border: 1px solid var(--border);
+      color: var(--text3); padding: 0.2rem 0.6rem;
+      border-radius: 6px; font-size: 0.72rem; font-weight: 500;
+    }
+    .project-links { display: flex; gap: 0.75rem; }
+    .project-link {
+      flex: 1; text-align: center; padding: 0.55rem;
+      border-radius: 10px; font-size: 0.8rem; font-weight: 600;
+      text-decoration: none; transition: all 0.2s;
+    }
+    .link-demo {
+      background: var(--accent); color: white;
+    }
+    .link-demo:hover { background: var(--accent2); }
+    .link-github {
+      background: var(--card2); color: var(--text2);
+      border: 1px solid var(--border2);
+    }
+    .link-github:hover { border-color: var(--accent); color: var(--accent3); }
+    .link-disabled {
+      background: var(--bg3); color: var(--text3);
+      border: 1px solid var(--border); pointer-events: none; opacity: 0.5;
+    }
+
+    /* ─── BOTS ─── */
+    .bots-grid {
+      display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 1.5rem; margin-top: 2rem;
+    }
+    .bot-card {
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: 20px; padding: 1.75rem;
+      transition: all 0.3s;
+    }
+    .bot-card:hover { border-color: var(--green); transform: translateY(-3px); box-shadow: 0 0 30px rgba(34,211,160,0.08); }
+    .bot-header { display: flex; align-items: center; gap: 1rem; margin-bottom: 1rem; }
+    .bot-icon {
+      width: 48px; height: 48px; border-radius: 14px;
+      background: linear-gradient(135deg, #075E54, #128C7E);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.4rem; box-shadow: 0 0 20px rgba(18,140,126,0.3);
+    }
+    .bot-name { font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 1rem; }
+    .bot-status {
+      display: inline-flex; align-items: center; gap: 0.35rem;
+      color: var(--green); font-size: 0.72rem; font-weight: 600;
+      text-transform: uppercase; letter-spacing: 0.05em;
+    }
+    .bot-status::before { content: '●'; font-size: 0.4rem; }
+    .bot-desc { color: var(--text2); font-size: 0.875rem; line-height: 1.6; margin-bottom: 1rem; }
+    .bot-features { list-style: none; display: flex; flex-direction: column; gap: 0.4rem; }
+    .bot-features li { color: var(--text3); font-size: 0.8rem; display: flex; align-items: center; gap: 0.5rem; }
+    .bot-features li::before { content: '→'; color: var(--green); }
+    .bot-tech { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-top: 1rem; }
+
+    /* ─── CONTACT ─── */
+    .contact-grid {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 3rem; margin-top: 3rem; align-items: start;
+    }
+    .contact-info p { color: var(--text2); margin-bottom: 1.5rem; line-height: 1.7; }
+    .contact-links { display: flex; flex-direction: column; gap: 1rem; }
+    .contact-link {
+      display: flex; align-items: center; gap: 1rem;
+      background: var(--card2); border: 1px solid var(--border2);
+      border-radius: 14px; padding: 1rem 1.25rem;
+      text-decoration: none; color: var(--text); transition: all 0.2s;
+    }
+    .contact-link:hover { border-color: var(--accent); background: var(--card); }
+    .contact-link-icon {
+      width: 40px; height: 40px; border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.2rem; flex-shrink: 0;
+    }
+    .contact-link-text { }
+    .contact-link-label { font-weight: 600; font-size: 0.875rem; }
+    .contact-link-val { color: var(--text3); font-size: 0.8rem; }
+    .contact-form { }
+    .form-group { margin-bottom: 1.25rem; }
+    .form-group label { display: block; color: var(--text2); font-size: 0.85rem; font-weight: 500; margin-bottom: 0.5rem; }
+    .form-group input, .form-group textarea {
+      width: 100%; background: var(--card2); border: 1px solid var(--border2);
+      color: var(--text); border-radius: 12px; padding: 0.75rem 1rem;
+      font-size: 0.9rem; font-family: inherit; transition: border-color 0.2s;
+      outline: none; resize: vertical;
+    }
+    .form-group input:focus, .form-group textarea:focus { border-color: var(--accent); }
+    .form-group textarea { min-height: 120px; }
+    .form-submit {
+      width: 100%; background: linear-gradient(135deg, var(--accent), var(--accent2));
+      color: white; border: none; padding: 0.85rem;
+      border-radius: 12px; font-size: 1rem; font-weight: 600;
+      cursor: pointer; transition: all 0.3s;
+    }
+    .form-submit:hover { transform: translateY(-2px); box-shadow: 0 0 30px rgba(108,99,255,0.4); }
+
+    /* ─── FOOTER ─── */
+    footer {
+      background: var(--bg2); border-top: 1px solid var(--border);
+      padding: 2.5rem; text-align: center;
+      color: var(--text3); font-size: 0.85rem;
+    }
+    footer a { color: var(--accent3); text-decoration: none; }
+    footer a:hover { text-decoration: underline; }
+
+    /* ─── ANIMATIONS ─── */
+    .fade-in {
+      opacity: 0; transform: translateY(20px);
+      transition: opacity 0.6s ease, transform 0.6s ease;
+    }
+    .fade-in.visible { opacity: 1; transform: translateY(0); }
+
+    /* ─── RESPONSIVE ─── */
+    @media (max-width: 768px) {
+      nav { padding: 1rem; }
+      .nav-links { display: none; }
+      .nav-cta { display: none; }
+      .nav-menu-btn { display: block; }
+      .nav-mobile.open {
+        display: flex; flex-direction: column; gap: 1rem;
+        position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+        background: var(--bg2); z-index: 99;
+        align-items: center; justify-content: center;
+      }
+      .nav-mobile a {
+        color: var(--text); text-decoration: none; font-size: 1.5rem; font-weight: 600;
+      }
+      .nav-close {
+        position: absolute; top: 1.5rem; right: 1.5rem;
+        background: none; border: none; color: var(--text); font-size: 2rem; cursor: pointer;
+      }
+      .about-grid { grid-template-columns: 1fr; }
+      .contact-grid { grid-template-columns: 1fr; }
+      .hero-stats { gap: 1.5rem; }
+      .youtube-card { flex-direction: column; text-align: center; }
+      .yt-stats { justify-content: center; }
+    }
+    @media (max-width: 480px) {
+      .projects-grid { grid-template-columns: 1fr; }
+      .bots-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav id="navbar">
+  <div class="nav-logo">RA.</div>
+  <ul class="nav-links">
+    <li><a href="#sobre-mi">Sobre mí</a></li>
+    <li><a href="#youtube">YouTube</a></li>
+    <li><a href="#proyectos">Proyectos</a></li>
+    <li><a href="#bots">Bots</a></li>
+    <li><a href="#contacto">Contacto</a></li>
+  </ul>
+  <a href="#contacto" class="nav-cta">Contactame</a>
+  <button class="nav-menu-btn" onclick="toggleMobileMenu()">☰</button>
+</nav>
+
+<!-- MOBILE MENU -->
+<div class="nav-mobile" id="mobileMenu">
+  <button class="nav-close" onclick="toggleMobileMenu()">✕</button>
+  <a href="#sobre-mi" onclick="toggleMobileMenu()">Sobre mí</a>
+  <a href="#youtube" onclick="toggleMobileMenu()">YouTube</a>
+  <a href="#proyectos" onclick="toggleMobileMenu()">Proyectos</a>
+  <a href="#bots" onclick="toggleMobileMenu()">Bots</a>
+  <a href="#contacto" onclick="toggleMobileMenu()">Contacto</a>
+  <a href="#contacto" class="nav-cta" onclick="toggleMobileMenu()">Contactame</a>
+</div>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-grid"></div>
+  <div class="hero-content fade-in visible">
+    <div class="hero-badge">Disponible para proyectos</div>
+    <h1 class="hero-title">
+      <span class="name">Rodrigo Arena</span>
+      <span class="role">Desarrollador Full Stack</span>
+    </h1>
+    <p class="hero-desc">
+      Creo aplicaciones web, bots inteligentes y sistemas empresariales.
+      Apasionado por convertir ideas en productos reales con React, Firebase, Node.js y más.
+    </p>
+    <div class="hero-actions">
+      <a href="#proyectos" class="btn-primary">Ver mis proyectos</a>
+      <a href="#contacto" class="btn-secondary">Contactarme</a>
+    </div>
+    <div class="hero-stats">
+      <div class="stat">
+        <div class="stat-num">12+</div>
+        <div class="stat-label">Proyectos</div>
+      </div>
+      <div class="stat">
+        <div class="stat-num">13.7K</div>
+        <div class="stat-label">Suscriptores YouTube</div>
+      </div>
+      <div class="stat">
+        <div class="stat-num">2</div>
+        <div class="stat-label">Cuentas GitHub</div>
+      </div>
+      <div class="stat">
+        <div class="stat-num">∞</div>
+        <div class="stat-label">Café por día</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SOBRE MÍ -->
+<section id="sobre-mi" style="background: var(--bg2); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border);">
+  <div class="section-inner">
+    <span class="section-tag fade-in">// about</span>
+    <h2 class="section-title fade-in">Sobre mí</h2>
+    <div class="about-grid fade-in">
+      <div class="about-text">
+        <p>
+          Soy un desarrollador autodidacta con experiencia creando productos digitales completos:
+          desde aplicaciones web con bases de datos en tiempo real hasta bots de WhatsApp con inteligencia artificial.
+        </p>
+        <p>
+          Me especializo en el ecosistema JavaScript/TypeScript, trabajando tanto en frontend como en backend.
+          Construí proyectos para comercios, familias, empresas y comunidades — cada uno con sus propios desafíos.
+        </p>
+        <p>
+          También comparto todo lo que aprendo en YouTube, donde tengo más de 13.700 suscriptores que siguen
+          tutoriales de programación y tecnología.
+        </p>
+        <div class="about-skills">
+          <span class="skill-chip">React</span>
+          <span class="skill-chip">Node.js</span>
+          <span class="skill-chip">Firebase</span>
+          <span class="skill-chip">Tailwind CSS</span>
+          <span class="skill-chip">JavaScript</span>
+          <span class="skill-chip">TypeScript</span>
+          <span class="skill-chip">Vite</span>
+          <span class="skill-chip">WhatsApp Bots</span>
+          <span class="skill-chip">Groq AI</span>
+          <span class="skill-chip">PWA</span>
+          <span class="skill-chip">Firestore</span>
+          <span class="skill-chip">Git / GitHub</span>
+          <span class="skill-chip">Render</span>
+          <span class="skill-chip">HTML / CSS</span>
+          <span class="skill-chip">MercadoLibre API</span>
+          <span class="skill-chip">Google Calendar API</span>
+        </div>
+      </div>
+      <div class="about-visual">
+        <div class="timeline">
+          <div class="timeline-item">
+            <div class="timeline-dot"></div>
+            <div class="timeline-content">
+              <div class="timeline-title">Desarrollo Full Stack</div>
+              <div class="timeline-sub">Apps web completas con React + Firebase</div>
+            </div>
+          </div>
+          <div class="timeline-item">
+            <div class="timeline-dot" style="background: var(--green); box-shadow: 0 0 10px var(--green);"></div>
+            <div class="timeline-content">
+              <div class="timeline-title">Bots de WhatsApp</div>
+              <div class="timeline-sub">Baileys + IA + Integración con Google Calendar</div>
+            </div>
+          </div>
+          <div class="timeline-item">
+            <div class="timeline-dot" style="background: var(--pink); box-shadow: 0 0 10px var(--pink);"></div>
+            <div class="timeline-content">
+              <div class="timeline-title">Sistemas Empresariales</div>
+              <div class="timeline-sub">Gestión de ventas, inventario, reportes</div>
+            </div>
+          </div>
+          <div class="timeline-item">
+            <div class="timeline-dot" style="background: var(--orange); box-shadow: 0 0 10px var(--orange);"></div>
+            <div class="timeline-content">
+              <div class="timeline-title">E-Commerce & Marketplaces</div>
+              <div class="timeline-sub">Tiendas online con MercadoLibre integrado</div>
+            </div>
+          </div>
+          <div class="timeline-item">
+            <div class="timeline-dot" style="background: #ff0000; box-shadow: 0 0 10px #ff0000;"></div>
+            <div class="timeline-content">
+              <div class="timeline-title">Creador de Contenido</div>
+              <div class="timeline-sub">13.700+ suscriptores en YouTube</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- YOUTUBE -->
+<section id="youtube">
+  <div class="section-inner">
+    <span class="section-tag fade-in">// content</span>
+    <h2 class="section-title fade-in">Canal de YouTube</h2>
+    <p class="section-desc fade-in">Comparto tutoriales de programación, proyectos y tecnología con una comunidad en crecimiento.</p>
+    <a href="https://www.youtube.com/@rodarena7" target="_blank" class="youtube-card fade-in">
+      <div class="yt-icon">▶</div>
+      <div class="yt-info">
+        <div class="yt-title">rodarena7</div>
+        <div class="yt-desc">Tutoriales de programación, apps web, bots y todo lo que construyo. Contenido para devs de habla hispana.</div>
+        <div class="yt-stats">
+          <div class="yt-stat">
+            <div class="yt-stat-num">13.7K+</div>
+            <div class="yt-stat-label">Suscriptores</div>
+          </div>
+          <div class="yt-stat">
+            <div class="yt-stat-num">React</div>
+            <div class="yt-stat-label">Firebase · Node.js</div>
+          </div>
+        </div>
+      </div>
+      <span class="yt-btn">▶ Ver canal</span>
+    </a>
+  </div>
+</section>
+
+<!-- PROYECTOS -->
+<section id="proyectos" style="background: var(--bg2); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border);">
+  <div class="section-inner">
+    <span class="section-tag fade-in">// projects</span>
+    <h2 class="section-title fade-in">Proyectos</h2>
+    <p class="section-desc fade-in">Aplicaciones web reales, en producción, usadas por personas reales.</p>
+    <div class="filter-row fade-in">
+      <button class="filter-btn active" onclick="filterProjects('all')">Todos</button>
+      <button class="filter-btn" onclick="filterProjects('app')">Apps Web</button>
+      <button class="filter-btn" onclick="filterProjects('ecommerce')">E-Commerce</button>
+      <button class="filter-btn" onclick="filterProjects('sistema')">Sistemas</button>
+      <button class="filter-btn" onclick="filterProjects('comunidad')">Comunidades</button>
+    </div>
+    <div class="projects-grid" id="projectsGrid">
+
+      <!-- SANDBOOK -->
+      <div class="project-card fade-in" data-type="app">
+        <div class="project-header">
+          <div class="project-logo" style="background: linear-gradient(135deg, #1e3a5f, #2563eb);">📚</div>
+          <div class="project-meta">
+            <div class="project-name">Sandbook</div>
+            <div class="project-owner">rodarena7-commits</div>
+          </div>
+          <div class="project-type" style="background: rgba(59,130,246,0.15); color: #60a5fa; border: 1px solid rgba(59,130,246,0.3);">App</div>
+        </div>
+        <div class="project-body">
+          <p class="project-desc">Red social de libros con biblioteca personal, planes de lectura, reseñas, favoritos, escritores, tutorial onboarding y más.</p>
+          <div class="project-tags">
+            <span class="project-tag">React</span>
+            <span class="project-tag">Firebase</span>
+            <span class="project-tag">Tailwind</span>
+            <span class="project-tag">PWA</span>
+            <span class="project-tag">OpenLibrary</span>
+          </div>
+          <div class="project-links">
+            <a href="https://sandbook-web.onrender.com" target="_blank" class="project-link link-demo">🚀 Ver demo</a>
+            <a href="https://github.com/rodarena7-commits/sandbook" target="_blank" class="project-link link-github">GitHub</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- SYSTEMPRESAS -->
+      <div class="project-card fade-in" data-type="sistema">
+        <div class="project-header">
+          <div class="project-logo" style="background: linear-gradient(135deg, #1a1a2e, #3b82f6);">🏪</div>
+          <div class="project-meta">
+            <div class="project-name">Systempresas</div>
+            <div class="project-owner">Ssteier2016</div>
+          </div>
+          <div class="project-type" style="background: rgba(251,191,36,0.15); color: #fbbf24; border: 1px solid rgba(251,191,36,0.3);">Sistema</div>
+        </div>
+        <div class="project-body">
+          <p class="project-desc">Sistema de gestión empresarial completo: ventas, inventario, historial, turnos, clientes. Multi-auth con Google, Email y anónimo.</p>
+          <div class="project-tags">
+            <span class="project-tag">Firebase</span>
+            <span class="project-tag">PWA</span>
+            <span class="project-tag">Firestore</span>
+            <span class="project-tag">Multi-Auth</span>
+            <span class="project-tag">Tailwind</span>
+          </div>
+          <div class="project-links">
+            <a href="https://systempresas.onrender.com" target="_blank" class="project-link link-demo">🚀 Ver demo</a>
+            <a href="https://github.com/Ssteier2016/Systempresas" target="_blank" class="project-link link-github">GitHub</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- OUTLET ROMA -->
+      <div class="project-card fade-in" data-type="ecommerce">
+        <div class="project-header">
+          <div class="project-logo" style="background: linear-gradient(135deg, #3d0000, #dc2626);">👗</div>
+          <div class="project-meta">
+            <div class="project-name">Outlet Roma</div>
+            <div class="project-owner">rodarena7-commits</div>
+          </div>
+          <div class="project-type" style="background: rgba(220,38,38,0.15); color: #f87171; border: 1px solid rgba(220,38,38,0.3);">E-Commerce</div>
+        </div>
+        <div class="project-body">
+          <p class="project-desc">Tienda online de indumentaria con chat, publicación de productos, panel admin, compresión de imágenes y notificaciones.</p>
+          <div class="project-tags">
+            <span class="project-tag">React</span>
+            <span class="project-tag">Firebase</span>
+            <span class="project-tag">Chat</span>
+            <span class="project-tag">Admin</span>
+            <span class="project-tag">Vite</span>
+          </div>
+          <div class="project-links">
+            <a href="https://outlet-roma.onrender.com" target="_blank" class="project-link link-demo">🚀 Ver demo</a>
+            <a href="https://github.com/rodarena7-commits/outlet-Roma" target="_blank" class="project-link link-github">GitHub</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- PIJAMAS -->
+      <div class="project-card fade-in" data-type="ecommerce">
+        <div class="project-header">
+          <div class="project-logo" style="background: linear-gradient(135deg, #2d1b69, #7c3aed);">🛍️</div>
+          <div class="project-meta">
+            <div class="project-name">Pijamas Store</div>
+            <div class="project-owner">rodarena7-commits</div>
+          </div>
+          <div class="project-type" style="background: rgba(220,38,38,0.15); color: #f87171; border: 1px solid rgba(220,38,38,0.3);">E-Commerce</div>
+        </div>
+        <div class="project-body">
+          <p class="project-desc">Tienda online de pijamas y ropa de dormir con catálogo, carrito de compras y sistema de pedidos.</p>
+          <div class="project-tags">
+            <span class="project-tag">React</span>
+            <span class="project-tag">Firebase</span>
+            <span class="project-tag">Tailwind</span>
+          </div>
+          <div class="project-links">
+            <a href="https://pijamas-store.onrender.com" target="_blank" class="project-link link-demo">🚀 Ver demo</a>
+            <a href="https://github.com/rodarena7-commits/pijamas" target="_blank" class="project-link link-github">GitHub</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- WALLWT FAMILY -->
+      <div class="project-card fade-in" data-type="app">
+        <div class="project-header">
+          <div class="project-logo" style="background: linear-gradient(135deg, #0f4c1f, #16a34a);">👨‍👩‍👧‍👦</div>
+          <div class="project-meta">
+            <div class="project-name">Wallwt Family</div>
+            <div class="project-owner">Ssteier2016</div>
+          </div>
+          <div class="project-type" style="background: rgba(34,211,160,0.15); color: #22d3a0; border: 1px solid rgba(34,211,160,0.3);">App</div>
+        </div>
+        <div class="project-body">
+          <p class="project-desc">App familiar de finanzas personales: presupuestos, gastos compartidos, metas de ahorro y seguimiento de inversiones.</p>
+          <div class="project-tags">
+            <span class="project-tag">React</span>
+            <span class="project-tag">Firebase</span>
+            <span class="project-tag">Finanzas</span>
+          </div>
+          <div class="project-links">
+            <a href="https://wallwtfamily.onrender.com" target="_blank" class="project-link link-demo">🚀 Ver demo</a>
+            <a href="https://github.com/Ssteier2016/wallwtfamily" target="_blank" class="project-link link-github">GitHub</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- GUIARCAPITAL -->
+      <div class="project-card fade-in" data-type="app">
+        <div class="project-header">
+          <div class="project-logo" style="background: linear-gradient(135deg, #1a2744, #3b82f6);">📈</div>
+          <div class="project-meta">
+            <div class="project-name">GuiarCapital</div>
+            <div class="project-owner">Ssteier2016</div>
+          </div>
+          <div class="project-type" style="background: rgba(59,130,246,0.15); color: #60a5fa; border: 1px solid rgba(59,130,246,0.3);">App</div>
+        </div>
+        <div class="project-body">
+          <p class="project-desc">Plataforma de inversiones y finanzas con cotizaciones en tiempo real, simuladores y gestión de cartera.</p>
+          <div class="project-tags">
+            <span class="project-tag">React</span>
+            <span class="project-tag">Firebase</span>
+            <span class="project-tag">APIs Financieras</span>
+          </div>
+          <div class="project-links">
+            <a href="https://guiarcapital.onrender.com" target="_blank" class="project-link link-demo">🚀 Ver demo</a>
+            <a href="https://github.com/Ssteier2016/guiarcapital" target="_blank" class="project-link link-github">GitHub</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- BITCOINER -->
+      <div class="project-card fade-in" data-type="app">
+        <div class="project-header">
+          <div class="project-logo" style="background: linear-gradient(135deg, #3d2000, #f97316);">₿</div>
+          <div class="project-meta">
+            <div class="project-name">Bitcoiner</div>
+            <div class="project-owner">Ssteier2016</div>
+          </div>
+          <div class="project-type" style="background: rgba(251,146,60,0.15); color: #fb923c; border: 1px solid rgba(251,146,60,0.3);">App</div>
+        </div>
+        <div class="project-body">
+          <p class="project-desc">Dashboard de criptomonedas con seguimiento de precios, portfolio, alertas y análisis del mercado crypto.</p>
+          <div class="project-tags">
+            <span class="project-tag">JavaScript</span>
+            <span class="project-tag">Crypto API</span>
+            <span class="project-tag">Firebase</span>
+          </div>
+          <div class="project-links">
+            <a href="https://bitcoiner-ssteier.onrender.com" target="_blank" class="project-link link-demo">🚀 Ver demo</a>
+            <a href="https://github.com/Ssteier2016/bitcoiner" target="_blank" class="project-link link-github">GitHub</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- YOUNG LIFE PARAGUAY -->
+      <div class="project-card fade-in" data-type="comunidad">
+        <div class="project-header">
+          <div class="project-logo" style="background: linear-gradient(135deg, #1a0a2e, #7c3aed);">✝️</div>
+          <div class="project-meta">
+            <div class="project-name">Young Life Paraguay</div>
+            <div class="project-owner">Ssteier2016</div>
+          </div>
+          <div class="project-type" style="background: rgba(167,139,250,0.15); color: #a78bfa; border: 1px solid rgba(167,139,250,0.3);">Comunidad</div>
+        </div>
+        <div class="project-body">
+          <p class="project-desc">Plataforma web para la organización Young Life Paraguay: eventos, noticias, contacto y comunidad juvenil.</p>
+          <div class="project-tags">
+            <span class="project-tag">HTML</span>
+            <span class="project-tag">CSS</span>
+            <span class="project-tag">JavaScript</span>
+          </div>
+          <div class="project-links">
+            <a href="https://younglifeparaguay.onrender.com" target="_blank" class="project-link link-demo">🚀 Ver demo</a>
+            <a href="https://github.com/Ssteier2016/younglifeparaguay" target="_blank" class="project-link link-github">GitHub</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- CHESS GAME -->
+      <div class="project-card fade-in" data-type="app">
+        <div class="project-header">
+          <div class="project-logo" style="background: linear-gradient(135deg, #1a1a1a, #374151);">♟️</div>
+          <div class="project-meta">
+            <div class="project-name">Chess Game</div>
+            <div class="project-owner">Ssteier2016</div>
+          </div>
+          <div class="project-type" style="background: rgba(34,211,160,0.15); color: #22d3a0; border: 1px solid rgba(34,211,160,0.3);">App</div>
+        </div>
+        <div class="project-body">
+          <p class="project-desc">Juego de ajedrez online con tablero interactivo, validación de movimientos, modo multijugador y diseño responsivo.</p>
+          <div class="project-tags">
+            <span class="project-tag">JavaScript</span>
+            <span class="project-tag">Canvas</span>
+            <span class="project-tag">HTML/CSS</span>
+          </div>
+          <div class="project-links">
+            <a href="https://chess-game-ssteier.onrender.com" target="_blank" class="project-link link-demo">🚀 Ver demo</a>
+            <a href="https://github.com/Ssteier2016/chess-game" target="_blank" class="project-link link-github">GitHub</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- AUTOMATIZACION -->
+      <div class="project-card fade-in" data-type="sistema">
+        <div class="project-header">
+          <div class="project-logo" style="background: linear-gradient(135deg, #0f2027, #2c5364);">⚙️</div>
+          <div class="project-meta">
+            <div class="project-name">Automatización</div>
+            <div class="project-owner">Ssteier2016</div>
+          </div>
+          <div class="project-type" style="background: rgba(251,191,36,0.15); color: #fbbf24; border: 1px solid rgba(251,191,36,0.3);">Sistema</div>
+        </div>
+        <div class="project-body">
+          <p class="project-desc">Herramientas de automatización de tareas y procesos para ahorrar tiempo en tareas repetitivas del día a día.</p>
+          <div class="project-tags">
+            <span class="project-tag">Node.js</span>
+            <span class="project-tag">Scripts</span>
+            <span class="project-tag">APIs</span>
+          </div>
+          <div class="project-links">
+            <a href="#" class="project-link link-github" onclick="return false;" style="flex:1">Ver en GitHub</a>
+            <a href="https://github.com/Ssteier2016/automatizacion" target="_blank" class="project-link link-github">GitHub</a>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- BOTS -->
+<section id="bots">
+  <div class="section-inner">
+    <span class="section-tag fade-in">// bots</span>
+    <h2 class="section-title fade-in">Bots de WhatsApp</h2>
+    <p class="section-desc fade-in">Bots inteligentes con IA, integración con Google Calendar, reportes automáticos y comandos personalizados.</p>
+    <div class="bots-grid">
+
+      <div class="bot-card fade-in">
+        <div class="bot-header">
+          <div class="bot-icon">🤖</div>
+          <div>
+            <div class="bot-name">SandboxAI Bot</div>
+            <div class="bot-status">Activo</div>
+          </div>
+        </div>
+        <p class="bot-desc">Bot de WhatsApp con inteligencia artificial usando Groq LLaMA. Responde preguntas, procesa texto y aprende del contexto de la conversación.</p>
+        <ul class="bot-features">
+          <li>Respuestas con IA (Groq LLaMA 3)</li>
+          <li>Contexto de conversación persistente</li>
+          <li>Comandos de administración</li>
+          <li>Multi-grupo y mensajes privados</li>
+        </ul>
+        <div class="bot-tech">
+          <span class="skill-chip" style="font-size: 0.72rem;">Baileys</span>
+          <span class="skill-chip" style="font-size: 0.72rem;">Groq AI</span>
+          <span class="skill-chip" style="font-size: 0.72rem;">Node.js</span>
+          <span class="skill-chip" style="font-size: 0.72rem;">Render</span>
+        </div>
+      </div>
+
+      <div class="bot-card fade-in">
+        <div class="bot-header">
+          <div class="bot-icon">🛒</div>
+          <div>
+            <div class="bot-name">Bot Descuentos</div>
+            <div class="bot-status">Activo</div>
+          </div>
+        </div>
+        <p class="bot-desc">Bot de WhatsApp que busca y notifica descuentos y promociones de forma automática. Integrado con MercadoLibre para afiliados.</p>
+        <ul class="bot-features">
+          <li>Notificaciones automáticas de ofertas</li>
+          <li>Afiliado MercadoLibre integrado</li>
+          <li>Links de compra personalizados</li>
+          <li>Reportes diarios de descuentos</li>
+        </ul>
+        <div class="bot-tech">
+          <span class="skill-chip" style="font-size: 0.72rem;">Baileys</span>
+          <span class="skill-chip" style="font-size: 0.72rem;">MercadoLibre API</span>
+          <span class="skill-chip" style="font-size: 0.72rem;">Node.js</span>
+          <span class="skill-chip" style="font-size: 0.72rem;">Cron Jobs</span>
+        </div>
+      </div>
+
+      <div class="bot-card fade-in">
+        <div class="bot-header">
+          <div class="bot-icon">💎</div>
+          <div>
+            <div class="bot-name">Showroom Derek</div>
+            <div class="bot-status">Activo</div>
+          </div>
+        </div>
+        <p class="bot-desc">Bot de gestión para showroom de ropa. Maneja agenda, reservas, reportes financieros diarios y comunicación con clientes vía WhatsApp.</p>
+        <ul class="bot-features">
+          <li>Agenda con Google Calendar</li>
+          <li>Reporte financiero diario (18:00 hs)</li>
+          <li>Resumen de agenda (10:00 y 20:00 hs)</li>
+          <li>Panel de administración multi-admin</li>
+        </ul>
+        <div class="bot-tech">
+          <span class="skill-chip" style="font-size: 0.72rem;">Baileys</span>
+          <span class="skill-chip" style="font-size: 0.72rem;">Google Calendar API</span>
+          <span class="skill-chip" style="font-size: 0.72rem;">Node.js</span>
+          <span class="skill-chip" style="font-size: 0.72rem;">node-cron</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contacto" style="background: var(--bg2); border-top: 1px solid var(--border);">
+  <div class="section-inner">
+    <span class="section-tag fade-in">// contact</span>
+    <h2 class="section-title fade-in">Contacto</h2>
+    <p class="section-desc fade-in">¿Tenés un proyecto en mente? Hablemos.</p>
+    <div class="contact-grid fade-in">
+      <div class="contact-info">
+        <p>Estoy disponible para proyectos freelance, colaboraciones y consultoría.
+        Si tenés una idea o necesitás ayuda con tu app, no dudes en escribirme.</p>
+        <div class="contact-links">
+          <a href="mailto:rodrigo.n.arena@hotmail.com" class="contact-link">
+            <div class="contact-link-icon" style="background: rgba(59,130,246,0.15);">📧</div>
+            <div class="contact-link-text">
+              <div class="contact-link-label">Email</div>
+              <div class="contact-link-val">rodrigo.n.arena@hotmail.com</div>
+            </div>
+          </a>
+          <a href="https://github.com/rodarena7-commits" target="_blank" class="contact-link">
+            <div class="contact-link-icon" style="background: rgba(255,255,255,0.05);">🐙</div>
+            <div class="contact-link-text">
+              <div class="contact-link-label">GitHub Principal</div>
+              <div class="contact-link-val">@rodarena7-commits</div>
+            </div>
+          </a>
+          <a href="https://github.com/Ssteier2016" target="_blank" class="contact-link">
+            <div class="contact-link-icon" style="background: rgba(255,255,255,0.05);">🐙</div>
+            <div class="contact-link-text">
+              <div class="contact-link-label">GitHub Secundario</div>
+              <div class="contact-link-val">@Ssteier2016</div>
+            </div>
+          </a>
+          <a href="https://www.youtube.com/@rodarena7" target="_blank" class="contact-link">
+            <div class="contact-link-icon" style="background: rgba(255,0,0,0.1);">▶</div>
+            <div class="contact-link-text">
+              <div class="contact-link-label">YouTube</div>
+              <div class="contact-link-val">@rodarena7 · 13.7K suscriptores</div>
+            </div>
+          </a>
+        </div>
+      </div>
+      <form class="contact-form" onsubmit="sendEmail(event)">
+        <div class="form-group">
+          <label>Nombre</label>
+          <input type="text" id="contactName" placeholder="Tu nombre" required />
+        </div>
+        <div class="form-group">
+          <label>Email</label>
+          <input type="email" id="contactEmail" placeholder="tu@email.com" required />
+        </div>
+        <div class="form-group">
+          <label>Mensaje</label>
+          <textarea id="contactMsg" placeholder="Contame sobre tu proyecto..." required></textarea>
+        </div>
+        <button type="submit" class="form-submit" id="submitBtn">Enviar mensaje</button>
+      </form>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <p>
+    Hecho con ☕ por <a href="https://github.com/rodarena7-commits">Rodrigo Arena</a> ·
+    <a href="https://github.com/rodarena7-commits" target="_blank">GitHub</a> ·
+    <a href="https://www.youtube.com/@rodarena7" target="_blank">YouTube</a>
+  </p>
+  <p style="margin-top: 0.5rem; font-size: 0.75rem;">
+    © 2026 Rodrigo Arena · Desarrollador Full Stack
+  </p>
+</footer>
+
+<script>
+  // ─── MOBILE MENU ───
+  function toggleMobileMenu() {
+    document.getElementById('mobileMenu').classList.toggle('open');
+  }
+
+  // ─── SCROLL ANIMATIONS ───
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) { e.target.classList.add('visible'); }
+    });
+  }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+  document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+
+  // ─── NAV SHADOW ON SCROLL ───
+  window.addEventListener('scroll', () => {
+    const nav = document.getElementById('navbar');
+    if (window.scrollY > 50) {
+      nav.style.boxShadow = '0 4px 30px rgba(0,0,0,0.4)';
+    } else {
+      nav.style.boxShadow = 'none';
+    }
+  });
+
+  // ─── PROJECT FILTER ───
+  function filterProjects(type) {
+    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+    event.target.classList.add('active');
+    document.querySelectorAll('.project-card').forEach(card => {
+      if (type === 'all' || card.dataset.type === type) {
+        card.classList.remove('hidden');
+      } else {
+        card.classList.add('hidden');
+      }
+    });
+  }
+
+  // ─── CONTACT FORM ───
+  function sendEmail(e) {
+    e.preventDefault();
+    const name = document.getElementById('contactName').value;
+    const email = document.getElementById('contactEmail').value;
+    const msg = document.getElementById('contactMsg').value;
+    const btn = document.getElementById('submitBtn');
+    const subject = encodeURIComponent(`Portfolio - Mensaje de ${name}`);
+    const body = encodeURIComponent(`Nombre: ${name}\nEmail: ${email}\n\nMensaje:\n${msg}`);
+    window.open(`mailto:rodrigo.n.arena@hotmail.com?subject=${subject}&body=${body}`);
+    btn.textContent = '✓ ¡Enviado!';
+    btn.style.background = 'linear-gradient(135deg, #16a34a, #22d3a0)';
+    setTimeout(() => {
+      btn.textContent = 'Enviar mensaje';
+      btn.style.background = '';
+    }, 3000);
+  }
+
+  // ─── STAGGER ANIMATION FOR CARDS ───
+  document.querySelectorAll('.project-card, .bot-card').forEach((card, i) => {
+    card.style.transitionDelay = `${i * 0.05}s`;
+  });
+</script>
+</body>
+</html>
