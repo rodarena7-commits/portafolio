@@ -435,6 +435,126 @@
       .projects-grid { grid-template-columns: 1fr; }
       .bots-grid { grid-template-columns: 1fr; }
     }
+
+    /* ─── ADMIN MODAL ─── */
+    .admin-overlay {
+      position: fixed; inset: 0; z-index: 1000;
+      background: rgba(10, 10, 15, 0.75);
+      backdrop-filter: blur(8px);
+      display: flex; align-items: center; justify-content: center;
+      opacity: 0; pointer-events: none;
+      transition: opacity 0.3s ease;
+    }
+    .admin-overlay.open {
+      opacity: 1; pointer-events: all;
+    }
+    .admin-modal {
+      background: rgba(22, 22, 31, 0.85);
+      border: 1px solid var(--border2);
+      border-radius: 24px;
+      width: 90%; max-width: 500px;
+      max-height: 85vh; overflow-y: auto;
+      padding: 2.5rem;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5), 0 0 40px rgba(108, 99, 255, 0.1);
+      backdrop-filter: blur(20px);
+      transform: translateY(20px);
+      transition: transform 0.3s ease;
+      position: relative;
+    }
+    .admin-overlay.open .admin-modal {
+      transform: translateY(0);
+    }
+    .admin-header {
+      display: flex; justify-content: space-between; align-items: center;
+      margin-bottom: 2rem; border-bottom: 1px solid var(--border);
+      padding-bottom: 1rem;
+    }
+    .admin-title {
+      font-family: 'Space Grotesk', sans-serif;
+      font-weight: 700; font-size: 1.5rem;
+      background: linear-gradient(135deg, var(--accent3), var(--blue));
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .admin-close {
+      background: none; border: none; color: var(--text2);
+      font-size: 1.5rem; cursor: pointer; transition: color 0.2s;
+    }
+    .admin-close:hover { color: var(--red); }
+    .admin-field { margin-bottom: 1.5rem; }
+    .admin-field label {
+      display: block; color: var(--text2); font-size: 0.85rem;
+      font-weight: 600; margin-bottom: 0.5rem; text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    .admin-input, .admin-select {
+      width: 100%; background: var(--card2); border: 1px solid var(--border2);
+      color: var(--text); border-radius: 12px; padding: 0.75rem 1rem;
+      font-size: 0.9rem; font-family: inherit; transition: border-color 0.2s;
+      outline: none;
+    }
+    .admin-input:focus, .admin-select:focus { border-color: var(--accent); }
+    .admin-preview-row {
+      display: flex; align-items: center; gap: 1.5rem;
+      background: var(--bg2); border-radius: 16px;
+      padding: 1.2rem; border: 1px solid var(--border);
+    }
+    .admin-preview-logo {
+      width: 64px; height: 64px; border-radius: 16px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 2rem; font-weight: 700; flex-shrink: 0;
+      background: linear-gradient(135deg, #1e3a5f, #2563eb);
+      overflow: hidden;
+    }
+    .admin-preview-logo img {
+      width: 100%; height: 100%; object-fit: cover;
+    }
+    .admin-preview-info {
+      font-size: 0.85rem; color: var(--text2);
+    }
+    .admin-btn-group {
+      display: flex; gap: 1rem; margin-top: 2rem;
+    }
+    .admin-btn {
+      flex: 1; padding: 0.85rem; border-radius: 12px;
+      font-weight: 600; cursor: pointer; transition: all 0.3s;
+      border: none; text-align: center;
+    }
+    .admin-btn-save {
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      color: white; box-shadow: 0 0 20px rgba(108, 99, 255, 0.3);
+    }
+    .admin-btn-save:hover {
+      transform: translateY(-2px); box-shadow: 0 0 35px rgba(108, 99, 255, 0.5);
+    }
+    .admin-btn-delete {
+      background: rgba(248, 113, 113, 0.1); color: var(--red);
+      border: 1px solid rgba(248, 113, 113, 0.2);
+    }
+    .admin-btn-delete:hover {
+      background: rgba(248, 113, 113, 0.2); transform: translateY(-2px);
+    }
+    .admin-fb-trigger {
+      display: block; width: 100%; text-align: center; margin-top: 1.5rem;
+      background: none; border: none; color: var(--text3); font-size: 0.8rem;
+      cursor: pointer; text-decoration: underline; transition: color 0.2s;
+    }
+    .admin-fb-trigger:hover { color: var(--accent3); }
+    .admin-fb-panel {
+      margin-top: 1rem; border-top: 1px solid var(--border);
+      padding-top: 1rem; display: none;
+    }
+    .admin-fb-panel.visible { display: block; }
+    .admin-fb-panel p {
+      font-size: 0.8rem; color: var(--text2); margin-bottom: 0.8rem;
+      line-height: 1.5;
+    }
+    .admin-fb-code {
+      background: #090d16; color: #a78bfa; font-family: monospace;
+      padding: 0.8rem; border-radius: 8px; font-size: 0.75rem;
+      overflow-x: auto; border: 1px solid var(--border);
+      margin-bottom: 1rem; display: block; white-space: pre;
+    }
   </style>
 </head>
 <body>
@@ -471,7 +591,7 @@
   <div class="hero-content fade-in visible">
     <div class="hero-badge">Disponible para proyectos</div>
     <h1 class="hero-title">
-      <span class="name">Rodrigo Arena</span>
+      <span class="name"><span onclick="handleRodrigoClick(event)" style="cursor: pointer; user-select: none;">Rodrigo</span> Arena</span>
       <span class="role">Desarrollador Full Stack</span>
     </h1>
     <p class="hero-desc">
@@ -619,15 +739,15 @@
     <p class="section-desc fade-in">Aplicaciones web reales, en producción, usadas por personas reales.</p>
     <div class="filter-row fade-in">
       <button class="filter-btn active" onclick="filterProjects('all')">Todos</button>
-      <button class="filter-btn" onclick="filterProjects('app')">Apps Web</button>
       <button class="filter-btn" onclick="filterProjects('ecommerce')">E-Commerce</button>
+      <button class="filter-btn" onclick="filterProjects('bot')">Bots</button>
+      <button class="filter-btn" onclick="filterProjects('app')">Apps Web</button>
       <button class="filter-btn" onclick="filterProjects('sistema')">Sistemas</button>
-      <button class="filter-btn" onclick="filterProjects('comunidad')">Comunidades</button>
     </div>
     <div class="projects-grid" id="projectsGrid">
 
       <!-- SANDBOOK -->
-      <div class="project-card fade-in" data-type="app">
+      <div class="project-card fade-in" data-type="app" data-project="sandbook">
         <div class="project-header">
           <div class="project-logo" style="background: linear-gradient(135deg, #1e3a5f, #2563eb);">📚</div>
           <div class="project-meta">
@@ -646,14 +766,14 @@
             <span class="project-tag">OpenLibrary</span>
           </div>
           <div class="project-links">
-            <a href="https://sandbook-web.onrender.com" target="_blank" class="project-link link-demo">🚀 Ver demo</a>
+            <a href="https://sandbook-web.onrender.com" target="_blank" class="project-link link-demo project-app-btn">🚀 Ver App</a>
             <a href="https://github.com/rodarena7-commits/sandbook" target="_blank" class="project-link link-github">GitHub</a>
           </div>
         </div>
       </div>
 
       <!-- SYSTEMPRESAS -->
-      <div class="project-card fade-in" data-type="sistema">
+      <div class="project-card fade-in" data-type="sistema" data-project="systempresas">
         <div class="project-header">
           <div class="project-logo" style="background: linear-gradient(135deg, #1a1a2e, #3b82f6);">🏪</div>
           <div class="project-meta">
@@ -672,14 +792,14 @@
             <span class="project-tag">Tailwind</span>
           </div>
           <div class="project-links">
-            <a href="https://systempresas.onrender.com" target="_blank" class="project-link link-demo">🚀 Ver demo</a>
+            <a href="https://systempresas.onrender.com" target="_blank" class="project-link link-demo project-app-btn">🚀 Ver App</a>
             <a href="https://github.com/Ssteier2016/Systempresas" target="_blank" class="project-link link-github">GitHub</a>
           </div>
         </div>
       </div>
 
       <!-- OUTLET ROMA -->
-      <div class="project-card fade-in" data-type="ecommerce">
+      <div class="project-card fade-in" data-type="ecommerce" data-project="outlet-roma">
         <div class="project-header">
           <div class="project-logo" style="background: linear-gradient(135deg, #3d0000, #dc2626);">👗</div>
           <div class="project-meta">
@@ -698,14 +818,14 @@
             <span class="project-tag">Vite</span>
           </div>
           <div class="project-links">
-            <a href="https://outlet-roma.onrender.com" target="_blank" class="project-link link-demo">🚀 Ver demo</a>
+            <a href="https://outlet-roma.onrender.com" target="_blank" class="project-link link-demo project-app-btn">🚀 Ver App</a>
             <a href="https://github.com/rodarena7-commits/outlet-Roma" target="_blank" class="project-link link-github">GitHub</a>
           </div>
         </div>
       </div>
 
       <!-- PIJAMAS -->
-      <div class="project-card fade-in" data-type="ecommerce">
+      <div class="project-card fade-in" data-type="ecommerce" data-project="pijamas">
         <div class="project-header">
           <div class="project-logo" style="background: linear-gradient(135deg, #2d1b69, #7c3aed);">🛍️</div>
           <div class="project-meta">
@@ -722,14 +842,14 @@
             <span class="project-tag">Tailwind</span>
           </div>
           <div class="project-links">
-            <a href="https://pijamas-store.onrender.com" target="_blank" class="project-link link-demo">🚀 Ver demo</a>
+            <a href="https://pijamas-store.onrender.com" target="_blank" class="project-link link-demo project-app-btn">🚀 Ver App</a>
             <a href="https://github.com/rodarena7-commits/pijamas" target="_blank" class="project-link link-github">GitHub</a>
           </div>
         </div>
       </div>
 
       <!-- WALLWT FAMILY -->
-      <div class="project-card fade-in" data-type="app">
+      <div class="project-card fade-in" data-type="app" data-project="wallwtfamily">
         <div class="project-header">
           <div class="project-logo" style="background: linear-gradient(135deg, #0f4c1f, #16a34a);">👨‍👩‍👧‍👦</div>
           <div class="project-meta">
@@ -746,14 +866,14 @@
             <span class="project-tag">Finanzas</span>
           </div>
           <div class="project-links">
-            <a href="https://wallwtfamily.onrender.com" target="_blank" class="project-link link-demo">🚀 Ver demo</a>
+            <a href="https://wallwtfamily.onrender.com" target="_blank" class="project-link link-demo project-app-btn">🚀 Ver App</a>
             <a href="https://github.com/Ssteier2016/wallwtfamily" target="_blank" class="project-link link-github">GitHub</a>
           </div>
         </div>
       </div>
 
       <!-- GUIARCAPITAL -->
-      <div class="project-card fade-in" data-type="app">
+      <div class="project-card fade-in" data-type="app" data-project="guiarcapital">
         <div class="project-header">
           <div class="project-logo" style="background: linear-gradient(135deg, #1a2744, #3b82f6);">📈</div>
           <div class="project-meta">
@@ -770,14 +890,14 @@
             <span class="project-tag">APIs Financieras</span>
           </div>
           <div class="project-links">
-            <a href="https://guiarcapital.onrender.com" target="_blank" class="project-link link-demo">🚀 Ver demo</a>
+            <a href="https://guiarcapital.onrender.com" target="_blank" class="project-link link-demo project-app-btn">🚀 Ver App</a>
             <a href="https://github.com/Ssteier2016/guiarcapital" target="_blank" class="project-link link-github">GitHub</a>
           </div>
         </div>
       </div>
 
       <!-- BITCOINER -->
-      <div class="project-card fade-in" data-type="app">
+      <div class="project-card fade-in" data-type="app" data-project="bitcoiner">
         <div class="project-header">
           <div class="project-logo" style="background: linear-gradient(135deg, #3d2000, #f97316);">₿</div>
           <div class="project-meta">
@@ -794,21 +914,21 @@
             <span class="project-tag">Firebase</span>
           </div>
           <div class="project-links">
-            <a href="https://bitcoiner-ssteier.onrender.com" target="_blank" class="project-link link-demo">🚀 Ver demo</a>
+            <a href="https://bitcoiner-ssteier.onrender.com" target="_blank" class="project-link link-demo project-app-btn">🚀 Ver App</a>
             <a href="https://github.com/Ssteier2016/bitcoiner" target="_blank" class="project-link link-github">GitHub</a>
           </div>
         </div>
       </div>
 
       <!-- YOUNG LIFE PARAGUAY -->
-      <div class="project-card fade-in" data-type="comunidad">
+      <div class="project-card fade-in" data-type="app" data-project="younglifeparaguay">
         <div class="project-header">
           <div class="project-logo" style="background: linear-gradient(135deg, #1a0a2e, #7c3aed);">✝️</div>
           <div class="project-meta">
             <div class="project-name">Young Life Paraguay</div>
             <div class="project-owner">Ssteier2016</div>
           </div>
-          <div class="project-type" style="background: rgba(167,139,250,0.15); color: #a78bfa; border: 1px solid rgba(167,139,250,0.3);">Comunidad</div>
+          <div class="project-type" style="background: rgba(59,130,246,0.15); color: #60a5fa; border: 1px solid rgba(59,130,246,0.3);">App</div>
         </div>
         <div class="project-body">
           <p class="project-desc">Plataforma web para la organización Young Life Paraguay: eventos, noticias, contacto y comunidad juvenil.</p>
@@ -818,14 +938,14 @@
             <span class="project-tag">JavaScript</span>
           </div>
           <div class="project-links">
-            <a href="https://younglifeparaguay.onrender.com" target="_blank" class="project-link link-demo">🚀 Ver demo</a>
+            <a href="https://younglifeparaguay.onrender.com" target="_blank" class="project-link link-demo project-app-btn">🚀 Ver App</a>
             <a href="https://github.com/Ssteier2016/younglifeparaguay" target="_blank" class="project-link link-github">GitHub</a>
           </div>
         </div>
       </div>
 
       <!-- CHESS GAME -->
-      <div class="project-card fade-in" data-type="app">
+      <div class="project-card fade-in" data-type="app" data-project="chess-game">
         <div class="project-header">
           <div class="project-logo" style="background: linear-gradient(135deg, #1a1a1a, #374151);">♟️</div>
           <div class="project-meta">
@@ -842,14 +962,14 @@
             <span class="project-tag">HTML/CSS</span>
           </div>
           <div class="project-links">
-            <a href="https://chess-game-ssteier.onrender.com" target="_blank" class="project-link link-demo">🚀 Ver demo</a>
+            <a href="https://chess-game-ssteier.onrender.com" target="_blank" class="project-link link-demo project-app-btn">🚀 Ver App</a>
             <a href="https://github.com/Ssteier2016/chess-game" target="_blank" class="project-link link-github">GitHub</a>
           </div>
         </div>
       </div>
 
       <!-- AUTOMATIZACION -->
-      <div class="project-card fade-in" data-type="sistema">
+      <div class="project-card fade-in" data-type="sistema" data-project="automatizacion">
         <div class="project-header">
           <div class="project-logo" style="background: linear-gradient(135deg, #0f2027, #2c5364);">⚙️</div>
           <div class="project-meta">
@@ -866,12 +986,704 @@
             <span class="project-tag">APIs</span>
           </div>
           <div class="project-links">
-            <a href="#" class="project-link link-github" onclick="return false;" style="flex:1">Ver en GitHub</a>
+            <a href="#" class="project-link link-disabled project-app-btn" onclick="return false;">N/A App</a>
             <a href="https://github.com/Ssteier2016/automatizacion" target="_blank" class="project-link link-github">GitHub</a>
           </div>
         </div>
       </div>
 
+      <!-- ─── NUEVOS PROYECTOS (rodarena7-commits) ─── -->
+
+      <!-- BOTSHOWROOM -->
+      <div class="project-card fade-in" data-type="bot" data-project="botshowroom">
+        <div class="project-header">
+          <div class="project-logo" style="background: linear-gradient(135deg, #47102f, #db2777);">👕</div>
+          <div class="project-meta">
+            <div class="project-name">Bot Showroom</div>
+            <div class="project-owner">rodarena7-commits</div>
+          </div>
+          <div class="project-type" style="background: rgba(34,211,160,0.15); color: #22d3a0; border: 1px solid rgba(34,211,160,0.3);">Bot</div>
+        </div>
+        <div class="project-body">
+          <p class="project-desc">Bot de atención automática de showroom textil para WhatsApp con catálogo, stock y pedidos integrados.</p>
+          <div class="project-tags">
+            <span class="project-tag">Node.js</span>
+            <span class="project-tag">Baileys</span>
+            <span class="project-tag">WhatsApp</span>
+            <span class="project-tag">Catalog</span>
+          </div>
+          <div class="project-links">
+            <a href="#" class="project-link link-disabled project-app-btn" onclick="return false;">N/A App</a>
+            <a href="https://github.com/rodarena7-commits/botshowroom" target="_blank" class="project-link link-github">GitHub</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- BOTSIA -->
+      <div class="project-card fade-in" data-type="bot" data-project="botsia">
+        <div class="project-header">
+          <div class="project-logo" style="background: linear-gradient(135deg, #1e1b4b, #4f46e5);">🤖</div>
+          <div class="project-meta">
+            <div class="project-name">Bots IA</div>
+            <div class="project-owner">rodarena7-commits</div>
+          </div>
+          <div class="project-type" style="background: rgba(34,211,160,0.15); color: #22d3a0; border: 1px solid rgba(34,211,160,0.3);">Bot</div>
+        </div>
+        <div class="project-body">
+          <p class="project-desc">Bots de WhatsApp integrados con Inteligencia Artificial avanzada (Llama 3/Groq API) para resolver consultas complejas.</p>
+          <div class="project-tags">
+            <span class="project-tag">Node.js</span>
+            <span class="project-tag">Groq AI</span>
+            <span class="project-tag">Baileys</span>
+            <span class="project-tag">AI Chat</span>
+          </div>
+          <div class="project-links">
+            <a href="#" class="project-link link-disabled project-app-btn" onclick="return false;">N/A App</a>
+            <a href="https://github.com/rodarena7-commits/botsia" target="_blank" class="project-link link-github">GitHub</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- CORTESUPREMO -->
+      <div class="project-card fade-in" data-type="app" data-project="cortesupremo">
+        <div class="project-header">
+          <div class="project-logo" style="background: linear-gradient(135deg, #090d16, #1f2937);">✂️</div>
+          <div class="project-meta">
+            <div class="project-name">Corte Supremo</div>
+            <div class="project-owner">rodarena7-commits</div>
+          </div>
+          <div class="project-type" style="background: rgba(59,130,246,0.15); color: #60a5fa; border: 1px solid rgba(59,130,246,0.3);">App</div>
+        </div>
+        <div class="project-body">
+          <p class="project-desc">Aplicación web moderna para reservas de turnos y agenda online en barberías y salones de estética.</p>
+          <div class="project-tags">
+            <span class="project-tag">React</span>
+            <span class="project-tag">Firebase</span>
+            <span class="project-tag">Tailwind</span>
+            <span class="project-tag">Booking</span>
+          </div>
+          <div class="project-links">
+            <a href="#" class="project-link link-disabled project-app-btn" onclick="return false;">N/A App</a>
+            <a href="https://github.com/rodarena7-commits/cortesupremo" target="_blank" class="project-link link-github">GitHub</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- DESCUENTOS-BOT -->
+      <div class="project-card fade-in" data-type="bot" data-project="descuentos-bot">
+        <div class="project-header">
+          <div class="project-logo" style="background: linear-gradient(135deg, #3d0000, #dc2626);">🏷️</div>
+          <div class="project-meta">
+            <div class="project-name">Descuentos Bot</div>
+            <div class="project-owner">rodarena7-commits</div>
+          </div>
+          <div class="project-type" style="background: rgba(34,211,160,0.15); color: #22d3a0; border: 1px solid rgba(34,211,160,0.3);">Bot</div>
+        </div>
+        <div class="project-body">
+          <p class="project-desc">Bot de WhatsApp que busca y notifica descuentos de forma automática para usuarios y afiliados de Argentina.</p>
+          <div class="project-tags">
+            <span class="project-tag">Node.js</span>
+            <span class="project-tag">Scraper</span>
+            <span class="project-tag">WhatsApp</span>
+            <span class="project-tag">Cron</span>
+          </div>
+          <div class="project-links">
+            <a href="#" class="project-link link-disabled project-app-btn" onclick="return false;">N/A App</a>
+            <a href="https://github.com/rodarena7-commits/descuentos-bot" target="_blank" class="project-link link-github">GitHub</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- FGOPARFUM -->
+      <div class="project-card fade-in" data-type="ecommerce" data-project="fgoparfum">
+        <div class="project-header">
+          <div class="project-logo" style="background: linear-gradient(135deg, #2d1b69, #7c3aed);">🧴</div>
+          <div class="project-meta">
+            <div class="project-name">FGO Parfum</div>
+            <div class="project-owner">rodarena7-commits</div>
+          </div>
+          <div class="project-type" style="background: rgba(220,38,38,0.15); color: #f87171; border: 1px solid rgba(220,38,38,0.3);">E-Commerce</div>
+        </div>
+        <div class="project-body">
+          <p class="project-desc">Tienda premium y catálogo online para la venta de perfumes importados y fragancias exclusivas.</p>
+          <div class="project-tags">
+            <span class="project-tag">React</span>
+            <span class="project-tag">Vercel</span>
+            <span class="project-tag">Tailwind</span>
+            <span class="project-tag">UX/UI</span>
+          </div>
+          <div class="project-links">
+            <a href="https://fgoparfum.vercel.app" target="_blank" class="project-link link-demo project-app-btn">🚀 Ver App</a>
+            <a href="https://github.com/rodarena7-commits/fgoparfum" target="_blank" class="project-link link-github">GitHub</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- ME-DESCUENTOS-AR -->
+      <div class="project-card fade-in" data-type="app" data-project="me-descuentos-ar">
+        <div class="project-header">
+          <div class="project-logo" style="background: linear-gradient(135deg, #0f4c1f, #16a34a);">💳</div>
+          <div class="project-meta">
+            <div class="project-name">Me Descuentos AR</div>
+            <div class="project-owner">rodarena7-commits</div>
+          </div>
+          <div class="project-type" style="background: rgba(59,130,246,0.15); color: #60a5fa; border: 1px solid rgba(59,130,246,0.3);">App</div>
+        </div>
+        <div class="project-body">
+          <p class="project-desc">Agregador y buscador inteligente de promociones, descuentos y reintegros bancarios de billeteras virtuales en Argentina.</p>
+          <div class="project-tags">
+            <span class="project-tag">React</span>
+            <span class="project-tag">Finance</span>
+            <span class="project-tag">Tailwind</span>
+            <span class="project-tag">Scraping</span>
+          </div>
+          <div class="project-links">
+            <a href="#" class="project-link link-disabled project-app-btn" onclick="return false;">N/A App</a>
+            <a href="https://github.com/rodarena7-commits/me-descuentos-ar" target="_blank" class="project-link link-github">GitHub</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- METRICAS -->
+      <div class="project-card fade-in" data-type="sistema" data-project="metricas">
+        <div class="project-header">
+          <div class="project-logo" style="background: linear-gradient(135deg, #1a2744, #3b82f6);">📊</div>
+          <div class="project-meta">
+            <div class="project-name">Métricas</div>
+            <div class="project-owner">rodarena7-commits</div>
+          </div>
+          <div class="project-type" style="background: rgba(251,191,36,0.15); color: #fbbf24; border: 1px solid rgba(251,191,36,0.3);">Sistema</div>
+        </div>
+        <div class="project-body">
+          <p class="project-desc">Tablero de métricas financieras e inventario para la gestión y análisis de ingresos en proyectos comerciales.</p>
+          <div class="project-tags">
+            <span class="project-tag">React</span>
+            <span class="project-tag">Charts</span>
+            <span class="project-tag">Firebase</span>
+            <span class="project-tag">Dashboard</span>
+          </div>
+          <div class="project-links">
+            <a href="#" class="project-link link-disabled project-app-btn" onclick="return false;">N/A App</a>
+            <a href="https://github.com/rodarena7-commits/metricas" target="_blank" class="project-link link-github">GitHub</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- SANDAICARNES -->
+      <div class="project-card fade-in" data-type="ecommerce" data-project="sandaicarnes">
+        <div class="project-header">
+          <div class="project-logo" style="background: linear-gradient(135deg, #3d0000, #dc2626);">🥩</div>
+          <div class="project-meta">
+            <div class="project-name">Sandai Carnes</div>
+            <div class="project-owner">rodarena7-commits</div>
+          </div>
+          <div class="project-type" style="background: rgba(220,38,38,0.15); color: #f87171; border: 1px solid rgba(220,38,38,0.3);">E-Commerce</div>
+        </div>
+        <div class="project-body">
+          <p class="project-desc">Catálogo digital interactivo y canalizador de pedidos en tiempo real por WhatsApp para locales de venta de carnes.</p>
+          <div class="project-tags">
+            <span class="project-tag">React</span>
+            <span class="project-tag">Tailwind</span>
+            <span class="project-tag">WhatsApp API</span>
+          </div>
+          <div class="project-links">
+            <a href="#" class="project-link link-disabled project-app-btn" onclick="return false;">N/A App</a>
+            <a href="https://github.com/rodarena7-commits/sandaicarnes" target="_blank" class="project-link link-github">GitHub</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- SANDBOX-ARENA -->
+      <div class="project-card fade-in" data-type="app" data-project="sandbox-arena">
+        <div class="project-header">
+          <div class="project-logo" style="background: linear-gradient(135deg, #0f2027, #2c5364);">🏖️</div>
+          <div class="project-meta">
+            <div class="project-name">Sandbox Arena</div>
+            <div class="project-owner">rodarena7-commits</div>
+          </div>
+          <div class="project-type" style="background: rgba(59,130,246,0.15); color: #60a5fa; border: 1px solid rgba(59,130,246,0.3);">App</div>
+        </div>
+        <div class="project-body">
+          <p class="project-desc">Entorno web experimental de pruebas rápidas de prototipos frontend e interacciones con el DOM.</p>
+          <div class="project-tags">
+            <span class="project-tag">HTML5</span>
+            <span class="project-tag">CSS3</span>
+            <span class="project-tag">JavaScript</span>
+            <span class="project-tag">Dev</span>
+          </div>
+          <div class="project-links">
+            <a href="#" class="project-link link-disabled project-app-btn" onclick="return false;">N/A App</a>
+            <a href="https://github.com/rodarena7-commits/Sandbox-Arena" target="_blank" class="project-link link-github">GitHub</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- SANDBOXAI -->
+      <div class="project-card fade-in" data-type="app" data-project="sandboxai">
+        <div class="project-header">
+          <div class="project-logo" style="background: linear-gradient(135deg, #2d1b69, #7c3aed);">🧠</div>
+          <div class="project-meta">
+            <div class="project-name">Sandbox AI Web</div>
+            <div class="project-owner">rodarena7-commits</div>
+          </div>
+          <div class="project-type" style="background: rgba(59,130,246,0.15); color: #60a5fa; border: 1px solid rgba(59,130,246,0.3);">App</div>
+        </div>
+        <div class="project-body">
+          <p class="project-desc">Aplicación web y frontend con integración inteligente de servicios cognitivos de procesamiento de lenguaje natural.</p>
+          <div class="project-tags">
+            <span class="project-tag">React</span>
+            <span class="project-tag">Groq AI</span>
+            <span class="project-tag">Vercel</span>
+            <span class="project-tag">AI Chat</span>
+          </div>
+          <div class="project-links">
+            <a href="https://sandboxai-six.vercel.app" target="_blank" class="project-link link-demo project-app-btn">🚀 Ver App</a>
+            <a href="https://github.com/rodarena7-commits/sandboxai" target="_blank" class="project-link link-github">GitHub</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- SHOWROOMDEREK -->
+      <div class="project-card fade-in" data-type="bot" data-project="showroomderek">
+        <div class="project-header">
+          <div class="project-logo" style="background: linear-gradient(135deg, #47102f, #db2777);">🧥</div>
+          <div class="project-meta">
+            <div class="project-name">Showroom Derek</div>
+            <div class="project-owner">rodarena7-commits</div>
+          </div>
+          <div class="project-type" style="background: rgba(34,211,160,0.15); color: #22d3a0; border: 1px solid rgba(34,211,160,0.3);">Bot</div>
+        </div>
+        <div class="project-body">
+          <p class="project-desc">Servicio backend y bots para la administración de inventario, facturación y turnos en Showroom Derek.</p>
+          <div class="project-tags">
+            <span class="project-tag">Node.js</span>
+            <span class="project-tag">Google Calendar</span>
+            <span class="project-tag">WhatsApp API</span>
+          </div>
+          <div class="project-links">
+            <a href="#" class="project-link link-disabled project-app-btn" onclick="return false;">N/A App</a>
+            <a href="https://github.com/rodarena7-commits/showroomderek" target="_blank" class="project-link link-github">GitHub</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- TESTFUUF -->
+      <div class="project-card fade-in" data-type="app" data-project="testfuuf">
+        <div class="project-header">
+          <div class="project-logo" style="background: linear-gradient(135deg, #1a2744, #3b82f6);">🧪</div>
+          <div class="project-meta">
+            <div class="project-name">Test Fuuf</div>
+            <div class="project-owner">rodarena7-commits</div>
+          </div>
+          <div class="project-type" style="background: rgba(59,130,246,0.15); color: #60a5fa; border: 1px solid rgba(59,130,246,0.3);">App</div>
+        </div>
+        <div class="project-body">
+          <p class="project-desc">Proyecto rápido e interactivo de desarrollo para testear APIs de terceros y manejo del estado local en frontend.</p>
+          <div class="project-tags">
+            <span class="project-tag">HTML</span>
+            <span class="project-tag">CSS</span>
+            <span class="project-tag">JavaScript</span>
+          </div>
+          <div class="project-links">
+            <a href="#" class="project-link link-disabled project-app-btn" onclick="return false;">N/A App</a>
+            <a href="https://github.com/rodarena7-commits/testfuuf" target="_blank" class="project-link link-github">GitHub</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- TIKTOK-YOUTUBE -->
+      <div class="project-card fade-in" data-type="sistema" data-project="tiktok-youtube">
+        <div class="project-header">
+          <div class="project-logo" style="background: linear-gradient(135deg, #090d16, #1f2937);">📲</div>
+          <div class="project-meta">
+            <div class="project-name">TikTok to YouTube</div>
+            <div class="project-owner">rodarena7-commits</div>
+          </div>
+          <div class="project-type" style="background: rgba(251,191,36,0.15); color: #fbbf24; border: 1px solid rgba(251,191,36,0.3);">Sistema</div>
+        </div>
+        <div class="project-body">
+          <p class="project-desc">Script de automatización en Node.js que descarga videos de TikTok y los procesa para subirlos automáticamente a YouTube.</p>
+          <div class="project-tags">
+            <span class="project-tag">Node.js</span>
+            <span class="project-tag">TikTok API</span>
+            <span class="project-tag">YouTube API</span>
+            <span class="project-tag">FFmpeg</span>
+          </div>
+          <div class="project-links">
+            <a href="#" class="project-link link-disabled project-app-btn" onclick="return false;">N/A App</a>
+            <a href="https://github.com/rodarena7-commits/tiktok-youtube" target="_blank" class="project-link link-github">GitHub</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- YOUTUBE-AUTO -->
+      <div class="project-card fade-in" data-type="sistema" data-project="youtube-auto">
+        <div class="project-header">
+          <div class="project-logo" style="background: linear-gradient(135deg, #3d2000, #f97316);">📺</div>
+          <div class="project-meta">
+            <div class="project-name">YouTube Automation</div>
+            <div class="project-owner">rodarena7-commits</div>
+          </div>
+          <div class="project-type" style="background: rgba(251,191,36,0.15); color: #fbbf24; border: 1px solid rgba(251,191,36,0.3);">Sistema</div>
+        </div>
+        <div class="project-body">
+          <p class="project-desc">Automatización de subida, renderizado preliminar e indexación automática de contenido audiovisual a YouTube.</p>
+          <div class="project-tags">
+            <span class="project-tag">Node.js</span>
+            <span class="project-tag">YouTube API</span>
+            <span class="project-tag">Automation</span>
+          </div>
+          <div class="project-links">
+            <a href="#" class="project-link link-disabled project-app-btn" onclick="return false;">N/A App</a>
+            <a href="https://github.com/rodarena7-commits/youtube-auto" target="_blank" class="project-link link-github">GitHub</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- ─── NUEVOS PROYECTOS (Ssteier2016) ─── -->
+
+      <!-- AEROCOIN -->
+      <div class="project-card fade-in" data-type="app" data-project="aerocoin">
+        <div class="project-header">
+          <div class="project-logo" style="background: linear-gradient(135deg, #1e3a5f, #2563eb);">✈️</div>
+          <div class="project-meta">
+            <div class="project-name">Aerocoin</div>
+            <div class="project-owner">Ssteier2016</div>
+          </div>
+          <div class="project-type" style="background: rgba(59,130,246,0.15); color: #60a5fa; border: 1px solid rgba(59,130,246,0.3);">App</div>
+        </div>
+        <div class="project-body">
+          <p class="project-desc">Dashboard interactivo de simulación financiera y seguimiento de tokens cripto relacionados a la aeronáutica.</p>
+          <div class="project-tags">
+            <span class="project-tag">React</span>
+            <span class="project-tag">Firebase</span>
+            <span class="project-tag">Crypto</span>
+            <span class="project-tag">Charts</span>
+          </div>
+          <div class="project-links">
+            <a href="#" class="project-link link-disabled project-app-btn" onclick="return false;">N/A App</a>
+            <a href="https://github.com/Ssteier2016/aerocoin" target="_blank" class="project-link link-github">GitHub</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- BIBLIAWEB -->
+      <div class="project-card fade-in" data-type="app" data-project="bibliaweb">
+        <div class="project-header">
+          <div class="project-logo" style="background: linear-gradient(135deg, #2d1b69, #7c3aed);">📖</div>
+          <div class="project-meta">
+            <div class="project-name">Biblia Web</div>
+            <div class="project-owner">Ssteier2016</div>
+          </div>
+          <div class="project-type" style="background: rgba(59,130,246,0.15); color: #60a5fa; border: 1px solid rgba(59,130,246,0.3);">App</div>
+        </div>
+        <div class="project-body">
+          <p class="project-desc">Lector digital e interactivo de la Biblia con soporte multi-versión, búsqueda semántica y guardado de versículos.</p>
+          <div class="project-tags">
+            <span class="project-tag">React</span>
+            <span class="project-tag">Bible API</span>
+            <span class="project-tag">CSS Grid</span>
+          </div>
+          <div class="project-links">
+            <a href="#" class="project-link link-disabled project-app-btn" onclick="return false;">N/A App</a>
+            <a href="https://github.com/Ssteier2016/bibliaweb" target="_blank" class="project-link link-github">GitHub</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- CRYPTO-TRACKER -->
+      <div class="project-card fade-in" data-type="app" data-project="crypto-tracker">
+        <div class="project-header">
+          <div class="project-logo" style="background: linear-gradient(135deg, #3d2000, #f97316);">🪙</div>
+          <div class="project-meta">
+            <div class="project-name">Crypto Tracker</div>
+            <div class="project-owner">Ssteier2016</div>
+          </div>
+          <div class="project-type" style="background: rgba(59,130,246,0.15); color: #60a5fa; border: 1px solid rgba(59,130,246,0.3);">App</div>
+        </div>
+        <div class="project-body">
+          <p class="project-desc">Rastreador en tiempo real de criptomonedas integrado con CoinGecko API dentro de un solo archivo HTML ultraoptimizado.</p>
+          <div class="project-tags">
+            <span class="project-tag">React</span>
+            <span class="project-tag">CoinGecko API</span>
+            <span class="project-tag">Tailwind</span>
+            <span class="project-tag">SingleFile</span>
+          </div>
+          <div class="project-links">
+            <a href="#" class="project-link link-disabled project-app-btn" onclick="return false;">N/A App</a>
+            <a href="https://github.com/Ssteier2016/crypto-tracker" target="_blank" class="project-link link-github">GitHub</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- ECCODEARENA -->
+      <div class="project-card fade-in" data-type="app" data-project="eccodearena">
+        <div class="project-header">
+          <div class="project-logo" style="background: linear-gradient(135deg, #0f4c1f, #16a34a);">💻</div>
+          <div class="project-meta">
+            <div class="project-name">EC Code Arena</div>
+            <div class="project-owner">Ssteier2016</div>
+          </div>
+          <div class="project-type" style="background: rgba(59,130,246,0.15); color: #60a5fa; border: 1px solid rgba(59,130,246,0.3);">App</div>
+        </div>
+        <div class="project-body">
+          <p class="project-desc">Plataforma educativa interactiva que enseña bases de la programación mediante desafíos y sandbox interactivo.</p>
+          <div class="project-tags">
+            <span class="project-tag">React</span>
+            <span class="project-tag">Firebase</span>
+            <span class="project-tag">Education</span>
+            <span class="project-tag">Sandboxing</span>
+          </div>
+          <div class="project-links">
+            <a href="#" class="project-link link-disabled project-app-btn" onclick="return false;">N/A App</a>
+            <a href="https://github.com/Ssteier2016/eccodearena" target="_blank" class="project-link link-github">GitHub</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- ENOFTOKEN -->
+      <div class="project-card fade-in" data-type="app" data-project="enoftoken">
+        <div class="project-header">
+          <div class="project-logo" style="background: linear-gradient(135deg, #1e1b4b, #4f46e5);">🔑</div>
+          <div class="project-meta">
+            <div class="project-name">Enof Token</div>
+            <div class="project-owner">Ssteier2016</div>
+          </div>
+          <div class="project-type" style="background: rgba(59,130,246,0.15); color: #60a5fa; border: 1px solid rgba(59,130,246,0.3);">App</div>
+        </div>
+        <div class="project-body">
+          <p class="project-desc">DApp experimental para la emisión, transferencia e indexación de tokens personalizados y contratos inteligentes en Ethereum.</p>
+          <div class="project-tags">
+            <span class="project-tag">React</span>
+            <span class="project-tag">Web3</span>
+            <span class="project-tag">Ethers.js</span>
+            <span class="project-tag">Solidity</span>
+          </div>
+          <div class="project-links">
+            <a href="#" class="project-link link-disabled project-app-btn" onclick="return false;">N/A App</a>
+            <a href="https://github.com/Ssteier2016/enoftoken" target="_blank" class="project-link link-github">GitHub</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- FELLASAPP -->
+      <div class="project-card fade-in" data-type="app" data-project="fellasapp">
+        <div class="project-header">
+          <div class="project-logo" style="background: linear-gradient(135deg, #47102f, #db2777);">👥</div>
+          <div class="project-meta">
+            <div class="project-name">Fellas App</div>
+            <div class="project-owner">Ssteier2016</div>
+          </div>
+          <div class="project-type" style="background: rgba(59,130,246,0.15); color: #60a5fa; border: 1px solid rgba(59,130,246,0.3);">App</div>
+        </div>
+        <div class="project-body">
+          <p class="project-desc">Red social privada y chat grupal para círculos de amigos con notificaciones push e intercambio de multimedia.</p>
+          <div class="project-tags">
+            <span class="project-tag">React</span>
+            <span class="project-tag">Firebase</span>
+            <span class="project-tag">Realtime Chat</span>
+            <span class="project-tag">PWA</span>
+          </div>
+          <div class="project-links">
+            <a href="#" class="project-link link-disabled project-app-btn" onclick="return false;">N/A App</a>
+            <a href="https://github.com/Ssteier2016/fellasapp" target="_blank" class="project-link link-github">GitHub</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- FORTIBOTTON -->
+      <div class="project-card fade-in" data-type="bot" data-project="fortibotton">
+        <div class="project-header">
+          <div class="project-logo" style="background: linear-gradient(135deg, #090d16, #1f2937);">🕹️</div>
+          <div class="project-meta">
+            <div class="project-name">FortiBotton</div>
+            <div class="project-owner">Ssteier2016</div>
+          </div>
+          <div class="project-type" style="background: rgba(34,211,160,0.15); color: #22d3a0; border: 1px solid rgba(34,211,160,0.3);">Bot</div>
+        </div>
+        <div class="project-body">
+          <p class="project-desc">Bot de Discord multipropósito con reproducción de audio, moderación y comandos customizables para comunidades.</p>
+          <div class="project-tags">
+            <span class="project-tag">Node.js</span>
+            <span class="project-tag">Discord.js</span>
+            <span class="project-tag">API Integration</span>
+          </div>
+          <div class="project-links">
+            <a href="#" class="project-link link-disabled project-app-btn" onclick="return false;">N/A App</a>
+            <a href="https://github.com/Ssteier2016/FortiBotton" target="_blank" class="project-link link-github">GitHub</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- FORTIGAME -->
+      <div class="project-card fade-in" data-type="app" data-project="fortigame">
+        <div class="project-header">
+          <div class="project-logo" style="background: linear-gradient(135deg, #1a2744, #3b82f6);">🎮</div>
+          <div class="project-meta">
+            <div class="project-name">FortiGame</div>
+            <div class="project-owner">Ssteier2016</div>
+          </div>
+          <div class="project-type" style="background: rgba(59,130,246,0.15); color: #60a5fa; border: 1px solid rgba(59,130,246,0.3);">App</div>
+        </div>
+        <div class="project-body">
+          <p class="project-desc">Juego web multijugador en tiempo real basado en Phaser.js con backend en Node.js y comunicación por Socket.io.</p>
+          <div class="project-tags">
+            <span class="project-tag">Phaser.js</span>
+            <span class="project-tag">Node.js</span>
+            <span class="project-tag">Socket.io</span>
+            <span class="project-tag">Multiplayer</span>
+          </div>
+          <div class="project-links">
+            <a href="#" class="project-link link-disabled project-app-btn" onclick="return false;">N/A App</a>
+            <a href="https://github.com/Ssteier2016/fortigame" target="_blank" class="project-link link-github">GitHub</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- HANDLEPHONE -->
+      <div class="project-card fade-in" data-type="sistema" data-project="handlephone">
+        <div class="project-header">
+          <div class="project-logo" style="background: linear-gradient(135deg, #0f2027, #2c5364);">📞</div>
+          <div class="project-meta">
+            <div class="project-name">Handle Phone</div>
+            <div class="project-owner">Ssteier2016</div>
+          </div>
+          <div class="project-type" style="background: rgba(251,191,36,0.15); color: #fbbf24; border: 1px solid rgba(251,191,36,0.3);">Sistema</div>
+        </div>
+        <div class="project-body">
+          <p class="project-desc">Sistema experimental en Node.js para controlar remotamente y automatizar notificaciones o llamadas telefónicas.</p>
+          <div class="project-tags">
+            <span class="project-tag">Node.js</span>
+            <span class="project-tag">Automation</span>
+            <span class="project-tag">SMS API</span>
+          </div>
+          <div class="project-links">
+            <a href="#" class="project-link link-disabled project-app-btn" onclick="return false;">N/A App</a>
+            <a href="https://github.com/Ssteier2016/HANDLEPHONE" target="_blank" class="project-link link-github">GitHub</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- HUMANZOMBY -->
+      <div class="project-card fade-in" data-type="app" data-project="humanzomby">
+        <div class="project-header">
+          <div class="project-logo" style="background: linear-gradient(135deg, #3d0000, #dc2626);">🧟</div>
+          <div class="project-meta">
+            <div class="project-name">Human vs Zombie</div>
+            <div class="project-owner">Ssteier2016</div>
+          </div>
+          <div class="project-type" style="background: rgba(59,130,246,0.15); color: #60a5fa; border: 1px solid rgba(59,130,246,0.3);">App</div>
+        </div>
+        <div class="project-body">
+          <p class="project-desc">Juego web 2D interactivo de disparos y supervivencia en Canvas HTML5 contra hordas infinitas de zombies.</p>
+          <div class="project-tags">
+            <span class="project-tag">HTML5 Canvas</span>
+            <span class="project-tag">JavaScript</span>
+            <span class="project-tag">Game Design</span>
+          </div>
+          <div class="project-links">
+            <a href="#" class="project-link link-disabled project-app-btn" onclick="return false;">N/A App</a>
+            <a href="https://github.com/Ssteier2016/humanzomby" target="_blank" class="project-link link-github">GitHub</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- LINKEDIN-AUTOPILOT -->
+      <div class="project-card fade-in" data-type="bot" data-project="linkedin-autopilot">
+        <div class="project-header">
+          <div class="project-logo" style="background: linear-gradient(135deg, #1e3a5f, #2563eb);">💼</div>
+          <div class="project-meta">
+            <div class="project-name">LinkedIn Autopilot</div>
+            <div class="project-owner">Ssteier2016</div>
+          </div>
+          <div class="project-type" style="background: rgba(34,211,160,0.15); color: #22d3a0; border: 1px solid rgba(34,211,160,0.3);">Bot</div>
+        </div>
+        <div class="project-body">
+          <p class="project-desc">Búsqueda inteligente automatizada de ofertas de trabajo en LinkedIn e integración con WhatsApp para avisos diarios.</p>
+          <div class="project-tags">
+            <span class="project-tag">Puppeteer</span>
+            <span class="project-tag">AI Integration</span>
+            <span class="project-tag">Node.js</span>
+            <span class="project-tag">WhatsApp API</span>
+          </div>
+          <div class="project-links">
+            <a href="#" class="project-link link-disabled project-app-btn" onclick="return false;">N/A App</a>
+            <a href="https://github.com/Ssteier2016/linkedin-autopilot" target="_blank" class="project-link link-github">GitHub</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- NEIGAME -->
+      <div class="project-card fade-in" data-type="app" data-project="neigame">
+        <div class="project-header">
+          <div class="project-logo" style="background: linear-gradient(135deg, #1a0a2e, #7c3aed);">👾</div>
+          <div class="project-meta">
+            <div class="project-name">Neigame</div>
+            <div class="project-owner">Ssteier2016</div>
+          </div>
+          <div class="project-type" style="background: rgba(59,130,246,0.15); color: #60a5fa; border: 1px solid rgba(59,130,246,0.3);">App</div>
+        </div>
+        <div class="project-body">
+          <p class="project-desc">Juego retro casual de estilo arcade en HTML y CSS con animaciones, efectos de sonido y puntuación persistente.</p>
+          <div class="project-tags">
+            <span class="project-tag">HTML5</span>
+            <span class="project-tag">CSS3 Animations</span>
+            <span class="project-tag">JavaScript</span>
+          </div>
+          <div class="project-links">
+            <a href="#" class="project-link link-disabled project-app-btn" onclick="return false;">N/A App</a>
+            <a href="https://github.com/Ssteier2016/Neigame" target="_blank" class="project-link link-github">GitHub</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- STATIC -->
+      <div class="project-card fade-in" data-type="sistema" data-project="static">
+        <div class="project-header">
+          <div class="project-logo" style="background: linear-gradient(135deg, #1a1a1a, #374151);">📁</div>
+          <div class="project-meta">
+            <div class="project-name">Static File Server</div>
+            <div class="project-owner">Ssteier2016</div>
+          </div>
+          <div class="project-type" style="background: rgba(251,191,36,0.15); color: #fbbf24; border: 1px solid rgba(251,191,36,0.3);">Sistema</div>
+        </div>
+        <div class="project-body">
+          <p class="project-desc">Servidor de archivos e imágenes estáticas optimizado con Express para dar soporte ligero a aplicaciones web.</p>
+          <div class="project-tags">
+            <span class="project-tag">Node.js</span>
+            <span class="project-tag">Express</span>
+            <span class="project-tag">Hosting</span>
+          </div>
+          <div class="project-links">
+            <a href="#" class="project-link link-disabled project-app-btn" onclick="return false;">N/A App</a>
+            <a href="https://github.com/Ssteier2016/static" target="_blank" class="project-link link-github">GitHub</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- TRADING-APP -->
+      <div class="project-card fade-in" data-type="app" data-project="trading-app">
+        <div class="project-header">
+          <div class="project-logo" style="background: linear-gradient(135deg, #3d2000, #f97316);">📉</div>
+          <div class="project-meta">
+            <div class="project-name">Trading Simulator</div>
+            <div class="project-owner">Ssteier2016</div>
+          </div>
+          <div class="project-type" style="background: rgba(59,130,246,0.15); color: #60a5fa; border: 1px solid rgba(59,130,246,0.3);">App</div>
+        </div>
+        <div class="project-body">
+          <p class="project-desc">Simulador web de operaciones bursátiles con gráficos de velas japonesas interactivos y órdenes de compra/venta ficticias.</p>
+          <div class="project-tags">
+            <span class="project-tag">React</span>
+            <span class="project-tag">Chart.js</span>
+            <span class="project-tag">Finance API</span>
+          </div>
+          <div class="project-links">
+            <a href="#" class="project-link link-disabled project-app-btn" onclick="return false;">N/A App</a>
+            <a href="https://github.com/Ssteier2016/trading-app" target="_blank" class="project-link link-github">GitHub</a>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </section>
@@ -1020,7 +1832,7 @@
 <!-- FOOTER -->
 <footer>
   <p>
-    Hecho con ☕ por <a href="https://github.com/rodarena7-commits">Rodrigo Arena</a> ·
+    Hecho con ☕ por <a href="https://github.com/rodarena7-commits"><span onclick="handleRodrigoClick(event)" style="cursor: pointer; user-select: none;">Rodrigo</span> Arena</a> ·
     <a href="https://github.com/rodarena7-commits" target="_blank">GitHub</a> ·
     <a href="https://www.youtube.com/@rodarena7" target="_blank">YouTube</a>
   </p>
@@ -1028,6 +1840,77 @@
     © 2026 Rodrigo Arena · Desarrollador Full Stack
   </p>
 </footer>
+
+<!-- ADMIN MODAL -->
+<div class="admin-overlay" id="adminOverlay" onclick="handleOutsideClick(event)">
+  <div class="admin-modal" onclick="event.stopPropagation()">
+    <div class="admin-header">
+      <h3 class="admin-title">Panel de Control</h3>
+      <button class="admin-close" onclick="closeAdminModal()">✕</button>
+    </div>
+    
+    <div class="admin-field">
+      <label for="adminProjectSelect">Seleccionar Proyecto</label>
+      <select id="adminProjectSelect" class="admin-select" onchange="loadProjectLogoPreview()">
+        <!-- Populated dynamically -->
+      </select>
+    </div>
+    
+    <div class="admin-field">
+      <label>Visualización y Vista Previa</label>
+      <div class="admin-preview-row">
+        <div class="admin-preview-logo" id="adminPreviewLogo">📚</div>
+        <div class="admin-preview-info">
+          <strong id="adminPreviewName">Cargando...</strong>
+          <div style="font-size: 0.75rem; margin-top: 0.25rem;" id="adminLogoType">Logo por defecto</div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="admin-field">
+      <label for="adminEmojiInput">Opción 1: Usar Emoji</label>
+      <input type="text" id="adminEmojiInput" class="admin-input" placeholder="Ej: 🚀, 💻, 🧠" maxlength="4" oninput="previewEmojiLogo(this.value)" />
+    </div>
+
+    <div class="admin-field">
+      <label for="adminFileInput">Opción 2: Subir Imagen</label>
+      <input type="file" id="adminFileInput" class="admin-input" accept="image/*" onchange="previewImageFile(event)" />
+    </div>
+
+    <div class="admin-field">
+      <label for="adminUrlInput">Opción 3: URL de Imagen</label>
+      <input type="text" id="adminUrlInput" class="admin-input" placeholder="https://example.com/logo.png" oninput="previewUrlLogo(this.value)" />
+    </div>
+
+    <div class="admin-field">
+      <label for="adminAppUrlInput">Enlace del Botón "Ver App"</label>
+      <input type="text" id="adminAppUrlInput" class="admin-input" placeholder="https://example.com/mi-app" />
+    </div>
+
+    <div class="admin-btn-group">
+      <button class="admin-btn admin-btn-delete" onclick="deleteProjectCustomizations()">Quitar Personalizados</button>
+      <button class="admin-btn admin-btn-save" id="adminSaveBtn" onclick="saveProjectCustomizations()">Guardar Cambios</button>
+    </div>
+
+    <button class="admin-fb-trigger" onclick="toggleFbPanel()">⚙️ Configuración Firebase</button>
+    <div class="admin-fb-panel" id="adminFbPanel">
+      <p>Para persistir los logos públicamente para todos los usuarios, crea una base de datos Firebase Firestore y pega tu configuración en <code>index.html</code>:</p>
+      <pre class="admin-fb-code">const firebaseConfig = {
+  apiKey: "TU_API_KEY",
+  authDomain: "TU_AUTH_DOMAIN",
+  projectId: "TU_PROJECT_ID",
+  storageBucket: "TU_STORAGE_BUCKET",
+  messagingSenderId: "TU_SENDER_ID",
+  appId: "TU_APP_ID"
+};</pre>
+      <p style="font-size: 0.7rem; color: var(--text3);">Actualmente guardando en: <span id="dbModeLabel" style="font-weight:bold; color:var(--yellow);">Local Storage (Pruebas)</span></p>
+    </div>
+  </div>
+</div>
+
+<!-- Firebase SDK (Compat Version for Easy Static Integration) -->
+<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
 
 <script>
   // ─── MOBILE MENU ───
@@ -1088,6 +1971,381 @@
   document.querySelectorAll('.project-card, .bot-card').forEach((card, i) => {
     card.style.transitionDelay = `${i * 0.05}s`;
   });
+
+  // ─── FIREBASE CONFIGURATION ───
+  const firebaseConfig = {
+    apiKey: "AIzaSyA_bgjhOVxxFtu0iRI-8XUFjpprPboRIYA",
+    authDomain: "portafolio-577b7.firebaseapp.com",
+    projectId: "portafolio-577b7",
+    storageBucket: "portafolio-577b7.firebasestorage.app",
+    messagingSenderId: "823794075245",
+    appId: "1:823794075245:web:49354cdd0774fdca3d2164",
+    measurementId: "G-4ZT6F8KVYK"
+  };
+
+  let db = null;
+  let useFirebase = false;
+
+  if (firebaseConfig.apiKey && firebaseConfig.projectId) {
+    try {
+      firebase.initializeApp(firebaseConfig);
+      db = firebase.firestore();
+      useFirebase = true;
+      console.log("Firebase Firestore inicializado correctamente.");
+    } catch (error) {
+      console.error("Error al inicializar Firebase:", error);
+    }
+  } else {
+    console.log("Firebase no está configurado. Usando localStorage como fallback.");
+  }
+
+  const defaultProjectLogos = {};
+  const defaultAppUrls = {};
+  const projectsData = [];
+  let customLogos = {};
+  let previewLogoState = null;
+
+  document.querySelectorAll('.project-card').forEach(card => {
+    const id = card.dataset.project;
+    const name = card.querySelector('.project-name').textContent;
+    const logoEl = card.querySelector('.project-logo');
+    const appBtn = card.querySelector('.project-app-btn');
+    
+    defaultProjectLogos[id] = {
+      html: logoEl.innerHTML,
+      background: logoEl.style.background || ''
+    };
+
+    if (appBtn) {
+      const isDefaultEnabled = !appBtn.classList.contains('link-disabled');
+      defaultAppUrls[id] = {
+        enabled: isDefaultEnabled,
+        url: isDefaultEnabled ? appBtn.getAttribute('href') : '#'
+      };
+    }
+
+    projectsData.push({ id, name });
+  });
+
+  // ─── ADMIN MODAL FUNCTIONS ───
+  let clickCount = 0;
+  function handleRodrigoClick(e) {
+    if (e) e.preventDefault();
+    clickCount++;
+    if (clickCount === 7) {
+      clickCount = 0;
+      openAdminModal();
+    }
+  }
+
+  function openAdminModal() {
+    const select = document.getElementById('adminProjectSelect');
+    if (select.children.length === 0) {
+      projectsData.forEach(p => {
+        const opt = document.createElement('option');
+        opt.value = p.id;
+        opt.textContent = p.name;
+        select.appendChild(opt);
+      });
+    }
+
+    const label = document.getElementById('dbModeLabel');
+    if (useFirebase) {
+      label.textContent = "Firebase Firestore (Público & Global)";
+      label.style.color = "var(--green)";
+    } else {
+      label.textContent = "Local Storage (Solo en tu navegador)";
+      label.style.color = "var(--yellow)";
+    }
+
+    document.getElementById('adminOverlay').classList.add('open');
+    loadProjectLogoPreview();
+  }
+
+  function closeAdminModal() {
+    document.getElementById('adminOverlay').classList.remove('open');
+    document.getElementById('adminEmojiInput').value = '';
+    document.getElementById('adminFileInput').value = '';
+    document.getElementById('adminUrlInput').value = '';
+    document.getElementById('adminAppUrlInput').value = '';
+    previewLogoState = null;
+  }
+
+  function handleOutsideClick(e) {
+    if (e.target.id === 'adminOverlay') {
+      closeAdminModal();
+    }
+  }
+
+  function toggleFbPanel() {
+    document.getElementById('adminFbPanel').classList.toggle('visible');
+  }
+
+  function loadProjectLogoPreview() {
+    const projectId = document.getElementById('adminProjectSelect').value;
+    const project = projectsData.find(p => p.id === projectId);
+    if (!project) return;
+
+    document.getElementById('adminPreviewName').textContent = project.name;
+    
+    document.getElementById('adminEmojiInput').value = '';
+    document.getElementById('adminFileInput').value = '';
+    document.getElementById('adminUrlInput').value = '';
+    document.getElementById('adminAppUrlInput').value = '';
+
+    let custom = customLogos[projectId];
+    
+    if (custom && custom.type) {
+      custom = {
+        logo: { type: custom.type, value: custom.value },
+        appUrl: ''
+      };
+    }
+
+    const previewLogo = document.getElementById('adminPreviewLogo');
+    const typeLabel = document.getElementById('adminLogoType');
+
+    if (custom && custom.logo) {
+      previewLogoState = { ...custom.logo };
+      renderLogoToElement(previewLogo, custom.logo);
+      typeLabel.textContent = `Personalizado (${custom.logo.type === 'emoji' ? 'Emoji' : 'Imagen'})`;
+      
+      if (custom.logo.type === 'emoji') {
+        document.getElementById('adminEmojiInput').value = custom.logo.value;
+      } else if (custom.logo.type === 'image' && !custom.logo.value.startsWith('data:')) {
+        document.getElementById('adminUrlInput').value = custom.logo.value;
+      }
+    } else {
+      previewLogoState = null;
+      const def = defaultProjectLogos[projectId];
+      previewLogo.innerHTML = def.html;
+      previewLogo.style.background = def.background;
+      typeLabel.textContent = "Logo por defecto";
+    }
+
+    if (custom && custom.appUrl) {
+      document.getElementById('adminAppUrlInput').value = custom.appUrl;
+    } else {
+      const defLink = defaultAppUrls[projectId];
+      if (defLink && defLink.enabled) {
+        document.getElementById('adminAppUrlInput').placeholder = defLink.url;
+      } else {
+        document.getElementById('adminAppUrlInput').placeholder = "Sin enlace (N/A App)";
+      }
+    }
+  }
+
+  function renderLogoToElement(element, logo) {
+    if (!logo) return;
+    if (logo.type === 'emoji') {
+      element.innerHTML = logo.value;
+      element.style.background = 'linear-gradient(135deg, var(--accent), var(--accent2))';
+    } else {
+      element.innerHTML = `<img src="${logo.value}" style="width: 100%; height: 100%; object-fit: cover; border-radius: inherit;" onerror="this.parentNode.innerHTML='⚠️'; this.parentNode.style.background='var(--red)'" />`;
+      element.style.background = 'transparent';
+    }
+  }
+
+  function previewEmojiLogo(val) {
+    if (!val.trim()) { loadProjectLogoPreview(); return; }
+    document.getElementById('adminFileInput').value = '';
+    document.getElementById('adminUrlInput').value = '';
+    previewLogoState = { type: 'emoji', value: val.trim() };
+    renderLogoToElement(document.getElementById('adminPreviewLogo'), previewLogoState);
+    document.getElementById('adminLogoType').textContent = "Personalizado (Emoji)";
+  }
+
+  function previewUrlLogo(val) {
+    if (!val.trim()) { loadProjectLogoPreview(); return; }
+    document.getElementById('adminEmojiInput').value = '';
+    document.getElementById('adminFileInput').value = '';
+    previewLogoState = { type: 'image', value: val.trim() };
+    renderLogoToElement(document.getElementById('adminPreviewLogo'), previewLogoState);
+    document.getElementById('adminLogoType').textContent = "Personalizado (URL)";
+  }
+
+  function previewImageFile(e) {
+    const file = e.target.files[0];
+    if (!file) return;
+    document.getElementById('adminEmojiInput').value = '';
+    document.getElementById('adminUrlInput').value = '';
+    const reader = new FileReader();
+    reader.onload = function(event) {
+      const img = new Image();
+      img.onload = function() {
+        const canvas = document.createElement('canvas');
+        const maxDim = 128;
+        let width = img.width, height = img.height;
+        if (width > height) { if (width > maxDim) { height *= maxDim / width; width = maxDim; } }
+        else { if (height > maxDim) { width *= maxDim / height; height = maxDim; } }
+        canvas.width = width; canvas.height = height;
+        canvas.getContext('2d').drawImage(img, 0, 0, width, height);
+        const base64 = canvas.toDataURL('image/jpeg', 0.75);
+        previewLogoState = { type: 'image', value: base64 };
+        renderLogoToElement(document.getElementById('adminPreviewLogo'), previewLogoState);
+        document.getElementById('adminLogoType').textContent = "Personalizado (Imagen cargada)";
+      };
+      img.src = event.target.result;
+    };
+    reader.readAsDataURL(file);
+  }
+
+  async function saveProjectCustomizations() {
+    const projectId = document.getElementById('adminProjectSelect').value;
+    const appUrlValue = document.getElementById('adminAppUrlInput').value.trim();
+    let currentCustom = customLogos[projectId] || {};
+    if (currentCustom.type) {
+      currentCustom = { logo: { type: currentCustom.type, value: currentCustom.value }, appUrl: '' };
+    }
+    if (previewLogoState) { currentCustom.logo = previewLogoState; }
+    currentCustom.appUrl = appUrlValue;
+
+    if (!previewLogoState && !appUrlValue && !currentCustom.logo) {
+      if (!confirm("No has configurado ningún logo ni enlace. ¿Deseas guardar el proyecto con valores por defecto?")) return;
+    }
+
+    const saveBtn = document.getElementById('adminSaveBtn');
+    saveBtn.textContent = "Guardando..."; saveBtn.disabled = true;
+
+    try {
+      if (useFirebase) { await db.collection('project_logos').doc(projectId).set(currentCustom); }
+      customLogos[projectId] = currentCustom;
+      localStorage.setItem('portfolio_custom_logos', JSON.stringify(customLogos));
+      if (currentCustom.logo) { applyLogoToCard(projectId, currentCustom.logo); }
+      applyAppUrlToCard(projectId, currentCustom.appUrl);
+      saveBtn.textContent = "✓ ¡Guardado!";
+      setTimeout(() => { saveBtn.textContent = "Guardar Cambios"; saveBtn.disabled = false; closeAdminModal(); }, 1000);
+    } catch (err) {
+      console.error("Error al guardar cambios:", err);
+      alert("Error al guardar en la base de datos: " + err.message);
+      saveBtn.textContent = "Guardar Cambios"; saveBtn.disabled = false;
+    }
+  }
+
+  async function deleteProjectCustomizations() {
+    const projectId = document.getElementById('adminProjectSelect').value;
+    if (!customLogos[projectId]) { alert("Este proyecto no tiene configuraciones personalizadas."); return; }
+    if (!confirm("¿Estás seguro de que deseas quitar el logo y el enlace de App personalizado de este proyecto?")) return;
+    try {
+      if (useFirebase) { await db.collection('project_logos').doc(projectId).delete(); }
+      delete customLogos[projectId];
+      localStorage.setItem('portfolio_custom_logos', JSON.stringify(customLogos));
+      applyDefaultLogoToCard(projectId);
+      applyDefaultAppUrlToCard(projectId);
+      loadProjectLogoPreview();
+      alert("Personalizaciones eliminadas correctamente.");
+      closeAdminModal();
+    } catch (err) {
+      console.error("Error al eliminar customizations:", err);
+      alert("Error al eliminar personalizaciones: " + err.message);
+    }
+  }
+
+  function applyLogoToCard(projectId, logo) {
+    const card = document.querySelector(`.project-card[data-project="${projectId}"]`);
+    if (!card) return;
+    const logoEl = card.querySelector('.project-logo');
+    if (!logoEl) return;
+    renderLogoToElement(logoEl, logo);
+  }
+
+  function applyDefaultLogoToCard(projectId) {
+    const card = document.querySelector(`.project-card[data-project="${projectId}"]`);
+    if (!card) return;
+    const logoEl = card.querySelector('.project-logo');
+    if (!logoEl) return;
+    const def = defaultProjectLogos[projectId];
+    logoEl.innerHTML = def.html;
+    logoEl.style.background = def.background;
+  }
+
+  function applyAppUrlToCard(projectId, appUrl) {
+    const card = document.querySelector(`.project-card[data-project="${projectId}"]`);
+    if (!card) return;
+    const appBtn = card.querySelector('.project-app-btn');
+    if (!appBtn) return;
+    if (appUrl && appUrl.trim() !== '') {
+      appBtn.setAttribute('href', appUrl);
+      appBtn.setAttribute('target', '_blank');
+      appBtn.removeAttribute('onclick');
+      appBtn.className = 'project-link link-demo project-app-btn';
+      appBtn.textContent = '🚀 Ver App';
+    } else {
+      applyDefaultAppUrlToCard(projectId);
+    }
+  }
+
+  function applyDefaultAppUrlToCard(projectId) {
+    const card = document.querySelector(`.project-card[data-project="${projectId}"]`);
+    if (!card) return;
+    const appBtn = card.querySelector('.project-app-btn');
+    if (!appBtn) return;
+    const defLink = defaultAppUrls[projectId];
+    if (defLink) {
+      if (defLink.enabled) {
+        appBtn.setAttribute('href', defLink.url);
+        appBtn.setAttribute('target', '_blank');
+        appBtn.removeAttribute('onclick');
+        appBtn.className = 'project-link link-demo project-app-btn';
+        appBtn.textContent = '🚀 Ver App';
+      } else {
+        appBtn.setAttribute('href', '#');
+        appBtn.removeAttribute('target');
+        appBtn.setAttribute('onclick', 'return false;');
+        appBtn.className = 'project-link link-disabled project-app-btn';
+        appBtn.textContent = 'N/A App';
+      }
+    }
+  }
+
+  async function loadAllProjectCustomizations() {
+    const cached = localStorage.getItem('portfolio_custom_logos');
+    if (cached) {
+      try {
+        customLogos = JSON.parse(cached);
+        for (const pid in customLogos) {
+          let custom = customLogos[pid];
+          if (custom && custom.type) { custom = { logo: { type: custom.type, value: custom.value }, appUrl: '' }; }
+          if (custom.logo) { applyLogoToCard(pid, custom.logo); }
+          applyAppUrlToCard(pid, custom.appUrl);
+        }
+      } catch (e) { console.error("Error parsing cached customizations:", e); }
+    }
+    if (useFirebase) {
+      try {
+        const snapshot = await db.collection('project_logos').get();
+        const serverCustoms = {};
+        snapshot.forEach(doc => {
+          serverCustoms[doc.id] = doc.data();
+        });
+
+        // Merge server state and cache it
+        customLogos = { ...customLogos, ...serverCustoms };
+        localStorage.setItem('portfolio_custom_logos', JSON.stringify(customLogos));
+
+        // Refresh UI
+        for (const pid in customLogos) {
+          let custom = customLogos[pid];
+          // Backward compatibility
+          if (custom && custom.type) {
+            custom = {
+              logo: { type: custom.type, value: custom.value },
+              appUrl: ''
+            };
+          }
+          if (custom.logo) {
+            applyLogoToCard(pid, custom.logo);
+          }
+          applyAppUrlToCard(pid, custom.appUrl);
+        }
+      } catch (err) {
+        console.error("Error syncing with Firebase:", err);
+      }
+    }
+  }
+
+  // Initialize custom customizations loading
+  loadAllProjectCustomizations();
 </script>
 </body>
 </html>
