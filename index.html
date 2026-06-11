@@ -1887,6 +1887,11 @@
       <input type="text" id="adminAppUrlInput" class="admin-input" placeholder="https://example.com/mi-app" />
     </div>
 
+    <div class="admin-field" style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 1.5rem;">
+      <input type="checkbox" id="adminMaintenanceInput" style="width: 20px; height: 20px; cursor: pointer; accent-color: #f97316;" />
+      <label for="adminMaintenanceInput" style="margin-bottom: 0; cursor: pointer; text-transform: none; font-size: 0.9rem; font-weight: 600; color: #f97316;">🔧 Proyecto en Mantenimiento</label>
+    </div>
+
     <div class="admin-btn-group">
       <button class="admin-btn admin-btn-delete" onclick="deleteProjectCustomizations()">Quitar Personalizados</button>
       <button class="admin-btn admin-btn-save" id="adminSaveBtn" onclick="saveProjectCustomizations()">Guardar Cambios</button>
@@ -2068,6 +2073,7 @@
     document.getElementById('adminFileInput').value = '';
     document.getElementById('adminUrlInput').value = '';
     document.getElementById('adminAppUrlInput').value = '';
+    document.getElementById('adminMaintenanceInput').checked = false;
     previewLogoState = null;
   }
 
@@ -2092,13 +2098,15 @@
     document.getElementById('adminFileInput').value = '';
     document.getElementById('adminUrlInput').value = '';
     document.getElementById('adminAppUrlInput').value = '';
+    document.getElementById('adminMaintenanceInput').checked = false;
 
     let custom = customLogos[projectId];
     
     if (custom && custom.type) {
       custom = {
         logo: { type: custom.type, value: custom.value },
-        appUrl: ''
+        appUrl: '',
+        inMaintenance: false
       };
     }
 
@@ -2132,6 +2140,12 @@
       } else {
         document.getElementById('adminAppUrlInput').placeholder = "Sin enlace (N/A App)";
       }
+    }
+
+    if (custom && custom.inMaintenance) {
+      document.getElementById('adminMaintenanceInput').checked = true;
+    } else {
+      document.getElementById('adminMaintenanceInput').checked = false;
     }
   }
 
@@ -2193,15 +2207,17 @@
   async function saveProjectCustomizations() {
     const projectId = document.getElementById('adminProjectSelect').value;
     const appUrlValue = document.getElementById('adminAppUrlInput').value.trim();
+    const inMaintenanceValue = document.getElementById('adminMaintenanceInput').checked;
     let currentCustom = customLogos[projectId] || {};
     if (currentCustom.type) {
-      currentCustom = { logo: { type: currentCustom.type, value: currentCustom.value }, appUrl: '' };
+      currentCustom = { logo: { type: currentCustom.type, value: currentCustom.value }, appUrl: '', inMaintenance: false };
     }
     if (previewLogoState) { currentCustom.logo = previewLogoState; }
     currentCustom.appUrl = appUrlValue;
+    currentCustom.inMaintenance = inMaintenanceValue;
 
-    if (!previewLogoState && !appUrlValue && !currentCustom.logo) {
-      if (!confirm("No has configurado ningún logo ni enlace. ¿Deseas guardar el proyecto con valores por defecto?")) return;
+    if (!previewLogoState && !appUrlValue && !currentCustom.logo && !inMaintenanceValue) {
+      if (!confirm("No has configurado ningún logo, enlace o mantenimiento. ¿Deseas guardar el proyecto con valores por defecto?")) return;
     }
 
     const saveBtn = document.getElementById('adminSaveBtn');
@@ -2213,6 +2229,7 @@
       localStorage.setItem('portfolio_custom_logos', JSON.stringify(customLogos));
       if (currentCustom.logo) { applyLogoToCard(projectId, currentCustom.logo); }
       applyAppUrlToCard(projectId, currentCustom.appUrl);
+      applyMaintenanceToCard(projectId, currentCustom.inMaintenance, currentCustom.appUrl);
       saveBtn.textContent = "✓ ¡Guardado!";
       setTimeout(() => { saveBtn.textContent = "Guardar Cambios"; saveBtn.disabled = false; closeAdminModal(); }, 1000);
     } catch (err) {
@@ -2232,6 +2249,7 @@
       localStorage.setItem('portfolio_custom_logos', JSON.stringify(customLogos));
       applyDefaultLogoToCard(projectId);
       applyDefaultAppUrlToCard(projectId);
+      applyMaintenanceToCard(projectId, false, '');
       loadProjectLogoPreview();
       alert("Personalizaciones eliminadas correctamente.");
       closeAdminModal();
@@ -2298,6 +2316,37 @@
     }
   }
 
+  function applyMaintenanceToCard(projectId, inMaintenance, appUrl) {
+    const card = document.querySelector(`.project-card[data-project="${projectId}"]`);
+    if (!card) return;
+    let maintBadge = card.querySelector('.project-maintenance-badge');
+    if (inMaintenance) {
+      if (!maintBadge) {
+        maintBadge = document.createElement('div');
+        maintBadge.className = 'project-maintenance-badge';
+        maintBadge.style.cssText = 'display: inline-block; background: rgba(249,115,22,0.15); color: #f97316; border: 1px solid rgba(249,115,22,0.3); font-size: 0.65rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; padding: 0.2rem 0.5rem; border-radius: 6px; margin-top: 0.35rem;';
+        maintBadge.textContent = '🔧 Mantenimiento';
+        const projectMeta = card.querySelector('.project-meta');
+        if (projectMeta) {
+          projectMeta.appendChild(maintBadge);
+        }
+      }
+      const appBtn = card.querySelector('.project-app-btn');
+      if (appBtn) {
+        appBtn.setAttribute('href', '#');
+        appBtn.removeAttribute('target');
+        appBtn.setAttribute('onclick', 'return false;');
+        appBtn.className = 'project-link link-disabled project-app-btn';
+        appBtn.textContent = '🔧 Mantenimiento';
+      }
+    } else {
+      if (maintBadge) {
+        maintBadge.remove();
+      }
+      applyAppUrlToCard(projectId, appUrl);
+    }
+  }
+
   async function loadAllProjectCustomizations() {
     const cached = localStorage.getItem('portfolio_custom_logos');
     if (cached) {
@@ -2305,9 +2354,10 @@
         customLogos = JSON.parse(cached);
         for (const pid in customLogos) {
           let custom = customLogos[pid];
-          if (custom && custom.type) { custom = { logo: { type: custom.type, value: custom.value }, appUrl: '' }; }
+          if (custom && custom.type) { custom = { logo: { type: custom.type, value: custom.value }, appUrl: '', inMaintenance: false }; }
           if (custom.logo) { applyLogoToCard(pid, custom.logo); }
           applyAppUrlToCard(pid, custom.appUrl);
+          applyMaintenanceToCard(pid, custom.inMaintenance, custom.appUrl);
         }
       } catch (e) { console.error("Error parsing cached customizations:", e); }
     }
@@ -2330,13 +2380,15 @@
           if (custom && custom.type) {
             custom = {
               logo: { type: custom.type, value: custom.value },
-              appUrl: ''
+              appUrl: '',
+              inMaintenance: false
             };
           }
           if (custom.logo) {
             applyLogoToCard(pid, custom.logo);
           }
           applyAppUrlToCard(pid, custom.appUrl);
+          applyMaintenanceToCard(pid, custom.inMaintenance, custom.appUrl);
         }
       } catch (err) {
         console.error("Error syncing with Firebase:", err);
