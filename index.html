@@ -481,6 +481,27 @@
       font-size: 1.5rem; cursor: pointer; transition: color 0.2s;
     }
     .admin-close:hover { color: var(--red); }
+
+    /* Admin Tabs Styling */
+    .admin-tabs {
+      display: flex; gap: 0.5rem; margin-bottom: 1.5rem;
+      border-bottom: 1px solid var(--border); padding-bottom: 0.75rem;
+    }
+    .admin-tab {
+      background: none; border: none; color: var(--text3);
+      padding: 0.5rem 1.2rem; cursor: pointer; font-size: 0.9rem;
+      font-weight: 700; border-radius: 8px; transition: all 0.2s;
+      font-family: inherit;
+    }
+    .admin-tab.active {
+      background: rgba(108, 99, 255, 0.15); color: var(--accent3);
+      border: 1px solid rgba(108, 99, 255, 0.3);
+    }
+    .admin-tab:hover:not(.active) {
+      color: var(--text2); background: rgba(255, 255, 255, 0.05);
+    }
+    .admin-tab-content { display: none; }
+    .admin-tab-content.active { display: block; }
     .admin-field { margin-bottom: 1.5rem; }
     .admin-field label {
       display: block; color: var(--text2); font-size: 0.85rem;
@@ -608,7 +629,7 @@
         <div class="stat-label">Proyectos</div>
       </div>
       <div class="stat">
-        <div class="stat-num">13.7K</div>
+        <div class="stat-num" id="ytSubscribersHero">13.7K</div>
         <div class="stat-label">Suscriptores YouTube</div>
       </div>
       <div class="stat">
@@ -639,7 +660,7 @@
           Construí proyectos para comercios, familias, empresas y comunidades — cada uno con sus propios desafíos.
         </p>
         <p>
-          También comparto todo lo que aprendo en YouTube, donde tengo más de 13.700 suscriptores que siguen
+          También comparto todo lo que aprendo en YouTube, donde tengo más de <span id="ytSubscribersAbout">13.700</span> suscriptores que siguen
           tutoriales de programación y tecnología.
         </p>
         <div class="about-skills">
@@ -695,7 +716,7 @@
             <div class="timeline-dot" style="background: #ff0000; box-shadow: 0 0 10px #ff0000;"></div>
             <div class="timeline-content">
               <div class="timeline-title">Creador de Contenido</div>
-              <div class="timeline-sub">13.700+ suscriptores en YouTube</div>
+              <div class="timeline-sub"><span id="ytSubscribersTimeline">13.700+</span> suscriptores en YouTube</div>
             </div>
           </div>
         </div>
@@ -710,14 +731,14 @@
     <span class="section-tag fade-in">// content</span>
     <h2 class="section-title fade-in">Canal de YouTube</h2>
     <p class="section-desc fade-in">Comparto tutoriales de programación, proyectos y tecnología con una comunidad en crecimiento.</p>
-    <a href="https://www.youtube.com/@rodarena7" target="_blank" class="youtube-card fade-in">
-      <div class="yt-icon">▶</div>
+    <a href="https://www.youtube.com/@rodarena7" target="_blank" class="youtube-card fade-in" id="ytCardLink">
+      <div class="yt-icon" id="ytIcon">▶</div>
       <div class="yt-info">
-        <div class="yt-title">rodarena7</div>
+        <div class="yt-title" id="ytTitleText">rodarena7</div>
         <div class="yt-desc">Tutoriales de programación, apps web, bots y todo lo que construyo. Contenido para devs de habla hispana.</div>
         <div class="yt-stats">
           <div class="yt-stat">
-            <div class="yt-stat-num">13.7K+</div>
+            <div class="yt-stat-num" id="ytSubscribersCard">13.7K+</div>
             <div class="yt-stat-label">Suscriptores</div>
           </div>
           <div class="yt-stat">
@@ -1801,11 +1822,11 @@
               <div class="contact-link-val">@Ssteier2016</div>
             </div>
           </a>
-          <a href="https://www.youtube.com/@rodarena7" target="_blank" class="contact-link">
+          <a href="https://www.youtube.com/@rodarena7" target="_blank" class="contact-link" id="ytContactLink">
             <div class="contact-link-icon" style="background: rgba(255,0,0,0.1);">▶</div>
             <div class="contact-link-text">
               <div class="contact-link-label">YouTube</div>
-              <div class="contact-link-val">@rodarena7 · 13.7K suscriptores</div>
+              <div class="contact-link-val" id="ytContactVal">@rodarena7 · 13.7K suscriptores</div>
             </div>
           </a>
         </div>
@@ -1834,7 +1855,7 @@
   <p>
     Hecho con ☕ por <a href="https://github.com/rodarena7-commits"><span onclick="handleRodrigoClick(event)" style="cursor: pointer; user-select: none;">Rodrigo</span> Arena</a> ·
     <a href="https://github.com/rodarena7-commits" target="_blank">GitHub</a> ·
-    <a href="https://www.youtube.com/@rodarena7" target="_blank">YouTube</a>
+    <a href="https://www.youtube.com/@rodarena7" target="_blank" id="ytFooterLink">YouTube</a>
   </p>
   <p style="margin-top: 0.5rem; font-size: 0.75rem;">
     © 2026 Rodrigo Arena · Desarrollador Full Stack
@@ -1848,56 +1869,114 @@
       <h3 class="admin-title">Panel de Control</h3>
       <button class="admin-close" onclick="closeAdminModal()">✕</button>
     </div>
-    
-    <div class="admin-field">
-      <label for="adminProjectSelect">Seleccionar Proyecto</label>
-      <select id="adminProjectSelect" class="admin-select" onchange="loadProjectLogoPreview()">
-        <!-- Populated dynamically -->
-      </select>
+
+    <!-- Admin Tabs -->
+    <div class="admin-tabs">
+      <button class="admin-tab active" id="tabBtnProjects" onclick="switchAdminTab('projects')">📁 Proyectos</button>
+      <button class="admin-tab" id="tabBtnYt" onclick="switchAdminTab('yt')">🎥 YouTube</button>
     </div>
-    
-    <div class="admin-field">
-      <label>Visualización y Vista Previa</label>
-      <div class="admin-preview-row">
-        <div class="admin-preview-logo" id="adminPreviewLogo">📚</div>
-        <div class="admin-preview-info">
-          <strong id="adminPreviewName">Cargando...</strong>
-          <div style="font-size: 0.75rem; margin-top: 0.25rem;" id="adminLogoType">Logo por defecto</div>
+
+    <!-- TAB 1: PROJECTS -->
+    <div class="admin-tab-content active" id="adminTabProjects">
+      <div class="admin-field">
+        <label for="adminProjectSelect">Seleccionar Proyecto</label>
+        <select id="adminProjectSelect" class="admin-select" onchange="loadProjectLogoPreview()">
+          <!-- Populated dynamically -->
+        </select>
+      </div>
+      
+      <div class="admin-field">
+        <label>Visualización y Vista Previa</label>
+        <div class="admin-preview-row">
+          <div class="admin-preview-logo" id="adminPreviewLogo">📚</div>
+          <div class="admin-preview-info">
+            <strong id="adminPreviewName">Cargando...</strong>
+            <div style="font-size: 0.75rem; margin-top: 0.25rem;" id="adminLogoType">Logo por defecto</div>
+          </div>
         </div>
       </div>
-    </div>
-    
-    <div class="admin-field">
-      <label for="adminEmojiInput">Opción 1: Usar Emoji</label>
-      <input type="text" id="adminEmojiInput" class="admin-input" placeholder="Ej: 🚀, 💻, 🧠" maxlength="4" oninput="previewEmojiLogo(this.value)" />
+      
+      <div class="admin-field">
+        <label for="adminEmojiInput">Opción 1: Usar Emoji</label>
+        <input type="text" id="adminEmojiInput" class="admin-input" placeholder="Ej: 🚀, 💻, 🧠" maxlength="4" oninput="previewEmojiLogo(this.value)" />
+      </div>
+
+      <div class="admin-field">
+        <label for="adminFileInput">Opción 2: Subir Imagen</label>
+        <input type="file" id="adminFileInput" class="admin-input" accept="image/*" onchange="previewImageFile(event)" />
+      </div>
+
+      <div class="admin-field">
+        <label for="adminUrlInput">Opción 3: URL de Imagen</label>
+        <input type="text" id="adminUrlInput" class="admin-input" placeholder="https://example.com/logo.png" oninput="previewUrlLogo(this.value)" />
+      </div>
+
+      <div class="admin-field">
+        <label for="adminAppUrlInput">Enlace del Botón "Ver App"</label>
+        <input type="text" id="adminAppUrlInput" class="admin-input" placeholder="https://example.com/mi-app" />
+      </div>
+
+      <div class="admin-field" style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 1.5rem;">
+        <input type="checkbox" id="adminMaintenanceInput" style="width: 20px; height: 20px; cursor: pointer; accent-color: #f97316;" />
+        <label for="adminMaintenanceInput" style="margin-bottom: 0; cursor: pointer; text-transform: none; font-size: 0.9rem; font-weight: 600; color: #f97316;">🔧 Proyecto en Mantenimiento</label>
+      </div>
+
+      <div class="admin-btn-group">
+        <button class="admin-btn admin-btn-delete" onclick="deleteProjectCustomizations()">Quitar Personalizados</button>
+        <button class="admin-btn admin-btn-save" id="adminSaveBtn" onclick="saveProjectCustomizations()">Guardar Cambios</button>
+      </div>
     </div>
 
-    <div class="admin-field">
-      <label for="adminFileInput">Opción 2: Subir Imagen</label>
-      <input type="file" id="adminFileInput" class="admin-input" accept="image/*" onchange="previewImageFile(event)" />
+    <!-- TAB 2: YOUTUBE -->
+    <div class="admin-tab-content" id="adminTabYt">
+      <div class="admin-field">
+        <label>Vista Previa del Canal</label>
+        <div style="display: flex; align-items: center; gap: 1.2rem; background: var(--bg2); border: 1px solid var(--border); padding: 1.2rem; border-radius: 16px;">
+          <div id="adminYtPreviewIcon" style="width: 60px; height: 60px; background: #ff0000; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 1.8rem; box-shadow: 0 0 15px rgba(255,0,0,0.3); overflow: hidden; flex-shrink: 0; color: white;">▶</div>
+          <div style="flex: 1; min-width: 0;">
+            <strong style="display: block; font-size: 1rem; color: var(--text);" id="adminYtPreviewName">@rodarena7</strong>
+            <span style="font-size: 0.8rem; color: var(--text3);" id="adminYtPreviewSubs">13.7K suscriptores</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="admin-field">
+        <label for="adminYtUrlInput">Enlace del Canal</label>
+        <input type="text" id="adminYtUrlInput" class="admin-input" placeholder="https://www.youtube.com/@rodarena7" oninput="updateYtPreviewUrl(this.value)" />
+      </div>
+
+      <div class="admin-field">
+        <label for="adminYtSubsShortInput">Suscriptores (Ej: 13.7K)</label>
+        <input type="text" id="adminYtSubsShortInput" class="admin-input" placeholder="13.7K" oninput="updateYtPreviewSubsShort(this.value)" />
+      </div>
+
+      <div class="admin-field">
+        <label for="adminYtSubsLongInput">Suscriptores Completo (Ej: 13.700)</label>
+        <input type="text" id="adminYtSubsLongInput" class="admin-input" placeholder="13.700" />
+      </div>
+
+      <div class="admin-field">
+        <label for="adminYtEmojiInput">Opción 1: Usar Emoji (para el Avatar)</label>
+        <input type="text" id="adminYtEmojiInput" class="admin-input" placeholder="Ej: ▶, 🎥" maxlength="4" oninput="previewYtEmoji(this.value)" />
+      </div>
+
+      <div class="admin-field">
+        <label for="adminYtFileInput">Opción 2: Subir Avatar del Canal</label>
+        <input type="file" id="adminYtFileInput" class="admin-input" accept="image/*" onchange="previewYtImageFile(event)" />
+      </div>
+
+      <div class="admin-field">
+        <label for="adminYtUrlLogoInput">Opción 3: URL del Avatar del Canal</label>
+        <input type="text" id="adminYtUrlLogoInput" class="admin-input" placeholder="https://example.com/youtube-avatar.png" oninput="previewYtUrlLogo(this.value)" />
+      </div>
+
+      <div class="admin-btn-group" style="margin-top: 2rem;">
+        <button class="admin-btn admin-btn-delete" onclick="resetYtSettings()">Restablecer por Defecto</button>
+        <button class="admin-btn admin-btn-save" id="adminYtSaveBtn" onclick="saveYtSettings()">Guardar Cambios</button>
+      </div>
     </div>
 
-    <div class="admin-field">
-      <label for="adminUrlInput">Opción 3: URL de Imagen</label>
-      <input type="text" id="adminUrlInput" class="admin-input" placeholder="https://example.com/logo.png" oninput="previewUrlLogo(this.value)" />
-    </div>
-
-    <div class="admin-field">
-      <label for="adminAppUrlInput">Enlace del Botón "Ver App"</label>
-      <input type="text" id="adminAppUrlInput" class="admin-input" placeholder="https://example.com/mi-app" />
-    </div>
-
-    <div class="admin-field" style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 1.5rem;">
-      <input type="checkbox" id="adminMaintenanceInput" style="width: 20px; height: 20px; cursor: pointer; accent-color: #f97316;" />
-      <label for="adminMaintenanceInput" style="margin-bottom: 0; cursor: pointer; text-transform: none; font-size: 0.9rem; font-weight: 600; color: #f97316;">🔧 Proyecto en Mantenimiento</label>
-    </div>
-
-    <div class="admin-btn-group">
-      <button class="admin-btn admin-btn-delete" onclick="deleteProjectCustomizations()">Quitar Personalizados</button>
-      <button class="admin-btn admin-btn-save" id="adminSaveBtn" onclick="saveProjectCustomizations()">Guardar Cambios</button>
-    </div>
-
-    <button class="admin-fb-trigger" onclick="toggleFbPanel()">⚙️ Configuración Firebase</button>
+    <button class="admin-fb-trigger" onclick="toggleFbPanel()" style="margin-top: 1.5rem;">⚙️ Configuración Firebase</button>
     <div class="admin-fb-panel" id="adminFbPanel">
       <p>Para persistir los logos públicamente para todos los usuarios, crea una base de datos Firebase Firestore y pega tu configuración en <code>index.html</code>:</p>
       <pre class="admin-fb-code">const firebaseConfig = {
@@ -2004,6 +2083,14 @@
     console.log("Firebase no está configurado. Usando localStorage como fallback.");
   }
 
+  let ytSettings = {
+    url: 'https://www.youtube.com/@rodarena7',
+    subsShort: '13.7K',
+    subsLong: '13.700',
+    avatar: { type: 'emoji', value: '▶' }
+  };
+  let ytPreviewAvatarState = null;
+
   const defaultProjectLogos = {};
   const defaultAppUrls = {};
   const projectsData = [];
@@ -2074,7 +2161,11 @@
     document.getElementById('adminUrlInput').value = '';
     document.getElementById('adminAppUrlInput').value = '';
     document.getElementById('adminMaintenanceInput').checked = false;
+    
+    switchAdminTab('projects');
+
     previewLogoState = null;
+    ytPreviewAvatarState = null;
   }
 
   function handleOutsideClick(e) {
@@ -2344,6 +2435,234 @@
         maintBadge.remove();
       }
       applyAppUrlToCard(projectId, appUrl);
+    }
+  }
+
+  function switchAdminTab(tabName) {
+    const tabProjectsBtn = document.getElementById('tabBtnProjects');
+    const tabYtBtn = document.getElementById('tabBtnYt');
+    const tabProjectsContent = document.getElementById('adminTabProjects');
+    const tabYtContent = document.getElementById('adminTabYt');
+
+    if (tabName === 'projects') {
+      tabProjectsBtn.classList.add('active');
+      tabYtBtn.classList.remove('active');
+      tabProjectsContent.classList.add('active');
+      tabYtContent.classList.remove('active');
+    } else {
+      tabProjectsBtn.classList.remove('active');
+      tabYtBtn.classList.add('active');
+      tabProjectsContent.classList.remove('active');
+      tabYtContent.classList.add('active');
+      loadYtSettingsInModal();
+    }
+  }
+
+  function loadYtSettingsInModal() {
+    document.getElementById('adminYtUrlInput').value = ytSettings.url || '';
+    document.getElementById('adminYtSubsShortInput').value = ytSettings.subsShort || '';
+    document.getElementById('adminYtSubsLongInput').value = ytSettings.subsLong || '';
+    document.getElementById('adminYtEmojiInput').value = '';
+    document.getElementById('adminYtFileInput').value = '';
+    document.getElementById('adminYtUrlLogoInput').value = '';
+
+    ytPreviewAvatarState = ytSettings.avatar ? { ...ytSettings.avatar } : { type: 'emoji', value: '▶' };
+    
+    if (ytPreviewAvatarState.type === 'emoji') {
+      document.getElementById('adminYtEmojiInput').value = ytPreviewAvatarState.value;
+    } else if (ytPreviewAvatarState.type === 'image' && !ytPreviewAvatarState.value.startsWith('data:')) {
+      document.getElementById('adminYtUrlLogoInput').value = ytPreviewAvatarState.value;
+    }
+
+    renderYtAvatarToElement(document.getElementById('adminYtPreviewIcon'), ytPreviewAvatarState);
+    updateYtPreviewUrl(ytSettings.url);
+    updateYtPreviewSubsShort(ytSettings.subsShort);
+  }
+
+  function renderYtAvatarToElement(element, avatar) {
+    if (!avatar) {
+      element.innerHTML = '▶';
+      element.style.background = '#ff0000';
+      return;
+    }
+    if (avatar.type === 'emoji') {
+      element.innerHTML = avatar.value;
+      element.style.background = '#ff0000';
+    } else {
+      element.innerHTML = `<img src="${avatar.value}" style="width: 100%; height: 100%; object-fit: cover; border-radius: inherit;" onerror="this.parentNode.innerHTML='⚠️'; this.parentNode.style.background='var(--red)'" />`;
+      element.style.background = 'transparent';
+    }
+  }
+
+  function updateYtPreviewUrl(val) {
+    const nameEl = document.getElementById('adminYtPreviewName');
+    if (!val || val.trim() === '') {
+      nameEl.textContent = '@rodarena7';
+      return;
+    }
+    const parts = val.trim().split('/');
+    const lastPart = parts[parts.length - 1] || parts[parts.length - 2] || '@rodarena7';
+    nameEl.textContent = lastPart.startsWith('@') ? lastPart : '@' + lastPart;
+  }
+
+  function updateYtPreviewSubsShort(val) {
+    const subsEl = document.getElementById('adminYtPreviewSubs');
+    subsEl.textContent = (val.trim() || '13.7K') + ' suscriptores';
+  }
+
+  function previewYtEmoji(val) {
+    if (!val.trim()) {
+      ytPreviewAvatarState = { type: 'emoji', value: '▶' };
+    } else {
+      document.getElementById('adminYtFileInput').value = '';
+      document.getElementById('adminYtUrlLogoInput').value = '';
+      ytPreviewAvatarState = { type: 'emoji', value: val.trim() };
+    }
+    renderYtAvatarToElement(document.getElementById('adminYtPreviewIcon'), ytPreviewAvatarState);
+  }
+
+  function previewYtUrlLogo(val) {
+    if (!val.trim()) {
+      ytPreviewAvatarState = { type: 'emoji', value: '▶' };
+    } else {
+      document.getElementById('adminYtEmojiInput').value = '';
+      document.getElementById('adminYtFileInput').value = '';
+      ytPreviewAvatarState = { type: 'image', value: val.trim() };
+    }
+    renderYtAvatarToElement(document.getElementById('adminYtPreviewIcon'), ytPreviewAvatarState);
+  }
+
+  function previewYtImageFile(e) {
+    const file = e.target.files[0];
+    if (!file) return;
+    document.getElementById('adminYtEmojiInput').value = '';
+    document.getElementById('adminYtUrlLogoInput').value = '';
+    const reader = new FileReader();
+    reader.onload = function(event) {
+      const img = new Image();
+      img.onload = function() {
+        const canvas = document.createElement('canvas');
+        const maxDim = 128;
+        let width = img.width, height = img.height;
+        if (width > height) { if (width > maxDim) { height *= maxDim / width; width = maxDim; } }
+        else { if (height > maxDim) { width *= maxDim / height; height = maxDim; } }
+        canvas.width = width; canvas.height = height;
+        canvas.getContext('2d').drawImage(img, 0, 0, width, height);
+        const base64 = canvas.toDataURL('image/jpeg', 0.75);
+        ytPreviewAvatarState = { type: 'image', value: base64 };
+        renderYtAvatarToElement(document.getElementById('adminYtPreviewIcon'), ytPreviewAvatarState);
+      };
+      img.src = event.target.result;
+    };
+    reader.readAsDataURL(file);
+  }
+
+  async function saveYtSettings() {
+    const urlValue = document.getElementById('adminYtUrlInput').value.trim() || 'https://www.youtube.com/@rodarena7';
+    const subsShortValue = document.getElementById('adminYtSubsShortInput').value.trim() || '13.7K';
+    const subsLongValue = document.getElementById('adminYtSubsLongInput').value.trim() || '13.700';
+    
+    const settings = {
+      url: urlValue,
+      subsShort: subsShortValue,
+      subsLong: subsLongValue,
+      avatar: ytPreviewAvatarState || { type: 'emoji', value: '▶' }
+    };
+
+    const saveBtn = document.getElementById('adminYtSaveBtn');
+    saveBtn.textContent = "Guardando..."; saveBtn.disabled = true;
+
+    try {
+      if (useFirebase) {
+        await db.collection('site_settings').doc('youtube').set(settings);
+      }
+      ytSettings = settings;
+      localStorage.setItem('portfolio_youtube_settings', JSON.stringify(ytSettings));
+      
+      applyYtSettingsToPage(ytSettings);
+      
+      saveBtn.textContent = "✓ ¡Guardado!";
+      setTimeout(() => {
+        saveBtn.textContent = "Guardar Cambios";
+        saveBtn.disabled = false;
+        closeAdminModal();
+      }, 1000);
+    } catch(err) {
+      console.error("Error al guardar YouTube settings:", err);
+      alert("Error al guardar en la base de datos: " + err.message);
+      saveBtn.textContent = "Guardar Cambios";
+      saveBtn.disabled = false;
+    }
+  }
+
+  async function resetYtSettings() {
+    if (!confirm("¿Estás seguro de que deseas restablecer los valores de YouTube a los predeterminados?")) return;
+    
+    const defaults = {
+      url: 'https://www.youtube.com/@rodarena7',
+      subsShort: '13.7K',
+      subsLong: '13.700',
+      avatar: { type: 'emoji', value: '▶' }
+    };
+
+    try {
+      if (useFirebase) {
+        await db.collection('site_settings').doc('youtube').delete();
+      }
+      ytSettings = defaults;
+      localStorage.setItem('portfolio_youtube_settings', JSON.stringify(ytSettings));
+      applyYtSettingsToPage(ytSettings);
+      loadYtSettingsInModal();
+      alert("Configuración de YouTube restablecida.");
+      closeAdminModal();
+    } catch(err) {
+      console.error("Error al eliminar YouTube settings:", err);
+      alert("Error al restablecer configuración: " + err.message);
+    }
+  }
+
+  function applyYtSettingsToPage(settings) {
+    if (!settings) return;
+    const url = settings.url || 'https://www.youtube.com/@rodarena7';
+    const subsShort = settings.subsShort || '13.7K';
+    const subsLong = settings.subsLong || '13.700';
+    const avatar = settings.avatar || { type: 'emoji', value: '▶' };
+    
+    const parts = url.split('/');
+    const handle = parts[parts.length - 1] || parts[parts.length - 2] || '@rodarena7';
+    const cleanHandle = handle.startsWith('@') ? handle : '@' + handle;
+    const handleNoAt = handle.startsWith('@') ? handle.substring(1) : handle;
+
+    const subHero = document.getElementById('ytSubscribersHero');
+    if (subHero) subHero.textContent = subsShort;
+
+    const subAbout = document.getElementById('ytSubscribersAbout');
+    if (subAbout) subAbout.textContent = subsLong;
+
+    const subTimeline = document.getElementById('ytSubscribersTimeline');
+    if (subTimeline) subTimeline.textContent = subsLong + '+';
+
+    const subCard = document.getElementById('ytSubscribersCard');
+    if (subCard) subCard.textContent = subsShort + '+';
+
+    const cardLink = document.getElementById('ytCardLink');
+    if (cardLink) cardLink.setAttribute('href', url);
+
+    const contactLink = document.getElementById('ytContactLink');
+    if (contactLink) contactLink.setAttribute('href', url);
+
+    const footerLink = document.getElementById('ytFooterLink');
+    if (footerLink) footerLink.setAttribute('href', url);
+
+    const titleText = document.getElementById('ytTitleText');
+    if (titleText) titleText.textContent = handleNoAt;
+
+    const contactVal = document.getElementById('ytContactVal');
+    if (contactVal) contactVal.textContent = cleanHandle + ' · ' + subsShort + ' suscriptores';
+
+    const iconEl = document.getElementById('ytIcon');
+    if (iconEl) {
+      renderYtAvatarToElement(iconEl, avatar);
     }
   }
 
