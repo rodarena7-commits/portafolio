@@ -1916,6 +1916,29 @@
         <input type="text" id="adminAppUrlInput" class="admin-input" placeholder="https://example.com/mi-app" />
       </div>
 
+      <div class="admin-field">
+        <label for="adminProjectNameInput">Nombre Personalizado</label>
+        <input type="text" id="adminProjectNameInput" class="admin-input" placeholder="Nombre original del proyecto" />
+      </div>
+
+      <div class="admin-field">
+        <label for="adminCategorySelect">Categoría / Tipo de Proyecto</label>
+        <select id="adminCategorySelect" class="admin-select">
+          <option value="default">Por defecto del proyecto</option>
+          <option value="ecommerce">E-Commerce</option>
+          <option value="bot">Bot</option>
+          <option value="app">App Web</option>
+          <option value="sistema">Sistema</option>
+        </select>
+      </div>
+
+      <div class="admin-field">
+        <label>Antigüedad del Repositorio</label>
+        <div style="font-size: 0.9rem; color: var(--text); background: var(--bg2); padding: 0.75rem 1rem; border-radius: 12px; border: 1px solid var(--border); font-weight: 500;" id="adminProjectAgeDisplay">
+          Cargando fecha...
+        </div>
+      </div>
+
       <div class="admin-field" style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 1.5rem;">
         <input type="checkbox" id="adminMaintenanceInput" style="width: 20px; height: 20px; cursor: pointer; accent-color: #f97316;" />
         <label for="adminMaintenanceInput" style="margin-bottom: 0; cursor: pointer; text-transform: none; font-size: 0.9rem; font-weight: 600; color: #f97316;">🔧 Proyecto en Mantenimiento</label>
@@ -2091,17 +2114,62 @@
   };
   let ytPreviewAvatarState = null;
 
+  const repoCreationDates = {
+    "sandbook": "2026-02-04T23:26:25Z",
+    "systempresas": "2025-11-25T18:03:10Z",
+    "outlet-roma": "2026-02-13T06:11:13Z",
+    "pijamas": "2026-04-21T16:58:16Z",
+    "wallwtfamily": "2026-03-20T02:17:21Z",
+    "guiarcapital": "2025-10-25T18:58:51Z",
+    "bitcoiner": "2025-12-04T10:52:44Z",
+    "younglifeparaguay": "2026-03-29T02:29:46Z",
+    "chess-game": "2025-03-20T17:04:45Z",
+    "automatizacion": "2026-01-26T02:56:07Z",
+    "botshowroom": "2026-05-06T15:00:54Z",
+    "botsia": "2026-05-06T04:48:46Z",
+    "cortesupremo": "2026-04-28T04:48:20Z",
+    "descuentos-bot": "2026-05-08T13:50:14Z",
+    "fgoparfum": "2026-06-09T14:32:17Z",
+    "me-descuentos-ar": "2026-05-13T04:48:53Z",
+    "metricas": "2026-04-28T02:23:49Z",
+    "sandaicarnes": "2026-05-06T02:35:39Z",
+    "sandbox-arena": "2026-01-20T19:13:24Z",
+    "sandboxai": "2026-04-14T03:26:00Z",
+    "showroomderek": "2026-05-08T16:38:36Z",
+    "testfuuf": "2026-04-14T18:31:55Z",
+    "tiktok-youtube": "2026-05-23T02:43:33Z",
+    "youtube-auto": "2026-05-23T03:18:08Z",
+    "aerocoin": "2025-12-10T13:23:35Z",
+    "bibliaweb": "2025-05-26T11:32:17Z",
+    "crypto-tracker": "2025-07-03T18:31:56Z",
+    "eccodearena": "2026-01-20T18:30:57Z",
+    "enoftoken": "2025-12-03T04:21:42Z",
+    "fellasapp": "2025-05-07T14:50:50Z",
+    "fortibotton": "2025-03-29T05:48:54Z",
+    "fortigame": "2025-04-27T15:59:30Z",
+    "handlephone": "2025-04-01T16:19:07Z",
+    "humanzomby": "2025-12-29T17:20:05Z",
+    "linkedin-autopilot": "2026-06-04T02:53:26Z",
+    "neigame": "2025-05-02T21:00:01Z",
+    "static": "2025-04-02T14:55:38Z",
+    "trading-app": "2025-06-19T09:54:57Z"
+  };
+
   const defaultProjectLogos = {};
   const defaultAppUrls = {};
+  const defaultProjectNames = {};
+  const defaultProjectCategories = {};
   const projectsData = [];
   let customLogos = {};
   let previewLogoState = null;
 
   document.querySelectorAll('.project-card').forEach(card => {
     const id = card.dataset.project;
-    const name = card.querySelector('.project-name').textContent;
+    const nameEl = card.querySelector('.project-name');
+    const name = nameEl.textContent;
     const logoEl = card.querySelector('.project-logo');
     const appBtn = card.querySelector('.project-app-btn');
+    const typeEl = card.querySelector('.project-type');
     
     defaultProjectLogos[id] = {
       html: logoEl.innerHTML,
@@ -2116,7 +2184,32 @@
       };
     }
 
+    defaultProjectNames[id] = name;
+
+    if (typeEl) {
+      defaultProjectCategories[id] = {
+        type: card.dataset.type || 'app',
+        text: typeEl.textContent,
+        style: typeEl.getAttribute('style') || ''
+      };
+    }
+
     projectsData.push({ id, name });
+  });
+
+  // Dynamic age elements rendering on page load
+  document.querySelectorAll('.project-card').forEach(card => {
+    const id = card.dataset.project;
+    const owner = card.querySelector('.project-owner').textContent.trim();
+    const metaEl = card.querySelector('.project-meta');
+    if (metaEl) {
+      const ageDiv = document.createElement('div');
+      ageDiv.className = 'project-age';
+      ageDiv.style.cssText = 'font-size: 0.72rem; color: var(--text3); margin-top: 0.25rem; display: flex; align-items: center; gap: 0.25rem; opacity: 0.85;';
+      ageDiv.innerHTML = `📅 <span class="project-age-val" id="age-${id}">Calculando...</span>`;
+      metaEl.appendChild(ageDiv);
+    }
+    loadProjectAge(id, owner);
   });
 
   // ─── ADMIN MODAL FUNCTIONS ───
@@ -2160,6 +2253,8 @@
     document.getElementById('adminFileInput').value = '';
     document.getElementById('adminUrlInput').value = '';
     document.getElementById('adminAppUrlInput').value = '';
+    document.getElementById('adminProjectNameInput').value = '';
+    document.getElementById('adminCategorySelect').value = 'default';
     document.getElementById('adminMaintenanceInput').checked = false;
     
     switchAdminTab('projects');
@@ -2189,6 +2284,8 @@
     document.getElementById('adminFileInput').value = '';
     document.getElementById('adminUrlInput').value = '';
     document.getElementById('adminAppUrlInput').value = '';
+    document.getElementById('adminProjectNameInput').value = '';
+    document.getElementById('adminCategorySelect').value = 'default';
     document.getElementById('adminMaintenanceInput').checked = false;
 
     let custom = customLogos[projectId];
@@ -2197,7 +2294,9 @@
       custom = {
         logo: { type: custom.type, value: custom.value },
         appUrl: '',
-        inMaintenance: false
+        inMaintenance: false,
+        name: '',
+        category: 'default'
       };
     }
 
@@ -2230,6 +2329,41 @@
         document.getElementById('adminAppUrlInput').placeholder = defLink.url;
       } else {
         document.getElementById('adminAppUrlInput').placeholder = "Sin enlace (N/A App)";
+      }
+    }
+
+    if (custom && custom.name) {
+      document.getElementById('adminProjectNameInput').value = custom.name;
+    } else {
+      document.getElementById('adminProjectNameInput').placeholder = defaultProjectNames[projectId] || '';
+    }
+
+    if (custom && custom.category) {
+      document.getElementById('adminCategorySelect').value = custom.category;
+    } else {
+      document.getElementById('adminCategorySelect').value = 'default';
+    }
+
+    const ageDisplay = document.getElementById('adminProjectAgeDisplay');
+    const card = document.querySelector(`.project-card[data-project="${projectId}"]`);
+    const owner = card ? card.querySelector('.project-owner').textContent.trim() : '';
+    const createdDate = repoCreationDates[projectId] || localStorage.getItem(`repo_date_${projectId}`);
+    
+    if (createdDate) {
+      const formattedDate = new Date(createdDate).toLocaleDateString('es-ES', { year: 'numeric', month: 'long', day: 'numeric' });
+      const ageStr = calculateAgeString(createdDate);
+      ageDisplay.innerHTML = `${formattedDate} <span style="color:var(--accent3); margin-left: 0.5rem;">(${ageStr})</span>`;
+    } else {
+      ageDisplay.innerHTML = `<span style="color:var(--text3);">Carga automática de GitHub...</span>`;
+      if (card && owner) {
+        loadProjectAge(projectId, owner).then(() => {
+          const freshDate = repoCreationDates[projectId] || localStorage.getItem(`repo_date_${projectId}`);
+          if (freshDate) {
+            const formattedDate = new Date(freshDate).toLocaleDateString('es-ES', { year: 'numeric', month: 'long', day: 'numeric' });
+            const ageStr = calculateAgeString(freshDate);
+            ageDisplay.innerHTML = `${formattedDate} <span style="color:var(--accent3); margin-left: 0.5rem;">(${ageStr})</span>`;
+          }
+        });
       }
     }
 
@@ -2299,16 +2433,21 @@
     const projectId = document.getElementById('adminProjectSelect').value;
     const appUrlValue = document.getElementById('adminAppUrlInput').value.trim();
     const inMaintenanceValue = document.getElementById('adminMaintenanceInput').checked;
+    const projectNameValue = document.getElementById('adminProjectNameInput').value.trim();
+    const categoryValue = document.getElementById('adminCategorySelect').value;
+
     let currentCustom = customLogos[projectId] || {};
     if (currentCustom.type) {
-      currentCustom = { logo: { type: currentCustom.type, value: currentCustom.value }, appUrl: '', inMaintenance: false };
+      currentCustom = { logo: { type: currentCustom.type, value: currentCustom.value }, appUrl: '', inMaintenance: false, name: '', category: 'default' };
     }
     if (previewLogoState) { currentCustom.logo = previewLogoState; }
     currentCustom.appUrl = appUrlValue;
     currentCustom.inMaintenance = inMaintenanceValue;
+    currentCustom.name = projectNameValue;
+    currentCustom.category = categoryValue;
 
-    if (!previewLogoState && !appUrlValue && !currentCustom.logo && !inMaintenanceValue) {
-      if (!confirm("No has configurado ningún logo, enlace o mantenimiento. ¿Deseas guardar el proyecto con valores por defecto?")) return;
+    if (!previewLogoState && !appUrlValue && !currentCustom.logo && !inMaintenanceValue && !projectNameValue && categoryValue === 'default') {
+      if (!confirm("No has configurado ningún logo, enlace, mantenimiento, nombre o categoría. ¿Deseas guardar el proyecto con valores por defecto?")) return;
     }
 
     const saveBtn = document.getElementById('adminSaveBtn');
@@ -2321,6 +2460,9 @@
       if (currentCustom.logo) { applyLogoToCard(projectId, currentCustom.logo); }
       applyAppUrlToCard(projectId, currentCustom.appUrl);
       applyMaintenanceToCard(projectId, currentCustom.inMaintenance, currentCustom.appUrl);
+      applyNameToCard(projectId, currentCustom.name);
+      applyCategoryToCard(projectId, currentCustom.category);
+      
       saveBtn.textContent = "✓ ¡Guardado!";
       setTimeout(() => { saveBtn.textContent = "Guardar Cambios"; saveBtn.disabled = false; closeAdminModal(); }, 1000);
     } catch (err) {
@@ -2333,7 +2475,7 @@
   async function deleteProjectCustomizations() {
     const projectId = document.getElementById('adminProjectSelect').value;
     if (!customLogos[projectId]) { alert("Este proyecto no tiene configuraciones personalizadas."); return; }
-    if (!confirm("¿Estás seguro de que deseas quitar el logo y el enlace de App personalizado de este proyecto?")) return;
+    if (!confirm("¿Estás seguro de que deseas quitar las personalizaciones de este proyecto?")) return;
     try {
       if (useFirebase) { await db.collection('project_logos').doc(projectId).delete(); }
       delete customLogos[projectId];
@@ -2341,6 +2483,8 @@
       applyDefaultLogoToCard(projectId);
       applyDefaultAppUrlToCard(projectId);
       applyMaintenanceToCard(projectId, false, '');
+      applyNameToCard(projectId, '');
+      applyCategoryToCard(projectId, 'default');
       loadProjectLogoPreview();
       alert("Personalizaciones eliminadas correctamente.");
       closeAdminModal();
@@ -2435,6 +2579,122 @@
         maintBadge.remove();
       }
       applyAppUrlToCard(projectId, appUrl);
+    }
+  }
+
+  function applyNameToCard(projectId, name) {
+    const card = document.querySelector(`.project-card[data-project="${projectId}"]`);
+    if (!card) return;
+    const nameEl = card.querySelector('.project-name');
+    if (!nameEl) return;
+    if (name && name.trim() !== '') {
+      nameEl.textContent = name;
+    } else {
+      const def = defaultProjectNames[projectId];
+      if (def) {
+        nameEl.textContent = def;
+      }
+    }
+  }
+
+  function applyCategoryToCard(projectId, category) {
+    const card = document.querySelector(`.project-card[data-project="${projectId}"]`);
+    if (!card) return;
+    const typeEl = card.querySelector('.project-type');
+    if (!typeEl) return;
+
+    if (category && category !== 'default') {
+      card.dataset.type = category;
+      let text = '';
+      let style = '';
+      switch (category) {
+        case 'ecommerce':
+          text = 'E-Commerce';
+          style = 'background: rgba(220,38,38,0.15); color: #f87171; border: 1px solid rgba(220,38,38,0.3);';
+          break;
+        case 'bot':
+          text = 'Bot';
+          style = 'background: rgba(34,211,160,0.15); color: #22d3a0; border: 1px solid rgba(34,211,160,0.3);';
+          break;
+        case 'app':
+          text = 'App';
+          style = 'background: rgba(59,130,246,0.15); color: #60a5fa; border: 1px solid rgba(59,130,246,0.3);';
+          break;
+        case 'sistema':
+          text = 'Sistema';
+          style = 'background: rgba(251,191,36,0.15); color: #fbbf24; border: 1px solid rgba(251,191,36,0.3);';
+          break;
+      }
+      typeEl.textContent = text;
+      typeEl.setAttribute('style', style);
+    } else {
+      const def = defaultProjectCategories[projectId];
+      if (def) {
+        card.dataset.type = def.type;
+        typeEl.textContent = def.text;
+        typeEl.setAttribute('style', def.style);
+      }
+    }
+  }
+
+  function calculateAgeString(createdDateStr) {
+    if (!createdDateStr) return '';
+    const created = new Date(createdDateStr);
+    const now = new Date();
+    
+    let years = now.getFullYear() - created.getFullYear();
+    let months = now.getMonth() - created.getMonth();
+    
+    if (months < 0) {
+      years--;
+      months += 12;
+    }
+    
+    if (years === 0) {
+      if (months === 0) {
+        return 'Reciente';
+      }
+      return `${months} ${months === 1 ? 'mes' : 'meses'}`;
+    } else {
+      if (months === 0) {
+        return `${years} ${years === 1 ? 'año' : 'años'}`;
+      }
+      return `${years} ${years === 1 ? 'año' : 'años'} y ${months} ${months === 1 ? 'mes' : 'meses'}`;
+    }
+  }
+
+  async function loadProjectAge(projectId, owner) {
+    const ageValEl = document.getElementById(`age-${projectId}`);
+    if (!ageValEl) return;
+
+    let dateStr = repoCreationDates[projectId];
+    
+    if (!dateStr) {
+      const cachedDate = localStorage.getItem(`repo_date_${projectId}`);
+      if (cachedDate) {
+        dateStr = cachedDate;
+      } else {
+        try {
+          const res = await fetch(`https://api.github.com/repos/${owner}/${projectId}`);
+          if (res.ok) {
+            const data = await res.json();
+            dateStr = data.created_at;
+            localStorage.setItem(`repo_date_${projectId}`, dateStr);
+          }
+        } catch (e) {
+          console.error(`Error fetching age for ${projectId}:`, e);
+        }
+      }
+    }
+    
+    if (dateStr) {
+      ageValEl.textContent = calculateAgeString(dateStr);
+      const card = document.querySelector(`.project-card[data-project="${projectId}"]`);
+      if (card) {
+        card.dataset.createdAt = dateStr;
+      }
+    } else {
+      ageValEl.textContent = 'N/A';
     }
   }
 
@@ -2667,21 +2927,50 @@
   }
 
   async function loadAllProjectCustomizations() {
+    // Load YouTube settings first
+    const ytCached = localStorage.getItem('portfolio_youtube_settings');
+    if (ytCached) {
+      try {
+        ytSettings = JSON.parse(ytCached);
+        applyYtSettingsToPage(ytSettings);
+      } catch (e) { console.error("Error parsing cached YT settings:", e); }
+    } else {
+      applyYtSettingsToPage(ytSettings);
+    }
+
     const cached = localStorage.getItem('portfolio_custom_logos');
     if (cached) {
       try {
         customLogos = JSON.parse(cached);
         for (const pid in customLogos) {
           let custom = customLogos[pid];
-          if (custom && custom.type) { custom = { logo: { type: custom.type, value: custom.value }, appUrl: '', inMaintenance: false }; }
+          if (custom && custom.type) { 
+            custom = { 
+              logo: { type: custom.type, value: custom.value }, 
+              appUrl: '', 
+              inMaintenance: false,
+              name: '',
+              category: 'default'
+            }; 
+          }
           if (custom.logo) { applyLogoToCard(pid, custom.logo); }
           applyAppUrlToCard(pid, custom.appUrl);
           applyMaintenanceToCard(pid, custom.inMaintenance, custom.appUrl);
+          applyNameToCard(pid, custom.name);
+          applyCategoryToCard(pid, custom.category);
         }
       } catch (e) { console.error("Error parsing cached customizations:", e); }
     }
     if (useFirebase) {
       try {
+        // Fetch YT settings from Firebase
+        const ytDoc = await db.collection('site_settings').doc('youtube').get();
+        if (ytDoc.exists) {
+          ytSettings = ytDoc.data();
+          localStorage.setItem('portfolio_youtube_settings', JSON.stringify(ytSettings));
+          applyYtSettingsToPage(ytSettings);
+        }
+
         const snapshot = await db.collection('project_logos').get();
         const serverCustoms = {};
         snapshot.forEach(doc => {
@@ -2700,7 +2989,9 @@
             custom = {
               logo: { type: custom.type, value: custom.value },
               appUrl: '',
-              inMaintenance: false
+              inMaintenance: false,
+              name: '',
+              category: 'default'
             };
           }
           if (custom.logo) {
@@ -2708,6 +2999,8 @@
           }
           applyAppUrlToCard(pid, custom.appUrl);
           applyMaintenanceToCard(pid, custom.inMaintenance, custom.appUrl);
+          applyNameToCard(pid, custom.name);
+          applyCategoryToCard(pid, custom.category);
         }
       } catch (err) {
         console.error("Error syncing with Firebase:", err);
