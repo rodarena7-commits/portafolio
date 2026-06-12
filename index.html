@@ -844,11 +844,11 @@
     <h2 class="section-title fade-in">Sobre mí</h2>
     <div class="about-grid fade-in">
       <div class="about-text">
-        <p>
+        <p id="aboutBio1">
           Soy un desarrollador autodidacta con experiencia creando productos digitales completos:
           desde aplicaciones web con bases de datos en tiempo real hasta bots de WhatsApp con inteligencia artificial.
         </p>
-        <p>
+        <p id="aboutBio2">
           Me especializo en el ecosistema JavaScript/TypeScript, trabajando tanto en frontend como en backend.
           Construí proyectos para comercios, familias, empresas y comunidades — cada uno con sus propios desafíos.
         </p>
@@ -856,7 +856,7 @@
           También comparto todo lo que aprendo en YouTube, donde tengo más de <span id="ytSubscribersAbout">13.700</span> suscriptores que siguen
           tutoriales de programación y tecnología.
         </p>
-        <div class="about-skills">
+        <div class="about-skills" id="aboutSkillsContainer">
           <span class="skill-chip">React</span>
           <span class="skill-chip">Node.js</span>
           <span class="skill-chip">Firebase</span>
@@ -957,6 +957,7 @@
       <button class="filter-btn" onclick="filterProjects('bot')">Bots</button>
       <button class="filter-btn" onclick="filterProjects('app')">Apps Web</button>
       <button class="filter-btn" onclick="filterProjects('sistema')">Sistemas</button>
+      <button class="filter-btn" onclick="filterProjects('juego')">Juegos</button>
     </div>
     <div class="projects-grid" id="projectsGrid">
 
@@ -2126,6 +2127,7 @@
     <div class="admin-tabs">
       <button class="admin-tab active" id="tabBtnProjects" onclick="switchAdminTab('projects')">📁 Proyectos</button>
       <button class="admin-tab" id="tabBtnYt" onclick="switchAdminTab('yt')">🎥 YouTube</button>
+      <button class="admin-tab" id="tabBtnProfile" onclick="switchAdminTab('profile')">👤 Sobre Mí</button>
     </div>
 
     <!-- TAB 1: PROJECTS -->
@@ -2181,6 +2183,7 @@
           <option value="bot">Bot</option>
           <option value="app">App Web</option>
           <option value="sistema">Sistema</option>
+          <option value="juego">Juego</option>
         </select>
       </div>
 
@@ -2253,6 +2256,29 @@
       <div class="admin-btn-group" style="margin-top: 2rem;">
         <button class="admin-btn admin-btn-delete" onclick="resetYtSettings()">Restablecer por Defecto</button>
         <button class="admin-btn admin-btn-save" id="adminYtSaveBtn" onclick="saveYtSettings()">Guardar Cambios</button>
+      </div>
+    </div>
+
+    <!-- TAB 3: SOBRE MI / PERFIL -->
+    <div class="admin-tab-content" id="adminTabProfile">
+      <div class="admin-field">
+        <label for="adminBio1Input">Párrafo de Bio 1</label>
+        <textarea id="adminBio1Input" class="admin-input" style="height: 80px; resize: vertical; padding: 0.6rem; font-family: inherit; font-size: 0.85rem;" placeholder="Soy un desarrollador autodidacta..."></textarea>
+      </div>
+
+      <div class="admin-field">
+        <label for="adminBio2Input">Párrafo de Bio 2</label>
+        <textarea id="adminBio2Input" class="admin-input" style="height: 80px; resize: vertical; padding: 0.6rem; font-family: inherit; font-size: 0.85rem;" placeholder="Me especializo en el ecosistema JavaScript/TypeScript..."></textarea>
+      </div>
+
+      <div class="admin-field">
+        <label for="adminSkillsInput">Tecnologías / Lenguajes (Separados por coma)</label>
+        <textarea id="adminSkillsInput" class="admin-input" style="height: 80px; resize: vertical; padding: 0.6rem; font-family: inherit; font-size: 0.85rem;" placeholder="React, Node.js, Firebase, Tailwind CSS..."></textarea>
+      </div>
+
+      <div class="admin-btn-group" style="margin-top: 2rem;">
+        <button class="admin-btn admin-btn-delete" onclick="resetProfileSettings()">Restablecer por Defecto</button>
+        <button class="admin-btn admin-btn-save" id="adminProfileSaveBtn" onclick="saveProfileSettings()">Guardar Cambios</button>
       </div>
     </div>
 
@@ -2413,7 +2439,12 @@
     "neigame": "2025-05-02T21:00:01Z",
     "static": "2025-04-02T14:55:38Z",
     "trading-app": "2025-06-19T09:54:57Z"
+  };  const defaultProfileSettings = {
+    bio1: "Soy un desarrollador autodidacta con experiencia creando productos digitales completos: desde aplicaciones web con bases de datos en tiempo real hasta bots de WhatsApp con inteligencia artificial.",
+    bio2: "Me especializo en el ecosistema JavaScript/TypeScript, trabajando tanto en frontend como en backend. Construí proyectos para comercios, familias, empresas y comunidades — cada uno con sus propios desafíos.",
+    skills: ["React", "Node.js", "Firebase", "Tailwind CSS", "JavaScript", "TypeScript", "Vite", "WhatsApp Bots", "Groq AI", "PWA", "Firestore", "Git / GitHub", "Render", "HTML / CSS", "MercadoLibre API", "Google Calendar API"]
   };
+  let profileSettings = { ...defaultProfileSettings };
 
   const defaultProjectLogos = {};
   const defaultAppUrls = {};
@@ -2517,6 +2548,11 @@
     document.getElementById('adminCategorySelect').value = 'default';
     document.getElementById('adminMaintenanceInput').checked = false;
     document.getElementById('adminHideInput').checked = false;
+    
+    // reset profile inputs
+    document.getElementById('adminBio1Input').value = '';
+    document.getElementById('adminBio2Input').value = '';
+    document.getElementById('adminSkillsInput').value = '';
     
     switchAdminTab('projects');
 
@@ -2871,6 +2907,7 @@
       else if (activeFilter.includes('Bots')) type = 'bot';
       else if (activeFilter.includes('Apps')) type = 'app';
       else if (activeFilter.includes('Sistemas')) type = 'sistema';
+      else if (activeFilter.includes('Juegos')) type = 'juego';
 
       if (type === 'all' || card.dataset.type === type) {
         card.classList.remove('hidden');
@@ -2919,6 +2956,10 @@
         case 'sistema':
           text = 'Sistema';
           style = 'background: rgba(251,191,36,0.15); color: #fbbf24; border: 1px solid rgba(251,191,36,0.3);';
+          break;
+        case 'juego':
+          text = 'Juegos';
+          style = 'background: rgba(139,92,246,0.15); color: #c084fc; border: 1px solid rgba(139,92,246,0.3);';
           break;
       }
       typeEl.textContent = text;
@@ -2997,20 +3038,117 @@
   function switchAdminTab(tabName) {
     const tabProjectsBtn = document.getElementById('tabBtnProjects');
     const tabYtBtn = document.getElementById('tabBtnYt');
+    const tabProfileBtn = document.getElementById('tabBtnProfile');
     const tabProjectsContent = document.getElementById('adminTabProjects');
     const tabYtContent = document.getElementById('adminTabYt');
+    const tabProfileContent = document.getElementById('adminTabProfile');
+
+    tabProjectsBtn.classList.remove('active');
+    tabYtBtn.classList.remove('active');
+    tabProfileBtn.classList.remove('active');
+    tabProjectsContent.classList.remove('active');
+    tabYtContent.classList.remove('active');
+    tabProfileContent.classList.remove('active');
 
     if (tabName === 'projects') {
       tabProjectsBtn.classList.add('active');
-      tabYtBtn.classList.remove('active');
       tabProjectsContent.classList.add('active');
-      tabYtContent.classList.remove('active');
-    } else {
-      tabProjectsBtn.classList.remove('active');
+    } else if (tabName === 'yt') {
       tabYtBtn.classList.add('active');
-      tabProjectsContent.classList.remove('active');
       tabYtContent.classList.add('active');
       loadYtSettingsInModal();
+    } else if (tabName === 'profile') {
+      tabProfileBtn.classList.add('active');
+      tabProfileContent.classList.add('active');
+      loadProfileSettingsInModal();
+    }
+  }
+
+  function applyProfileSettingsToPage(settings) {
+    if (!settings) return;
+    const bio1El = document.getElementById('aboutBio1');
+    const bio2El = document.getElementById('aboutBio2');
+    const skillsContainer = document.getElementById('aboutSkillsContainer');
+    
+    if (bio1El && settings.bio1) {
+      bio1El.textContent = settings.bio1;
+    }
+    if (bio2El && settings.bio2) {
+      bio2El.textContent = settings.bio2;
+    }
+    if (skillsContainer && settings.skills) {
+      skillsContainer.innerHTML = '';
+      settings.skills.forEach(skill => {
+        if (skill && skill.trim()) {
+          const chip = document.createElement('span');
+          chip.className = 'skill-chip';
+          chip.textContent = skill.trim();
+          skillsContainer.appendChild(chip);
+        }
+      });
+    }
+  }
+
+  function loadProfileSettingsInModal() {
+    document.getElementById('adminBio1Input').value = profileSettings.bio1 || '';
+    document.getElementById('adminBio2Input').value = profileSettings.bio2 || '';
+    document.getElementById('adminSkillsInput').value = (profileSettings.skills || []).join(', ');
+  }
+
+  async function saveProfileSettings() {
+    const bio1Val = document.getElementById('adminBio1Input').value.trim();
+    const bio2Val = document.getElementById('adminBio2Input').value.trim();
+    const skillsVal = document.getElementById('adminSkillsInput').value.trim();
+    
+    const skillsArr = skillsVal ? skillsVal.split(',').map(s => s.trim()).filter(Boolean) : [];
+    
+    const newSettings = {
+      bio1: bio1Val,
+      bio2: bio2Val,
+      skills: skillsArr
+    };
+    
+    const saveBtn = document.getElementById('adminProfileSaveBtn');
+    saveBtn.textContent = "Guardando..."; saveBtn.disabled = true;
+    
+    try {
+      if (useFirebase) {
+        await db.collection('site_settings').doc('profile').set(newSettings);
+      }
+      profileSettings = newSettings;
+      localStorage.setItem('portfolio_profile_settings', JSON.stringify(profileSettings));
+      applyProfileSettingsToPage(profileSettings);
+      
+      saveBtn.textContent = "✓ ¡Guardado!";
+      setTimeout(() => {
+        saveBtn.textContent = "Guardar Cambios";
+        saveBtn.disabled = false;
+        closeAdminModal();
+      }, 1000);
+    } catch (err) {
+      console.error("Error saving profile settings:", err);
+      alert("Error al guardar: " + err.message);
+      saveBtn.textContent = "Guardar Cambios";
+      saveBtn.disabled = false;
+    }
+  }
+
+  async function resetProfileSettings() {
+    if (!confirm("¿Estás seguro de que deseas restablecer la biografía y las tecnologías por defecto?")) return;
+    
+    try {
+      if (useFirebase) {
+        await db.collection('site_settings').doc('profile').delete();
+      }
+      profileSettings = { ...defaultProfileSettings };
+      localStorage.removeItem('portfolio_profile_settings');
+      applyProfileSettingsToPage(profileSettings);
+      loadProfileSettingsInModal();
+      alert("Configuraciones restablecidas correctamente.");
+      closeAdminModal();
+    } catch (err) {
+      console.error("Error resetting profile settings:", err);
+      alert("Error al restablecer: " + err.message);
     }
   }
 
@@ -3223,6 +3361,17 @@
   }
 
   async function loadAllProjectCustomizations() {
+    // Load profile settings first
+    const profileCached = localStorage.getItem('portfolio_profile_settings');
+    if (profileCached) {
+      try {
+        profileSettings = JSON.parse(profileCached);
+        applyProfileSettingsToPage(profileSettings);
+      } catch (e) { console.error("Error parsing cached profile settings:", e); }
+    } else {
+      applyProfileSettingsToPage(profileSettings);
+    }
+
     // Load YouTube settings first
     const ytCached = localStorage.getItem('portfolio_youtube_settings');
     if (ytCached) {
@@ -3261,6 +3410,14 @@
     }
     if (useFirebase) {
       try {
+        // Fetch profile settings from Firebase
+        const profileDoc = await db.collection('site_settings').doc('profile').get();
+        if (profileDoc.exists) {
+          profileSettings = profileDoc.data();
+          localStorage.setItem('portfolio_profile_settings', JSON.stringify(profileSettings));
+          applyProfileSettingsToPage(profileSettings);
+        }
+
         // Fetch YT settings from Firebase
         const ytDoc = await db.collection('site_settings').doc('youtube').get();
         if (ytDoc.exists) {
