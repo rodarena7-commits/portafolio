@@ -1944,6 +1944,11 @@
         <label for="adminMaintenanceInput" style="margin-bottom: 0; cursor: pointer; text-transform: none; font-size: 0.9rem; font-weight: 600; color: #f97316;">🔧 Proyecto en Mantenimiento</label>
       </div>
 
+      <div class="admin-field" style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 1.5rem; margin-top: -0.75rem;">
+        <input type="checkbox" id="adminHideInput" style="width: 20px; height: 20px; cursor: pointer; accent-color: #3b82f6;" />
+        <label for="adminHideInput" style="margin-bottom: 0; cursor: pointer; text-transform: none; font-size: 0.9rem; font-weight: 600; color: #60a5fa;">👁️ Ocultar Proyecto de la Lista</label>
+      </div>
+
       <div class="admin-btn-group">
         <button class="admin-btn admin-btn-delete" onclick="deleteProjectCustomizations()">Quitar Personalizados</button>
         <button class="admin-btn admin-btn-save" id="adminSaveBtn" onclick="saveProjectCustomizations()">Guardar Cambios</button>
@@ -2048,7 +2053,10 @@
     document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
     event.target.classList.add('active');
     document.querySelectorAll('.project-card').forEach(card => {
-      if (type === 'all' || card.dataset.type === type) {
+      const isHiddenByAdmin = card.dataset.hiddenAdmin === 'true';
+      if (isHiddenByAdmin) {
+        card.classList.add('hidden');
+      } else if (type === 'all' || card.dataset.type === type) {
         card.classList.remove('hidden');
       } else {
         card.classList.add('hidden');
@@ -2256,6 +2264,7 @@
     document.getElementById('adminProjectNameInput').value = '';
     document.getElementById('adminCategorySelect').value = 'default';
     document.getElementById('adminMaintenanceInput').checked = false;
+    document.getElementById('adminHideInput').checked = false;
     
     switchAdminTab('projects');
 
@@ -2287,6 +2296,7 @@
     document.getElementById('adminProjectNameInput').value = '';
     document.getElementById('adminCategorySelect').value = 'default';
     document.getElementById('adminMaintenanceInput').checked = false;
+    document.getElementById('adminHideInput').checked = false;
 
     let custom = customLogos[projectId];
     
@@ -2296,7 +2306,8 @@
         appUrl: '',
         inMaintenance: false,
         name: '',
-        category: 'default'
+        category: 'default',
+        hidden: false
       };
     }
 
@@ -2372,6 +2383,12 @@
     } else {
       document.getElementById('adminMaintenanceInput').checked = false;
     }
+
+    if (custom && custom.hidden) {
+      document.getElementById('adminHideInput').checked = true;
+    } else {
+      document.getElementById('adminHideInput').checked = false;
+    }
   }
 
   function renderLogoToElement(element, logo) {
@@ -2435,19 +2452,21 @@
     const inMaintenanceValue = document.getElementById('adminMaintenanceInput').checked;
     const projectNameValue = document.getElementById('adminProjectNameInput').value.trim();
     const categoryValue = document.getElementById('adminCategorySelect').value;
+    const hiddenValue = document.getElementById('adminHideInput').checked;
 
     let currentCustom = customLogos[projectId] || {};
     if (currentCustom.type) {
-      currentCustom = { logo: { type: currentCustom.type, value: currentCustom.value }, appUrl: '', inMaintenance: false, name: '', category: 'default' };
+      currentCustom = { logo: { type: currentCustom.type, value: currentCustom.value }, appUrl: '', inMaintenance: false, name: '', category: 'default', hidden: false };
     }
     if (previewLogoState) { currentCustom.logo = previewLogoState; }
     currentCustom.appUrl = appUrlValue;
     currentCustom.inMaintenance = inMaintenanceValue;
     currentCustom.name = projectNameValue;
     currentCustom.category = categoryValue;
+    currentCustom.hidden = hiddenValue;
 
-    if (!previewLogoState && !appUrlValue && !currentCustom.logo && !inMaintenanceValue && !projectNameValue && categoryValue === 'default') {
-      if (!confirm("No has configurado ningún logo, enlace, mantenimiento, nombre o categoría. ¿Deseas guardar el proyecto con valores por defecto?")) return;
+    if (!previewLogoState && !appUrlValue && !currentCustom.logo && !inMaintenanceValue && !projectNameValue && categoryValue === 'default' && !hiddenValue) {
+      if (!confirm("No has configurado ningún logo, enlace, mantenimiento, nombre, categoría o visibilidad. ¿Deseas guardar el proyecto con valores por defecto?")) return;
     }
 
     const saveBtn = document.getElementById('adminSaveBtn');
@@ -2462,6 +2481,7 @@
       applyMaintenanceToCard(projectId, currentCustom.inMaintenance, currentCustom.appUrl);
       applyNameToCard(projectId, currentCustom.name);
       applyCategoryToCard(projectId, currentCustom.category);
+      applyVisibilityToCard(projectId, currentCustom.hidden);
       
       saveBtn.textContent = "✓ ¡Guardado!";
       setTimeout(() => { saveBtn.textContent = "Guardar Cambios"; saveBtn.disabled = false; closeAdminModal(); }, 1000);
@@ -2485,6 +2505,7 @@
       applyMaintenanceToCard(projectId, false, '');
       applyNameToCard(projectId, '');
       applyCategoryToCard(projectId, 'default');
+      applyVisibilityToCard(projectId, false);
       loadProjectLogoPreview();
       alert("Personalizaciones eliminadas correctamente.");
       closeAdminModal();
@@ -2579,6 +2600,29 @@
         maintBadge.remove();
       }
       applyAppUrlToCard(projectId, appUrl);
+    }
+  }
+
+  function applyVisibilityToCard(projectId, hidden) {
+    const card = document.querySelector(`.project-card[data-project="${projectId}"]`);
+    if (!card) return;
+    if (hidden) {
+      card.dataset.hiddenAdmin = 'true';
+      card.classList.add('hidden');
+    } else {
+      card.dataset.hiddenAdmin = 'false';
+      const activeFilterBtn = document.querySelector('.filter-btn.active');
+      const activeFilter = activeFilterBtn ? activeFilterBtn.textContent.trim() : 'Todos';
+      
+      let type = 'all';
+      if (activeFilter.includes('E-Commerce')) type = 'ecommerce';
+      else if (activeFilter.includes('Bots')) type = 'bot';
+      else if (activeFilter.includes('Apps')) type = 'app';
+      else if (activeFilter.includes('Sistemas')) type = 'sistema';
+
+      if (type === 'all' || card.dataset.type === type) {
+        card.classList.remove('hidden');
+      }
     }
   }
 
@@ -2950,7 +2994,8 @@
               appUrl: '', 
               inMaintenance: false,
               name: '',
-              category: 'default'
+              category: 'default',
+              hidden: false
             }; 
           }
           if (custom.logo) { applyLogoToCard(pid, custom.logo); }
@@ -2958,6 +3003,7 @@
           applyMaintenanceToCard(pid, custom.inMaintenance, custom.appUrl);
           applyNameToCard(pid, custom.name);
           applyCategoryToCard(pid, custom.category);
+          applyVisibilityToCard(pid, custom.hidden);
         }
       } catch (e) { console.error("Error parsing cached customizations:", e); }
     }
@@ -2991,7 +3037,8 @@
               appUrl: '',
               inMaintenance: false,
               name: '',
-              category: 'default'
+              category: 'default',
+              hidden: false
             };
           }
           if (custom.logo) {
@@ -3001,6 +3048,7 @@
           applyMaintenanceToCard(pid, custom.inMaintenance, custom.appUrl);
           applyNameToCard(pid, custom.name);
           applyCategoryToCard(pid, custom.category);
+          applyVisibilityToCard(pid, custom.hidden);
         }
       } catch (err) {
         console.error("Error syncing with Firebase:", err);
