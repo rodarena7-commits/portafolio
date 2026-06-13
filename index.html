@@ -317,6 +317,15 @@
       background: var(--bg3); color: var(--text3);
       border: 1px solid var(--border); pointer-events: none; opacity: 0.5;
     }
+    .link-whatsapp {
+      background: rgba(34,211,160,0.1); color: #22d3a0;
+      border: 1px solid rgba(34,211,160,0.25);
+    }
+    .link-whatsapp:hover {
+      background: #22d3a0; color: #0a0a0f !important;
+      border-color: #22d3a0;
+      box-shadow: 0 0 15px rgba(34,211,160,0.3);
+    }
 
     /* ─── BOTS ─── */
     .bots-grid {
@@ -876,6 +885,11 @@
         </div>
       </div>
       <div class="about-visual">
+        <div class="about-photo-wrapper" id="aboutPhotoWrapper" style="display: none; justify-content: center; margin-bottom: 2rem;">
+          <div style="position: relative; width: 160px; height: 160px; border-radius: 50%; padding: 4px; background: linear-gradient(135deg, var(--accent), var(--accent2)); box-shadow: 0 0 25px rgba(108,99,255,0.4);">
+            <img id="aboutPhotoImg" src="" style="width: 100%; height: 100%; object-fit: cover; border-radius: 50%; border: 3px solid var(--bg2);" />
+          </div>
+        </div>
         <div class="timeline">
           <div class="timeline-item">
             <div class="timeline-dot"></div>
@@ -1911,7 +1925,7 @@
     <p class="section-desc fade-in">Bots inteligentes con IA, integración con Google Calendar, reportes automáticos y comandos personalizados.</p>
     <div class="bots-grid">
 
-      <div class="bot-card fade-in">
+      <div class="bot-card fade-in" data-project="sandboxai">
         <div class="bot-header">
           <div class="bot-icon">🤖</div>
           <div>
@@ -1934,7 +1948,7 @@
         </div>
       </div>
 
-      <div class="bot-card fade-in">
+      <div class="bot-card fade-in" data-project="descuentos-bot">
         <div class="bot-header">
           <div class="bot-icon">🛒</div>
           <div>
@@ -1957,7 +1971,7 @@
         </div>
       </div>
 
-      <div class="bot-card fade-in">
+      <div class="bot-card fade-in" data-project="showroomderek">
         <div class="bot-header">
           <div class="bot-icon">💎</div>
           <div>
@@ -2194,6 +2208,14 @@
         </div>
       </div>
 
+      <div class="admin-field">
+        <label for="adminWhatsAppInput">Número de WhatsApp del Bot</label>
+        <div style="display: flex; gap: 0.5rem;">
+          <input type="text" id="adminWhatsAppInput" class="admin-input" placeholder="ej: 5491122334455" style="flex: 1;" />
+          <button type="button" class="admin-btn admin-btn-delete" style="width: auto; padding: 0.5rem 1rem; margin-bottom: 0px;" onclick="document.getElementById('adminWhatsAppInput').value=''">Eliminar</button>
+        </div>
+      </div>
+
       <div class="admin-field" style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 1.5rem;">
         <input type="checkbox" id="adminMaintenanceInput" style="width: 20px; height: 20px; cursor: pointer; accent-color: #f97316;" />
         <label for="adminMaintenanceInput" style="margin-bottom: 0; cursor: pointer; text-transform: none; font-size: 0.9rem; font-weight: 600; color: #f97316;">🔧 Proyecto en Mantenimiento</label>
@@ -2261,6 +2283,27 @@
 
     <!-- TAB 3: SOBRE MI / PERFIL -->
     <div class="admin-tab-content" id="adminTabProfile">
+      <div class="admin-field">
+        <label>Foto de Perfil</label>
+        <div style="display: flex; align-items: center; gap: 1.2rem; background: var(--bg2); border: 1px solid var(--border); padding: 1rem; border-radius: 16px; margin-bottom: 1rem;">
+          <div id="adminProfilePhotoPreview" style="width: 70px; height: 70px; background: var(--bg3); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.8rem; overflow: hidden; border: 2px solid var(--border); flex-shrink: 0;">👤</div>
+          <div style="flex: 1; min-width: 0;">
+            <strong style="display: block; font-size: 0.9rem; color: var(--text);">Foto de Perfil</strong>
+            <span style="font-size: 0.75rem; color: var(--text3);" id="adminProfilePhotoType">Sin foto personalizada</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="admin-field">
+        <label for="adminProfilePhotoFileInput">Subir Foto de Galería</label>
+        <input type="file" id="adminProfilePhotoFileInput" class="admin-input" accept="image/*" onchange="previewProfilePhotoFile(event)" />
+      </div>
+
+      <div class="admin-field">
+        <label for="adminProfilePhotoUrlInput">URL de Foto de Perfil</label>
+        <input type="text" id="adminProfilePhotoUrlInput" class="admin-input" placeholder="https://example.com/mi-foto.jpg" oninput="previewProfilePhotoUrl(this.value)" />
+      </div>
+
       <div class="admin-field">
         <label for="adminBio1Input">Párrafo de Bio 1</label>
         <textarea id="adminBio1Input" class="admin-input" style="height: 80px; resize: vertical; padding: 0.6rem; font-family: inherit; font-size: 0.85rem;" placeholder="Soy un desarrollador autodidacta..."></textarea>
@@ -2442,7 +2485,8 @@
   };  const defaultProfileSettings = {
     bio1: "Soy un desarrollador autodidacta con experiencia creando productos digitales completos: desde aplicaciones web con bases de datos en tiempo real hasta bots de WhatsApp con inteligencia artificial.",
     bio2: "Me especializo en el ecosistema JavaScript/TypeScript, trabajando tanto en frontend como en backend. Construí proyectos para comercios, familias, empresas y comunidades — cada uno con sus propios desafíos.",
-    skills: ["React", "Node.js", "Firebase", "Tailwind CSS", "JavaScript", "TypeScript", "Vite", "WhatsApp Bots", "Groq AI", "PWA", "Firestore", "Git / GitHub", "Render", "HTML / CSS", "MercadoLibre API", "Google Calendar API"]
+    skills: ["React", "Node.js", "Firebase", "Tailwind CSS", "JavaScript", "TypeScript", "Vite", "WhatsApp Bots", "Groq AI", "PWA", "Firestore", "Git / GitHub", "Render", "HTML / CSS", "MercadoLibre API", "Google Calendar API"],
+    photo: null
   };
   let profileSettings = { ...defaultProfileSettings };
 
@@ -2546,6 +2590,7 @@
     document.getElementById('adminAppUrlInput').value = '';
     document.getElementById('adminProjectNameInput').value = '';
     document.getElementById('adminCategorySelect').value = 'default';
+    document.getElementById('adminWhatsAppInput').value = '';
     document.getElementById('adminMaintenanceInput').checked = false;
     document.getElementById('adminHideInput').checked = false;
     
@@ -2553,6 +2598,9 @@
     document.getElementById('adminBio1Input').value = '';
     document.getElementById('adminBio2Input').value = '';
     document.getElementById('adminSkillsInput').value = '';
+    document.getElementById('adminProfilePhotoFileInput').value = '';
+    document.getElementById('adminProfilePhotoUrlInput').value = '';
+    profilePhotoState = null;
     
     switchAdminTab('projects');
 
@@ -2583,6 +2631,7 @@
     document.getElementById('adminAppUrlInput').value = '';
     document.getElementById('adminProjectNameInput').value = '';
     document.getElementById('adminCategorySelect').value = 'default';
+    document.getElementById('adminWhatsAppInput').value = '';
     document.getElementById('adminMaintenanceInput').checked = false;
     document.getElementById('adminHideInput').checked = false;
 
@@ -2595,7 +2644,8 @@
         inMaintenance: false,
         name: '',
         category: 'default',
-        hidden: false
+        hidden: false,
+        whatsapp: ''
       };
     }
 
@@ -2677,6 +2727,12 @@
     } else {
       document.getElementById('adminHideInput').checked = false;
     }
+
+    if (custom && custom.whatsapp) {
+      document.getElementById('adminWhatsAppInput').value = custom.whatsapp;
+    } else {
+      document.getElementById('adminWhatsAppInput').value = '';
+    }
   }
 
   function renderLogoToElement(element, logo) {
@@ -2741,10 +2797,11 @@
     const projectNameValue = document.getElementById('adminProjectNameInput').value.trim();
     const categoryValue = document.getElementById('adminCategorySelect').value;
     const hiddenValue = document.getElementById('adminHideInput').checked;
+    const whatsappValue = document.getElementById('adminWhatsAppInput').value.trim();
 
     let currentCustom = customLogos[projectId] || {};
     if (currentCustom.type) {
-      currentCustom = { logo: { type: currentCustom.type, value: currentCustom.value }, appUrl: '', inMaintenance: false, name: '', category: 'default', hidden: false };
+      currentCustom = { logo: { type: currentCustom.type, value: currentCustom.value }, appUrl: '', inMaintenance: false, name: '', category: 'default', hidden: false, whatsapp: '' };
     }
     if (previewLogoState) { currentCustom.logo = previewLogoState; }
     currentCustom.appUrl = appUrlValue;
@@ -2752,9 +2809,10 @@
     currentCustom.name = projectNameValue;
     currentCustom.category = categoryValue;
     currentCustom.hidden = hiddenValue;
+    currentCustom.whatsapp = whatsappValue;
 
-    if (!previewLogoState && !appUrlValue && !currentCustom.logo && !inMaintenanceValue && !projectNameValue && categoryValue === 'default' && !hiddenValue) {
-      if (!confirm("No has configurado ningún logo, enlace, mantenimiento, nombre, categoría o visibilidad. ¿Deseas guardar el proyecto con valores por defecto?")) return;
+    if (!previewLogoState && !appUrlValue && !currentCustom.logo && !inMaintenanceValue && !projectNameValue && categoryValue === 'default' && !hiddenValue && !whatsappValue) {
+      if (!confirm("No has configurado ningún logo, enlace, mantenimiento, nombre, categoría, visibilidad o WhatsApp. ¿Deseas guardar el proyecto con valores por defecto?")) return;
     }
 
     const saveBtn = document.getElementById('adminSaveBtn');
@@ -2770,6 +2828,7 @@
       applyNameToCard(projectId, currentCustom.name);
       applyCategoryToCard(projectId, currentCustom.category);
       applyVisibilityToCard(projectId, currentCustom.hidden);
+      applyWhatsAppToCard(projectId, currentCustom.whatsapp);
       
       saveBtn.textContent = "✓ ¡Guardado!";
       setTimeout(() => { saveBtn.textContent = "Guardar Cambios"; saveBtn.disabled = false; closeAdminModal(); }, 1000);
@@ -2794,6 +2853,7 @@
       applyNameToCard(projectId, '');
       applyCategoryToCard(projectId, 'default');
       applyVisibilityToCard(projectId, false);
+      applyWhatsAppToCard(projectId, '');
       loadProjectLogoPreview();
       alert("Personalizaciones eliminadas correctamente.");
       closeAdminModal();
@@ -2911,6 +2971,56 @@
 
       if (type === 'all' || card.dataset.type === type) {
         card.classList.remove('hidden');
+      }
+    }
+  }
+
+  function applyWhatsAppToCard(projectId, whatsappNum) {
+    const projectCard = document.querySelector(`.project-card[data-project="${projectId}"]`);
+    if (projectCard) {
+      const linksContainer = projectCard.querySelector('.project-links');
+      if (linksContainer) {
+        const existing = linksContainer.querySelector('.link-whatsapp');
+        if (existing) existing.remove();
+        
+        if (whatsappNum && whatsappNum.trim() !== '') {
+          const waLink = document.createElement('a');
+          waLink.href = `https://wa.me/${whatsappNum.trim()}`;
+          waLink.target = '_blank';
+          waLink.className = 'project-link link-whatsapp';
+          waLink.innerHTML = '💬 WhatsApp';
+          const githubLink = linksContainer.querySelector('.link-github');
+          if (githubLink) {
+            linksContainer.insertBefore(waLink, githubLink);
+          } else {
+            linksContainer.appendChild(waLink);
+          }
+        }
+      }
+    }
+
+    const botCard = document.querySelector(`.bot-card[data-project="${projectId}"]`);
+    if (botCard) {
+      let linksContainer = botCard.querySelector('.bot-links');
+      if (!linksContainer) {
+        linksContainer = document.createElement('div');
+        linksContainer.className = 'bot-links';
+        linksContainer.style.cssText = 'margin-top: 1.25rem; display: flex; gap: 0.75rem;';
+        botCard.appendChild(linksContainer);
+      }
+      
+      linksContainer.innerHTML = '';
+      
+      if (whatsappNum && whatsappNum.trim() !== '') {
+        const waLink = document.createElement('a');
+        waLink.href = `https://wa.me/${whatsappNum.trim()}`;
+        waLink.target = '_blank';
+        waLink.className = 'project-link link-whatsapp';
+        waLink.style.cssText = 'width: 100%; text-align: center; font-weight: 600; padding: 0.6rem 1rem;';
+        waLink.innerHTML = '💬 Iniciar Chat WhatsApp';
+        linksContainer.appendChild(waLink);
+      } else {
+        linksContainer.remove();
       }
     }
   }
@@ -3064,6 +3174,55 @@
     }
   }
 
+  let profilePhotoState = null;
+
+  function previewProfilePhotoFile(e) {
+    const file = e.target.files[0];
+    if (!file) return;
+    document.getElementById('adminProfilePhotoUrlInput').value = '';
+    const reader = new FileReader();
+    reader.onload = function(event) {
+      const img = new Image();
+      img.onload = function() {
+        const canvas = document.createElement('canvas');
+        const maxDim = 200;
+        let width = img.width, height = img.height;
+        if (width > height) { if (width > maxDim) { height *= maxDim / width; width = maxDim; } }
+        else { if (height > maxDim) { width *= maxDim / height; height = maxDim; } }
+        canvas.width = width; canvas.height = height;
+        canvas.getContext('2d').drawImage(img, 0, 0, width, height);
+        const base64 = canvas.toDataURL('image/jpeg', 0.8);
+        profilePhotoState = { type: 'image', value: base64 };
+        renderProfilePhotoPreview(profilePhotoState);
+      };
+      img.src = event.target.result;
+    };
+    reader.readAsDataURL(file);
+  }
+
+  function previewProfilePhotoUrl(val) {
+    if (!val.trim()) {
+      profilePhotoState = null;
+      renderProfilePhotoPreview(null);
+      return;
+    }
+    document.getElementById('adminProfilePhotoFileInput').value = '';
+    profilePhotoState = { type: 'image', value: val.trim() };
+    renderProfilePhotoPreview(profilePhotoState);
+  }
+
+  function renderProfilePhotoPreview(photo) {
+    const previewEl = document.getElementById('adminProfilePhotoPreview');
+    const typeLabel = document.getElementById('adminProfilePhotoType');
+    if (photo && photo.value) {
+      previewEl.innerHTML = `<img src="${photo.value}" style="width: 100%; height: 100%; object-fit: cover; border-radius: 50%;" onerror="this.parentNode.innerHTML='⚠️'; this.parentNode.style.background='var(--red)'" />`;
+      typeLabel.textContent = photo.value.startsWith('data:') ? 'Imagen cargada (Galería)' : 'Imagen externa (URL)';
+    } else {
+      previewEl.innerHTML = '👤';
+      typeLabel.textContent = 'Sin foto personalizada';
+    }
+  }
+
   function applyProfileSettingsToPage(settings) {
     if (!settings) return;
     const bio1El = document.getElementById('aboutBio1');
@@ -3087,12 +3246,35 @@
         }
       });
     }
+
+    const photoWrapper = document.getElementById('aboutPhotoWrapper');
+    const photoImg = document.getElementById('aboutPhotoImg');
+    if (photoWrapper && photoImg) {
+      if (settings.photo && settings.photo.value) {
+        photoImg.src = settings.photo.value;
+        photoWrapper.style.display = 'flex';
+      } else {
+        photoImg.src = '';
+        photoWrapper.style.display = 'none';
+      }
+    }
   }
 
   function loadProfileSettingsInModal() {
     document.getElementById('adminBio1Input').value = profileSettings.bio1 || '';
     document.getElementById('adminBio2Input').value = profileSettings.bio2 || '';
     document.getElementById('adminSkillsInput').value = (profileSettings.skills || []).join(', ');
+    
+    document.getElementById('adminProfilePhotoFileInput').value = '';
+    document.getElementById('adminProfilePhotoUrlInput').value = '';
+    
+    profilePhotoState = profileSettings.photo || null;
+    if (profilePhotoState && profilePhotoState.value) {
+      if (!profilePhotoState.value.startsWith('data:')) {
+        document.getElementById('adminProfilePhotoUrlInput').value = profilePhotoState.value;
+      }
+    }
+    renderProfilePhotoPreview(profilePhotoState);
   }
 
   async function saveProfileSettings() {
@@ -3105,7 +3287,8 @@
     const newSettings = {
       bio1: bio1Val,
       bio2: bio2Val,
-      skills: skillsArr
+      skills: skillsArr,
+      photo: profilePhotoState
     };
     
     const saveBtn = document.getElementById('adminProfileSaveBtn');
@@ -3134,13 +3317,13 @@
   }
 
   async function resetProfileSettings() {
-    if (!confirm("¿Estás seguro de que deseas restablecer la biografía y las tecnologías por defecto?")) return;
+    if (!confirm("¿Estás seguro de que deseas restablecer la biografía, tecnologías y foto de perfil por defecto?")) return;
     
     try {
       if (useFirebase) {
         await db.collection('site_settings').doc('profile').delete();
       }
-      profileSettings = { ...defaultProfileSettings };
+      profileSettings = { ...defaultProfileSettings, photo: null };
       localStorage.removeItem('portfolio_profile_settings');
       applyProfileSettingsToPage(profileSettings);
       loadProfileSettingsInModal();
@@ -3396,7 +3579,8 @@
               inMaintenance: false,
               name: '',
               category: 'default',
-              hidden: false
+              hidden: false,
+              whatsapp: ''
             }; 
           }
           if (custom.logo) { applyLogoToCard(pid, custom.logo); }
@@ -3405,6 +3589,7 @@
           applyNameToCard(pid, custom.name);
           applyCategoryToCard(pid, custom.category);
           applyVisibilityToCard(pid, custom.hidden);
+          applyWhatsAppToCard(pid, custom.whatsapp);
         }
       } catch (e) { console.error("Error parsing cached customizations:", e); }
     }
@@ -3447,7 +3632,8 @@
               inMaintenance: false,
               name: '',
               category: 'default',
-              hidden: false
+              hidden: false,
+              whatsapp: ''
             };
           }
           if (custom.logo) {
@@ -3458,6 +3644,7 @@
           applyNameToCard(pid, custom.name);
           applyCategoryToCard(pid, custom.category);
           applyVisibilityToCard(pid, custom.hidden);
+          applyWhatsAppToCard(pid, custom.whatsapp);
         }
       } catch (err) {
         console.error("Error syncing with Firebase:", err);
