@@ -585,197 +585,6 @@
       overflow-x: auto; border: 1px solid var(--border);
       margin-bottom: 1rem; display: block; white-space: pre;
     }
-
-    /* ─── RETRO GAME SECTION ─── */
-    .game-container {
-      max-width: 500px;
-      margin: 2rem auto 0 auto;
-      background: var(--card);
-      border: 1px solid var(--border);
-      border-radius: 24px;
-      padding: 1.5rem;
-      box-shadow: 0 20px 40px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.05);
-      position: relative;
-      overflow: hidden;
-      backdrop-filter: blur(10px);
-    }
-    .game-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 1rem;
-      background: var(--bg2);
-      border: 1px solid var(--border);
-      border-radius: 16px;
-      padding: 0.75rem 1.25rem;
-    }
-    .game-stat {
-      display: flex;
-      flex-direction: column;
-    }
-    .stat-label {
-      font-size: 0.65rem;
-      color: var(--text3);
-      letter-spacing: 0.05em;
-      font-weight: 700;
-      text-transform: uppercase;
-    }
-    .stat-val {
-      font-family: 'Space Grotesk', sans-serif;
-      font-size: 1.4rem;
-      font-weight: 700;
-      color: var(--text);
-      line-height: 1.2;
-    }
-    #gameScore {
-      color: var(--green);
-      text-shadow: 0 0 10px rgba(34,211,160,0.2);
-    }
-    #gameHighScore {
-      color: var(--pink);
-      text-shadow: 0 0 10px rgba(244,114,182,0.2);
-    }
-    .game-difficulty select {
-      background: var(--bg3);
-      color: var(--text);
-      border: 1px solid var(--border);
-      padding: 0.4rem 0.8rem;
-      border-radius: 8px;
-      font-size: 0.8rem;
-      cursor: pointer;
-      outline: none;
-      font-weight: 600;
-    }
-    .game-board-wrapper {
-      position: relative;
-      width: 100%;
-      aspect-ratio: 1;
-      border-radius: 16px;
-      overflow: hidden;
-      border: 1px solid var(--border);
-      background: #000;
-      box-shadow: inset 0 0 30px rgba(108,99,255,0.15);
-    }
-    #gameCanvas {
-      display: block;
-      width: 100%;
-      height: 100%;
-    }
-    .game-overlay {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(10,10,15,0.85);
-      backdrop-filter: blur(4px);
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      transition: opacity 0.3s ease;
-      z-index: 10;
-    }
-    .game-overlay.hidden {
-      opacity: 0;
-      pointer-events: none;
-    }
-    .overlay-content {
-      text-align: center;
-      padding: 1.5rem;
-    }
-    .overlay-content h3 {
-      font-family: 'Space Grotesk', sans-serif;
-      font-size: 2rem;
-      font-weight: 800;
-      color: var(--text);
-      margin-bottom: 0.5rem;
-      letter-spacing: 0.05em;
-      background: linear-gradient(135deg, var(--accent), var(--accent2));
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      text-shadow: 0 0 20px rgba(108,99,255,0.3);
-    }
-    .overlay-content p {
-      font-size: 0.85rem;
-      color: var(--text2);
-      margin-bottom: 1.5rem;
-    }
-    .game-btn-start {
-      background: linear-gradient(135deg, var(--accent), var(--accent2));
-      color: white;
-      border: none;
-      padding: 0.8rem 1.8rem;
-      font-size: 0.9rem;
-      font-weight: 700;
-      border-radius: 12px;
-      cursor: pointer;
-      box-shadow: 0 8px 20px rgba(108,99,255,0.3);
-      transition: all 0.2s ease;
-    }
-    .game-btn-start:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 12px 25px rgba(108,99,255,0.4);
-    }
-    .game-btn-start:active {
-      transform: translateY(0);
-    }
-    
-    /* Mobile controls gamepad styling */
-    .mobile-controls {
-      display: none;
-      flex-direction: column;
-      align-items: center;
-      margin-top: 1.5rem;
-      gap: 0.4rem;
-    }
-    .controls-row {
-      display: flex;
-      gap: 0.4rem;
-      align-items: center;
-    }
-    .control-btn {
-      width: 54px;
-      height: 54px;
-      border-radius: 16px;
-      border: 1px solid var(--border);
-      background: var(--bg2);
-      color: var(--text);
-      font-size: 1.2rem;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      user-select: none;
-      transition: all 0.15s ease;
-      touch-action: manipulation;
-    }
-    .control-btn:active {
-      background: var(--accent);
-      transform: scale(0.92);
-      border-color: var(--accent2);
-    }
-    .control-center {
-      width: 54px;
-      height: 54px;
-    }
-    @media (max-width: 768px) {
-      .mobile-controls {
-        display: flex;
-      }
-    }
-    .game-footer {
-      text-align: center;
-      margin-top: 1rem;
-      font-size: 0.75rem;
-      color: var(--text3);
-    }
-    .game-footer span {
-      background: var(--bg2);
-      padding: 0.1rem 0.4rem;
-      border-radius: 4px;
-      border: 1px solid var(--border);
-      color: var(--text2);
-    }
   </style>
 </head>
 <body>
@@ -788,7 +597,6 @@
     <li><a href="#youtube">YouTube</a></li>
     <li><a href="#proyectos">Proyectos</a></li>
     <li><a href="#bots">Bots</a></li>
-    <li><a href="#juego">Juego</a></li>
     <li><a href="#contacto">Contacto</a></li>
   </ul>
   <a href="#contacto" class="nav-cta">Contactame</a>
@@ -802,7 +610,6 @@
   <a href="#youtube" onclick="toggleMobileMenu()">YouTube</a>
   <a href="#proyectos" onclick="toggleMobileMenu()">Proyectos</a>
   <a href="#bots" onclick="toggleMobileMenu()">Bots</a>
-  <a href="#juego" onclick="toggleMobileMenu()">Juego</a>
   <a href="#contacto" onclick="toggleMobileMenu()">Contacto</a>
   <a href="#contacto" class="nav-cta" onclick="toggleMobileMenu()">Contactame</a>
 </div>
@@ -1998,64 +1805,7 @@
   </div>
 </section>
 
-<!-- JUEGO -->
-<section id="juego" style="background: var(--bg); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border);">
-  <div class="section-inner">
-    <span class="section-tag fade-in">// retro arena</span>
-    <h2 class="section-title fade-in">Cyber Snake Arcade</h2>
-    <p class="section-desc fade-in">Un clásico juego de Snake interactivo con estética neon y retro. ¡Esquivá las paredes y superá tu récord!</p>
-    
-    <div class="game-container fade-in">
-      <div class="game-header">
-        <div class="game-stat">
-          <span class="stat-label">PUNTOS</span>
-          <span class="stat-val" id="gameScore">000</span>
-        </div>
-        <div class="game-stat">
-          <span class="stat-label">RÉCORD</span>
-          <span class="stat-val" id="gameHighScore">000</span>
-        </div>
-        <div class="game-difficulty">
-          <select id="gameSpeedSelect" onchange="changeDifficulty()">
-            <option value="easy">Fácil</option>
-            <option value="medium" selected>Medio</option>
-            <option value="hard">Difícil</option>
-          </select>
-        </div>
-      </div>
-      
-      <div class="game-board-wrapper">
-        <canvas id="gameCanvas" width="400" height="400"></canvas>
-        <div id="gameOverlay" class="game-overlay">
-          <div class="overlay-content">
-            <h3 id="overlayTitle">CYBER SNAKE</h3>
-            <p id="overlayDesc">Presioná INICIAR o cualquier tecla de dirección para jugar</p>
-            <button class="game-btn-start" onclick="startGame()">INICIAR JUEGO</button>
-          </div>
-        </div>
-      </div>
-      
-      <!-- MOBILE CONTROLS -->
-      <div class="mobile-controls">
-        <div class="controls-row">
-          <button class="control-btn" id="ctrlUp" onclick="pressKey('ArrowUp')">▲</button>
-        </div>
-        <div class="controls-row">
-          <button class="control-btn" id="ctrlLeft" onclick="pressKey('ArrowLeft')">◀</button>
-          <div class="control-center"></div>
-          <button class="control-btn" id="ctrlRight" onclick="pressKey('ArrowRight')">▶</button>
-        </div>
-        <div class="controls-row">
-          <button class="control-btn" id="ctrlDown" onclick="pressKey('ArrowDown')">▼</button>
-        </div>
-      </div>
-      
-      <div class="game-footer">
-        <p>Usa las flechas del teclado <span>▲ ▼ ◀ ▶</span> o los botones en pantalla.</p>
-      </div>
-    </div>
-  </div>
-</section>
+
 
 <!-- CONTACT -->
 <section id="contacto" style="background: var(--bg2); border-top: 1px solid var(--border);">
@@ -2191,7 +1941,7 @@
 
       <div class="admin-field">
         <label for="adminCategorySelect">Categoría / Tipo de Proyecto</label>
-        <select id="adminCategorySelect" class="admin-select">
+        <select id="adminCategorySelect" class="admin-select" onchange="toggleCategorySpecificFields()">
           <option value="default">Por defecto del proyecto</option>
           <option value="ecommerce">E-Commerce</option>
           <option value="bot">Bot</option>
@@ -2199,6 +1949,21 @@
           <option value="sistema">Sistema</option>
           <option value="juego">Juego</option>
         </select>
+      </div>
+
+      <div class="admin-field">
+        <label for="adminProjectDescInput">Descripción Personalizada</label>
+        <textarea id="adminProjectDescInput" class="admin-input" style="height: 60px; resize: vertical; padding: 0.6rem; font-family: inherit; font-size: 0.85rem;" placeholder="Descripción corta del proyecto"></textarea>
+      </div>
+
+      <div class="admin-field">
+        <label for="adminProjectTechInput">Tecnologías / Etiquetas (separadas por coma)</label>
+        <input type="text" id="adminProjectTechInput" class="admin-input" placeholder="React, Node.js, Firebase..." />
+      </div>
+
+      <div class="admin-field" id="adminFeaturesField" style="display: none;">
+        <label for="adminProjectFeaturesInput">Características del Bot (separadas por coma)</label>
+        <input type="text" id="adminProjectFeaturesInput" class="admin-input" placeholder="Respuestas con IA, Notificaciones..." />
       </div>
 
       <div class="admin-field">
@@ -2494,7 +2259,16 @@
   const defaultAppUrls = {};
   const defaultProjectNames = {};
   const defaultProjectCategories = {};
+  const defaultProjectDescs = {};
+  const defaultProjectTechs = {};
   const projectsData = [];
+
+  const defaultBotLogos = {};
+  const defaultBotNames = {};
+  const defaultBotDescs = {};
+  const defaultBotFeatures = {};
+  const defaultBotTechs = {};
+
   let customLogos = {};
   let previewLogoState = null;
 
@@ -2505,6 +2279,8 @@
     const logoEl = card.querySelector('.project-logo');
     const appBtn = card.querySelector('.project-app-btn');
     const typeEl = card.querySelector('.project-type');
+    const descEl = card.querySelector('.project-desc');
+    const tagsEls = card.querySelectorAll('.project-tag');
     
     defaultProjectLogos[id] = {
       html: logoEl.innerHTML,
@@ -2529,7 +2305,43 @@
       };
     }
 
+    if (descEl) {
+      defaultProjectDescs[id] = descEl.textContent.trim();
+    }
+
+    if (tagsEls.length > 0) {
+      defaultProjectTechs[id] = Array.from(tagsEls).map(el => el.textContent.trim());
+    }
+
     projectsData.push({ id, name });
+  });
+
+  document.querySelectorAll('.bot-card').forEach(card => {
+    const id = card.dataset.project;
+    const nameEl = card.querySelector('.bot-name');
+    const logoEl = card.querySelector('.bot-icon');
+    const descEl = card.querySelector('.bot-desc');
+    const featuresList = card.querySelectorAll('.bot-features li');
+    const techChips = card.querySelectorAll('.bot-tech .skill-chip');
+
+    if (logoEl) {
+      defaultBotLogos[id] = {
+        html: logoEl.innerHTML,
+        background: logoEl.style.background || ''
+      };
+    }
+    if (nameEl) {
+      defaultBotNames[id] = nameEl.textContent.trim();
+    }
+    if (descEl) {
+      defaultBotDescs[id] = descEl.textContent.trim();
+    }
+    if (featuresList.length > 0) {
+      defaultBotFeatures[id] = Array.from(featuresList).map(el => el.textContent.trim().replace(/^→\s*/, ''));
+    }
+    if (techChips.length > 0) {
+      defaultBotTechs[id] = Array.from(techChips).map(el => el.textContent.trim());
+    }
   });
 
   // Dynamic age elements rendering on page load
@@ -2589,10 +2401,14 @@
     document.getElementById('adminUrlInput').value = '';
     document.getElementById('adminAppUrlInput').value = '';
     document.getElementById('adminProjectNameInput').value = '';
+    document.getElementById('adminProjectDescInput').value = '';
+    document.getElementById('adminProjectTechInput').value = '';
+    document.getElementById('adminProjectFeaturesInput').value = '';
     document.getElementById('adminCategorySelect').value = 'default';
     document.getElementById('adminWhatsAppInput').value = '';
     document.getElementById('adminMaintenanceInput').checked = false;
     document.getElementById('adminHideInput').checked = false;
+    document.getElementById('adminFeaturesField').style.display = 'none';
     
     // reset profile inputs
     document.getElementById('adminBio1Input').value = '';
@@ -2630,6 +2446,9 @@
     document.getElementById('adminUrlInput').value = '';
     document.getElementById('adminAppUrlInput').value = '';
     document.getElementById('adminProjectNameInput').value = '';
+    document.getElementById('adminProjectDescInput').value = '';
+    document.getElementById('adminProjectTechInput').value = '';
+    document.getElementById('adminProjectFeaturesInput').value = '';
     document.getElementById('adminCategorySelect').value = 'default';
     document.getElementById('adminWhatsAppInput').value = '';
     document.getElementById('adminMaintenanceInput').checked = false;
@@ -2645,7 +2464,10 @@
         name: '',
         category: 'default',
         hidden: false,
-        whatsapp: ''
+        whatsapp: '',
+        desc: '',
+        tech: '',
+        features: ''
       };
     }
 
@@ -2733,6 +2555,38 @@
     } else {
       document.getElementById('adminWhatsAppInput').value = '';
     }
+
+    if (custom && custom.desc) {
+      document.getElementById('adminProjectDescInput').value = custom.desc;
+    } else {
+      document.getElementById('adminProjectDescInput').placeholder = defaultProjectDescs[projectId] || '';
+    }
+
+    if (custom && custom.tech) {
+      document.getElementById('adminProjectTechInput').value = custom.tech;
+    } else {
+      document.getElementById('adminProjectTechInput').placeholder = defaultProjectTechs[projectId] ? defaultProjectTechs[projectId].join(', ') : '';
+    }
+
+    if (custom && custom.features) {
+      document.getElementById('adminProjectFeaturesInput').value = custom.features;
+    } else {
+      document.getElementById('adminProjectFeaturesInput').placeholder = defaultBotFeatures[projectId] ? defaultBotFeatures[projectId].join(', ') : '';
+    }
+
+    toggleCategorySpecificFields();
+  }
+
+  function toggleCategorySpecificFields() {
+    const categoryVal = document.getElementById('adminCategorySelect').value;
+    const projectId = document.getElementById('adminProjectSelect').value;
+    const isBot = categoryVal === 'bot' || (categoryVal === 'default' && (projectId === 'sandboxai' || projectId === 'descuentos-bot' || projectId === 'showroomderek'));
+    
+    if (isBot) {
+      document.getElementById('adminFeaturesField').style.display = 'block';
+    } else {
+      document.getElementById('adminFeaturesField').style.display = 'none';
+    }
   }
 
   function renderLogoToElement(element, logo) {
@@ -2798,10 +2652,13 @@
     const categoryValue = document.getElementById('adminCategorySelect').value;
     const hiddenValue = document.getElementById('adminHideInput').checked;
     const whatsappValue = document.getElementById('adminWhatsAppInput').value.trim();
+    const descValue = document.getElementById('adminProjectDescInput').value.trim();
+    const techValue = document.getElementById('adminProjectTechInput').value.trim();
+    const featuresValue = document.getElementById('adminProjectFeaturesInput').value.trim();
 
     let currentCustom = customLogos[projectId] || {};
     if (currentCustom.type) {
-      currentCustom = { logo: { type: currentCustom.type, value: currentCustom.value }, appUrl: '', inMaintenance: false, name: '', category: 'default', hidden: false, whatsapp: '' };
+      currentCustom = { logo: { type: currentCustom.type, value: currentCustom.value }, appUrl: '', inMaintenance: false, name: '', category: 'default', hidden: false, whatsapp: '', desc: '', tech: '', features: '' };
     }
     if (previewLogoState) { currentCustom.logo = previewLogoState; }
     currentCustom.appUrl = appUrlValue;
@@ -2810,9 +2667,12 @@
     currentCustom.category = categoryValue;
     currentCustom.hidden = hiddenValue;
     currentCustom.whatsapp = whatsappValue;
+    currentCustom.desc = descValue;
+    currentCustom.tech = techValue;
+    currentCustom.features = featuresValue;
 
-    if (!previewLogoState && !appUrlValue && !currentCustom.logo && !inMaintenanceValue && !projectNameValue && categoryValue === 'default' && !hiddenValue && !whatsappValue) {
-      if (!confirm("No has configurado ningún logo, enlace, mantenimiento, nombre, categoría, visibilidad o WhatsApp. ¿Deseas guardar el proyecto con valores por defecto?")) return;
+    if (!previewLogoState && !appUrlValue && !currentCustom.logo && !inMaintenanceValue && !projectNameValue && categoryValue === 'default' && !hiddenValue && !whatsappValue && !descValue && !techValue && !featuresValue) {
+      if (!confirm("No has configurado ningún logo, enlace, mantenimiento, nombre, categoría, visibilidad, WhatsApp, descripción, tecnologías o características. ¿Deseas guardar el proyecto con valores por defecto?")) return;
     }
 
     const saveBtn = document.getElementById('adminSaveBtn');
@@ -2829,6 +2689,9 @@
       applyCategoryToCard(projectId, currentCustom.category);
       applyVisibilityToCard(projectId, currentCustom.hidden);
       applyWhatsAppToCard(projectId, currentCustom.whatsapp);
+      applyDescriptionToCard(projectId, currentCustom.desc);
+      applyFeaturesToCard(projectId, currentCustom.features);
+      applyTechToCard(projectId, currentCustom.tech);
       
       saveBtn.textContent = "✓ ¡Guardado!";
       setTimeout(() => { saveBtn.textContent = "Guardar Cambios"; saveBtn.disabled = false; closeAdminModal(); }, 1000);
@@ -2854,6 +2717,9 @@
       applyCategoryToCard(projectId, 'default');
       applyVisibilityToCard(projectId, false);
       applyWhatsAppToCard(projectId, '');
+      applyDescriptionToCard(projectId, '');
+      applyFeaturesToCard(projectId, '');
+      applyTechToCard(projectId, '');
       loadProjectLogoPreview();
       alert("Personalizaciones eliminadas correctamente.");
       closeAdminModal();
@@ -2865,20 +2731,38 @@
 
   function applyLogoToCard(projectId, logo) {
     const card = document.querySelector(`.project-card[data-project="${projectId}"]`);
-    if (!card) return;
-    const logoEl = card.querySelector('.project-logo');
-    if (!logoEl) return;
-    renderLogoToElement(logoEl, logo);
+    if (card) {
+      const logoEl = card.querySelector('.project-logo');
+      if (logoEl) renderLogoToElement(logoEl, logo);
+    }
+    const botCard = document.querySelector(`.bot-card[data-project="${projectId}"]`);
+    if (botCard) {
+      const botIcon = botCard.querySelector('.bot-icon');
+      if (botIcon) renderLogoToElement(botIcon, logo);
+    }
   }
 
   function applyDefaultLogoToCard(projectId) {
     const card = document.querySelector(`.project-card[data-project="${projectId}"]`);
-    if (!card) return;
-    const logoEl = card.querySelector('.project-logo');
-    if (!logoEl) return;
-    const def = defaultProjectLogos[projectId];
-    logoEl.innerHTML = def.html;
-    logoEl.style.background = def.background;
+    if (card) {
+      const logoEl = card.querySelector('.project-logo');
+      if (logoEl) {
+        const def = defaultProjectLogos[projectId];
+        logoEl.innerHTML = def.html;
+        logoEl.style.background = def.background;
+      }
+    }
+    const botCard = document.querySelector(`.bot-card[data-project="${projectId}"]`);
+    if (botCard) {
+      const botIcon = botCard.querySelector('.bot-icon');
+      if (botIcon) {
+        const def = defaultBotLogos[projectId];
+        if (def) {
+          botIcon.innerHTML = def.html;
+          botIcon.style.background = def.background;
+        }
+      }
+    }
   }
 
   function applyAppUrlToCard(projectId, appUrl) {
@@ -2922,32 +2806,47 @@
 
   function applyMaintenanceToCard(projectId, inMaintenance, appUrl) {
     const card = document.querySelector(`.project-card[data-project="${projectId}"]`);
-    if (!card) return;
-    let maintBadge = card.querySelector('.project-maintenance-badge');
-    if (inMaintenance) {
-      if (!maintBadge) {
-        maintBadge = document.createElement('div');
-        maintBadge.className = 'project-maintenance-badge';
-        maintBadge.style.cssText = 'display: inline-block; background: rgba(249,115,22,0.15); color: #f97316; border: 1px solid rgba(249,115,22,0.3); font-size: 0.65rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; padding: 0.2rem 0.5rem; border-radius: 6px; margin-top: 0.35rem;';
-        maintBadge.textContent = '🔧 Mantenimiento';
-        const projectMeta = card.querySelector('.project-meta');
-        if (projectMeta) {
-          projectMeta.appendChild(maintBadge);
+    if (card) {
+      let maintBadge = card.querySelector('.project-maintenance-badge');
+      if (inMaintenance) {
+        if (!maintBadge) {
+          maintBadge = document.createElement('div');
+          maintBadge.className = 'project-maintenance-badge';
+          maintBadge.style.cssText = 'display: inline-block; background: rgba(249,115,22,0.15); color: #f97316; border: 1px solid rgba(249,115,22,0.3); font-size: 0.65rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; padding: 0.2rem 0.5rem; border-radius: 6px; margin-top: 0.35rem;';
+          maintBadge.textContent = '🔧 Mantenimiento';
+          const projectMeta = card.querySelector('.project-meta');
+          if (projectMeta) {
+            projectMeta.appendChild(maintBadge);
+          }
+        }
+        const appBtn = card.querySelector('.project-app-btn');
+        if (appBtn) {
+          appBtn.setAttribute('href', '#');
+          appBtn.removeAttribute('target');
+          appBtn.setAttribute('onclick', 'return false;');
+          appBtn.className = 'project-link link-disabled project-app-btn';
+          appBtn.textContent = '🔧 Mantenimiento';
+        }
+      } else {
+        if (maintBadge) {
+          maintBadge.remove();
+        }
+        applyAppUrlToCard(projectId, appUrl);
+      }
+    }
+
+    const botCard = document.querySelector(`.bot-card[data-project="${projectId}"]`);
+    if (botCard) {
+      const statusEl = botCard.querySelector('.bot-status');
+      if (statusEl) {
+        if (inMaintenance) {
+          statusEl.textContent = 'Mantenimiento';
+          statusEl.style.color = '#f97316';
+        } else {
+          statusEl.textContent = 'Activo';
+          statusEl.style.color = '';
         }
       }
-      const appBtn = card.querySelector('.project-app-btn');
-      if (appBtn) {
-        appBtn.setAttribute('href', '#');
-        appBtn.removeAttribute('target');
-        appBtn.setAttribute('onclick', 'return false;');
-        appBtn.className = 'project-link link-disabled project-app-btn';
-        appBtn.textContent = '🔧 Mantenimiento';
-      }
-    } else {
-      if (maintBadge) {
-        maintBadge.remove();
-      }
-      applyAppUrlToCard(projectId, appUrl);
     }
   }
 
@@ -3027,15 +2926,27 @@
 
   function applyNameToCard(projectId, name) {
     const card = document.querySelector(`.project-card[data-project="${projectId}"]`);
-    if (!card) return;
-    const nameEl = card.querySelector('.project-name');
-    if (!nameEl) return;
-    if (name && name.trim() !== '') {
-      nameEl.textContent = name;
-    } else {
-      const def = defaultProjectNames[projectId];
-      if (def) {
-        nameEl.textContent = def;
+    if (card) {
+      const nameEl = card.querySelector('.project-name');
+      if (nameEl) {
+        if (name && name.trim() !== '') {
+          nameEl.textContent = name;
+        } else {
+          const def = defaultProjectNames[projectId];
+          if (def) nameEl.textContent = def;
+        }
+      }
+    }
+    const botCard = document.querySelector(`.bot-card[data-project="${projectId}"]`);
+    if (botCard) {
+      const nameEl = botCard.querySelector('.bot-name');
+      if (nameEl) {
+        if (name && name.trim() !== '') {
+          nameEl.textContent = name;
+        } else {
+          const def = defaultBotNames[projectId];
+          if (def) nameEl.textContent = def;
+        }
       }
     }
   }
@@ -3080,6 +2991,119 @@
         card.dataset.type = def.type;
         typeEl.textContent = def.text;
         typeEl.setAttribute('style', def.style);
+      }
+    }
+  }
+
+  function applyDescriptionToCard(projectId, desc) {
+    const projectCard = document.querySelector(`.project-card[data-project="${projectId}"]`);
+    if (projectCard) {
+      const descEl = projectCard.querySelector('.project-desc');
+      if (descEl) {
+        if (desc && desc.trim() !== '') {
+          descEl.textContent = desc;
+        } else {
+          const def = defaultProjectDescs[projectId];
+          if (def) descEl.textContent = def;
+        }
+      }
+    }
+
+    const botCard = document.querySelector(`.bot-card[data-project="${projectId}"]`);
+    if (botCard) {
+      const descEl = botCard.querySelector('.bot-desc');
+      if (descEl) {
+        if (desc && desc.trim() !== '') {
+          descEl.textContent = desc;
+        } else {
+          const def = defaultBotDescs[projectId];
+          if (def) descEl.textContent = def;
+        }
+      }
+    }
+  }
+
+  function applyFeaturesToCard(projectId, featuresStr) {
+    const botCard = document.querySelector(`.bot-card[data-project="${projectId}"]`);
+    if (!botCard) return;
+    const featuresList = botCard.querySelector('.bot-features');
+    if (!featuresList) return;
+
+    featuresList.innerHTML = '';
+    const features = featuresStr ? featuresStr.split(',').map(f => f.trim()).filter(Boolean) : [];
+
+    if (features.length > 0) {
+      features.forEach(f => {
+        const li = document.createElement('li');
+        li.textContent = f;
+        featuresList.appendChild(li);
+      });
+    } else {
+      const def = defaultBotFeatures[projectId];
+      if (def) {
+        def.forEach(f => {
+          const li = document.createElement('li');
+          li.textContent = f;
+          featuresList.appendChild(li);
+        });
+      }
+    }
+  }
+
+  function applyTechToCard(projectId, techStr) {
+    const tech = techStr ? techStr.split(',').map(t => t.trim()).filter(Boolean) : [];
+
+    const projectCard = document.querySelector(`.project-card[data-project="${projectId}"]`);
+    if (projectCard) {
+      const tagsContainer = projectCard.querySelector('.project-tags');
+      if (tagsContainer) {
+        tagsContainer.innerHTML = '';
+        if (tech.length > 0) {
+          tech.forEach(t => {
+            const span = document.createElement('span');
+            span.className = 'project-tag';
+            span.textContent = t;
+            tagsContainer.appendChild(span);
+          });
+        } else {
+          const def = defaultProjectTechs[projectId];
+          if (def) {
+            def.forEach(t => {
+              const span = document.createElement('span');
+              span.className = 'project-tag';
+              span.textContent = t;
+              tagsContainer.appendChild(span);
+            });
+          }
+        }
+      }
+    }
+
+    const botCard = document.querySelector(`.bot-card[data-project="${projectId}"]`);
+    if (botCard) {
+      const techContainer = botCard.querySelector('.bot-tech');
+      if (techContainer) {
+        techContainer.innerHTML = '';
+        if (tech.length > 0) {
+          tech.forEach(t => {
+            const span = document.createElement('span');
+            span.className = 'skill-chip';
+            span.style.fontSize = '0.72rem';
+            span.textContent = t;
+            techContainer.appendChild(span);
+          });
+        } else {
+          const def = defaultBotTechs[projectId];
+          if (def) {
+            def.forEach(t => {
+              const span = document.createElement('span');
+              span.className = 'skill-chip';
+              span.style.fontSize = '0.72rem';
+              span.textContent = t;
+              techContainer.appendChild(span);
+            });
+          }
+        }
       }
     }
   }
@@ -3580,7 +3604,10 @@
               name: '',
               category: 'default',
               hidden: false,
-              whatsapp: ''
+              whatsapp: '',
+              desc: '',
+              tech: '',
+              features: ''
             }; 
           }
           if (custom.logo) { applyLogoToCard(pid, custom.logo); }
@@ -3590,6 +3617,9 @@
           applyCategoryToCard(pid, custom.category);
           applyVisibilityToCard(pid, custom.hidden);
           applyWhatsAppToCard(pid, custom.whatsapp);
+          applyDescriptionToCard(pid, custom.desc);
+          applyFeaturesToCard(pid, custom.features);
+          applyTechToCard(pid, custom.tech);
         }
       } catch (e) { console.error("Error parsing cached customizations:", e); }
     }
@@ -3633,7 +3663,10 @@
               name: '',
               category: 'default',
               hidden: false,
-              whatsapp: ''
+              whatsapp: '',
+              desc: '',
+              tech: '',
+              features: ''
             };
           }
           if (custom.logo) {
@@ -3645,388 +3678,14 @@
           applyCategoryToCard(pid, custom.category);
           applyVisibilityToCard(pid, custom.hidden);
           applyWhatsAppToCard(pid, custom.whatsapp);
+          applyDescriptionToCard(pid, custom.desc);
+          applyFeaturesToCard(pid, custom.features);
+          applyTechToCard(pid, custom.tech);
         }
       } catch (err) {
         console.error("Error syncing with Firebase:", err);
       }
     }
-  }
-
-  // ─── CYBER SNAKE GAME LOGIC ───
-  let gameCanvas, gameCtx;
-  const gridSize = 20;
-  const gridCount = 20;
-  
-  let snake = [];
-  let direction = 'right';
-  let nextDirection = 'right';
-  let food = { x: 0, y: 0, type: 'normal' };
-  let gameScore = 0;
-  let gameHighScore = 0;
-  let gameIsRunning = false;
-  let gameLoopInterval = null;
-  let gameSpeed = 85;
-  let particles = [];
-  let shakeFrames = 0;
-  
-  function initGame() {
-    gameCanvas = document.getElementById('gameCanvas');
-    if (!gameCanvas) return;
-    gameCtx = gameCanvas.getContext('2d');
-    
-    const savedHighScore = localStorage.getItem('portfolio_snake_highscore');
-    if (savedHighScore) {
-      gameHighScore = parseInt(savedHighScore, 10);
-      document.getElementById('gameHighScore').textContent = String(gameHighScore).padStart(3, '0');
-    }
-    
-    resetGameData();
-    drawGame();
-    
-    window.addEventListener('keydown', function(e) {
-      const keys = ['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'w', 's', 'a', 'd', 'W', 'S', 'A', 'D'];
-      if (keys.indexOf(e.key) > -1) {
-        if (gameIsRunning) {
-          e.preventDefault();
-        }
-        
-        let targetDir = '';
-        if (e.key === 'ArrowUp' || e.key.toLowerCase() === 'w') targetDir = 'up';
-        else if (e.key === 'ArrowDown' || e.key.toLowerCase() === 's') targetDir = 'down';
-        else if (e.key === 'ArrowLeft' || e.key.toLowerCase() === 'a') targetDir = 'left';
-        else if (e.key === 'ArrowRight' || e.key.toLowerCase() === 'd') targetDir = 'right';
-        
-        if (targetDir) {
-          if (!gameIsRunning && !document.getElementById('gameOverlay').classList.contains('hidden')) {
-            startGame();
-          }
-          changeDirection(targetDir);
-        }
-      }
-    });
-  }
-
-  document.addEventListener('DOMContentLoaded', initGame);
-
-  function resetGameData() {
-    snake = [
-      { x: 10, y: 10 },
-      { x: 9, y: 10 },
-      { x: 8, y: 10 }
-    ];
-    direction = 'right';
-    nextDirection = 'right';
-    gameScore = 0;
-    document.getElementById('gameScore').textContent = '000';
-    spawnFood();
-    particles = [];
-    shakeFrames = 0;
-  }
-  
-  function startGame() {
-    if (gameIsRunning) return;
-    resetGameData();
-    document.getElementById('gameOverlay').classList.add('hidden');
-    gameIsRunning = true;
-    
-    updateSpeed();
-    
-    if (gameLoopInterval) clearInterval(gameLoopInterval);
-    gameLoopInterval = setInterval(gameTick, gameSpeed);
-  }
-  
-  function stopGame(isGameOver) {
-    gameIsRunning = false;
-    if (gameLoopInterval) {
-      clearInterval(gameLoopInterval);
-      gameLoopInterval = null;
-    }
-    
-    const overlay = document.getElementById('gameOverlay');
-    const title = document.getElementById('overlayTitle');
-    const desc = document.getElementById('overlayDesc');
-    const startBtn = overlay.querySelector('.game-btn-start');
-    
-    if (isGameOver) {
-      shakeFrames = 15;
-      
-      title.textContent = 'JUEGO TERMINADO';
-      title.style.background = 'linear-gradient(135deg, #ef4444, #f43f5e)';
-      title.style.webkitBackgroundClip = 'text';
-      title.style.webkitTextFillColor = 'transparent';
-      
-      desc.innerHTML = `Puntuación obtenida: <strong style="color:var(--green);">${gameScore}</strong><br>Presioná iniciar para volver a intentar.`;
-      startBtn.textContent = 'REINTENTAR';
-      
-      if (gameScore > gameHighScore) {
-        gameHighScore = gameScore;
-        localStorage.setItem('portfolio_snake_highscore', gameHighScore);
-        document.getElementById('gameHighScore').textContent = String(gameHighScore).padStart(3, '0');
-      }
-    } else {
-      title.textContent = 'CYBER SNAKE';
-      title.style.background = 'linear-gradient(135deg, var(--accent), var(--accent2))';
-      title.style.webkitBackgroundClip = 'text';
-      title.style.webkitTextFillColor = 'transparent';
-      desc.textContent = 'Presioná INICIAR o cualquier tecla de dirección para jugar';
-      startBtn.textContent = 'INICIAR JUEGO';
-    }
-    
-    overlay.classList.remove('hidden');
-    drawGame();
-  }
-  
-  function updateSpeed() {
-    const diff = document.getElementById('gameSpeedSelect').value;
-    if (diff === 'easy') gameSpeed = 130;
-    else if (diff === 'medium') gameSpeed = 85;
-    else if (diff === 'hard') gameSpeed = 55;
-  }
-  
-  function changeDifficulty() {
-    if (gameIsRunning) {
-      updateSpeed();
-      clearInterval(gameLoopInterval);
-      gameLoopInterval = setInterval(gameTick, gameSpeed);
-    }
-  }
-  
-  function changeDirection(newDir) {
-    if (newDir === 'up' && direction === 'down') return;
-    if (newDir === 'down' && direction === 'up') return;
-    if (newDir === 'left' && direction === 'right') return;
-    if (newDir === 'right' && direction === 'left') return;
-    nextDirection = newDir;
-  }
-  
-  function pressKey(key) {
-    let targetDir = '';
-    if (key === 'ArrowUp') targetDir = 'up';
-    else if (key === 'ArrowDown') targetDir = 'down';
-    else if (key === 'ArrowLeft') targetDir = 'left';
-    else if (key === 'ArrowRight') targetDir = 'right';
-    
-    if (targetDir) {
-      if (!gameIsRunning && !document.getElementById('gameOverlay').classList.contains('hidden')) {
-        startGame();
-      } else {
-        changeDirection(targetDir);
-      }
-    }
-  }
-  
-  function spawnFood() {
-    let valid = false;
-    let rx, ry;
-    
-    while (!valid) {
-      rx = Math.floor(Math.random() * gridCount);
-      ry = Math.floor(Math.random() * gridCount);
-      
-      valid = true;
-      for (const seg of snake) {
-        if (seg.x === rx && seg.y === ry) {
-          valid = false;
-          break;
-        }
-      }
-    }
-    
-    const isSpecial = Math.random() < 0.15;
-    food = {
-      x: rx,
-      y: ry,
-      type: isSpecial ? 'special' : 'normal'
-    };
-  }
-  
-  function gameTick() {
-    if (!gameIsRunning) return;
-    
-    direction = nextDirection;
-    const head = { ...snake[0] };
-    
-    if (direction === 'up') head.y--;
-    else if (direction === 'down') head.y++;
-    else if (direction === 'left') head.x--;
-    else if (direction === 'right') head.x++;
-    
-    if (head.x < 0 || head.x >= gridCount || head.y < 0 || head.y >= gridCount) {
-      stopGame(true);
-      return;
-    }
-    
-    for (const seg of snake) {
-      if (seg.x === head.x && seg.y === head.y) {
-        stopGame(true);
-        return;
-      }
-    }
-    
-    snake.unshift(head);
-    
-    if (head.x === food.x && head.y === food.y) {
-      const points = food.type === 'special' ? 20 : 10;
-      gameScore += points;
-      document.getElementById('gameScore').textContent = String(gameScore).padStart(3, '0');
-      
-      const pColor = food.type === 'special' ? 'var(--yellow)' : 'var(--green)';
-      spawnParticles(food.x, food.y, pColor);
-      
-      spawnFood();
-    } else {
-      snake.pop();
-    }
-    
-    updateParticles();
-    
-    if (shakeFrames > 0) {
-      shakeFrames--;
-    }
-    
-    drawGame();
-  }
-  
-  function spawnParticles(x, y, color) {
-    for (let i = 0; i < 15; i++) {
-      particles.push({
-        x: (x + 0.5) * gridSize,
-        y: (y + 0.5) * gridSize,
-        vx: (Math.random() - 0.5) * 6,
-        vy: (Math.random() - 0.5) * 6,
-        radius: Math.random() * 2.5 + 1.2,
-        color: color,
-        alpha: 1,
-        decay: Math.random() * 0.04 + 0.02
-      });
-    }
-  }
-  
-  function updateParticles() {
-    for (let i = particles.length - 1; i >= 0; i--) {
-      const p = particles[i];
-      p.x += p.vx;
-      p.y += p.vy;
-      p.alpha -= p.decay;
-      if (p.alpha <= 0) {
-        particles.splice(i, 1);
-      }
-    }
-  }
-  
-  function drawGame() {
-    if (!gameCtx) return;
-    
-    gameCtx.setTransform(1, 0, 0, 1, 0, 0);
-    gameCtx.fillStyle = '#08080c';
-    gameCtx.fillRect(0, 0, gameCanvas.width, gameCanvas.height);
-    
-    if (shakeFrames > 0) {
-      const dx = (Math.random() - 0.5) * 10;
-      const dy = (Math.random() - 0.5) * 10;
-      gameCtx.translate(dx, dy);
-    }
-    
-    gameCtx.strokeStyle = 'rgba(108,99,255,0.03)';
-    gameCtx.lineWidth = 1;
-    for (let i = 0; i < gridCount; i++) {
-      gameCtx.beginPath();
-      gameCtx.moveTo(i * gridSize, 0);
-      gameCtx.lineTo(i * gridSize, gameCanvas.height);
-      gameCtx.stroke();
-      
-      gameCtx.beginPath();
-      gameCtx.moveTo(0, i * gridSize);
-      gameCtx.lineTo(gameCanvas.width, i * gridSize);
-      gameCtx.stroke();
-    }
-    
-    particles.forEach(p => {
-      gameCtx.save();
-      gameCtx.globalAlpha = p.alpha;
-      gameCtx.fillStyle = p.color;
-      gameCtx.shadowBlur = 8;
-      gameCtx.shadowColor = p.color;
-      gameCtx.beginPath();
-      gameCtx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
-      gameCtx.fill();
-      gameCtx.restore();
-    });
-    
-    if (food) {
-      gameCtx.save();
-      const fx = (food.x + 0.5) * gridSize;
-      const fy = (food.y + 0.5) * gridSize;
-      
-      let glowColor = 'var(--green)';
-      let mainColor = 'var(--green)';
-      let radius = gridSize / 2 - 3;
-      
-      if (food.type === 'special') {
-        glowColor = 'var(--yellow)';
-        mainColor = 'var(--yellow)';
-        const pulse = Math.sin(Date.now() / 100) * 1.5;
-        radius += pulse;
-      }
-      
-      gameCtx.shadowBlur = 15;
-      gameCtx.shadowColor = glowColor;
-      gameCtx.fillStyle = mainColor;
-      gameCtx.beginPath();
-      gameCtx.arc(fx, fy, radius, 0, Math.PI * 2);
-      gameCtx.fill();
-      gameCtx.restore();
-    }
-    
-    snake.forEach((segment, index) => {
-      gameCtx.save();
-      const sx = (segment.x + 0.5) * gridSize;
-      const sy = (segment.y + 0.5) * gridSize;
-      
-      let glowColor = 'var(--accent)';
-      let mainColor = 'var(--accent)';
-      let radius = gridSize / 2 - 1.5;
-      
-      if (index > 0) {
-        const ratio = 1 - (index / snake.length) * 0.3;
-        radius *= ratio;
-        glowColor = 'var(--accent2)';
-        mainColor = 'var(--accent2)';
-      }
-      
-      gameCtx.shadowBlur = index === 0 ? 12 : 6;
-      gameCtx.shadowColor = glowColor;
-      gameCtx.fillStyle = mainColor;
-      gameCtx.beginPath();
-      gameCtx.arc(sx, sy, radius, 0, Math.PI * 2);
-      gameCtx.fill();
-      
-      if (index === 0) {
-        gameCtx.shadowBlur = 0;
-        gameCtx.fillStyle = '#fff';
-        
-        let eyeOffsetLeftX = -3, eyeOffsetLeftY = -3;
-        let eyeOffsetRightX = 3, eyeOffsetRightY = -3;
-        
-        if (direction === 'down') {
-          eyeOffsetLeftX = -3; eyeOffsetLeftY = 3;
-          eyeOffsetRightX = 3; eyeOffsetRightY = 3;
-        } else if (direction === 'left') {
-          eyeOffsetLeftX = -3; eyeOffsetLeftY = -3;
-          eyeOffsetRightX = -3; eyeOffsetRightY = 3;
-        } else if (direction === 'right') {
-          eyeOffsetLeftX = 3; eyeOffsetLeftY = -3;
-          eyeOffsetRightX = 3; eyeOffsetRightY = 3;
-        }
-        
-        gameCtx.beginPath();
-        gameCtx.arc(sx + eyeOffsetLeftX, sy + eyeOffsetLeftY, 1.8, 0, Math.PI * 2);
-        gameCtx.arc(sx + eyeOffsetRightX, sy + eyeOffsetRightY, 1.8, 0, Math.PI * 2);
-        gameCtx.fill();
-      }
-      
-      gameCtx.restore();
-    });
   }
 
   // Initialize custom customizations loading
