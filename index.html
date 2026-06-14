@@ -1887,6 +1887,12 @@
       <button class="admin-close" onclick="closeAdminModal()">✕</button>
     </div>
 
+    <div style="font-size: 0.82rem; color: var(--text2); margin-top: -1.25rem; margin-bottom: 1.5rem; display: flex; align-items: center; gap: 0.5rem; background: rgba(108,99,255,0.06); border: 1px solid rgba(108,99,255,0.15); padding: 0.6rem 1rem; border-radius: 10px;">
+      <span style="font-size: 1rem;">👥</span>
+      <span>Visitantes únicos:</span>
+      <strong id="adminVisitorCount" style="color: var(--accent3); font-size: 0.95rem;">Cargando...</strong>
+    </div>
+
     <!-- Admin Tabs -->
     <div class="admin-tabs">
       <button class="admin-tab active" id="tabBtnProjects" onclick="switchAdminTab('projects')">📁 Proyectos</button>
@@ -2200,6 +2206,34 @@
     console.log("Firebase no está configurado. Usando localStorage como fallback.");
   }
 
+  function registerVisitor() {
+    let visitorId = localStorage.getItem('portfolio_visitor_id');
+    if (!visitorId) {
+      visitorId = 'visitor_' + Date.now() + Math.random().toString(36).substring(2, 11);
+      localStorage.setItem('portfolio_visitor_id', visitorId);
+    }
+    if (useFirebase) {
+      const isSynced = localStorage.getItem('portfolio_visitor_synced');
+      if (!isSynced) {
+        db.collection('visitors').doc(visitorId).set({
+          firstVisit: firebase.firestore.FieldValue.serverTimestamp(),
+          userAgent: navigator.userAgent
+        }).then(() => {
+          localStorage.setItem('portfolio_visitor_synced', 'true');
+        }).catch(err => {
+          console.error("Error registering visitor:", err);
+        });
+      }
+    }
+  }
+
+  // Register visitor
+  try {
+    registerVisitor();
+  } catch (err) {
+    console.error("Error running visitor registration:", err);
+  }
+
   let ytSettings = {
     url: 'https://www.youtube.com/@rodarena7',
     subsShort: '13.7K',
@@ -2370,6 +2404,36 @@
     }
   }
 
+  function updateVisitorCountDisplay() {
+    const countEl = document.getElementById('adminVisitorCount');
+    if (!countEl) return;
+    
+    if (!useFirebase) {
+      countEl.textContent = "1 (Local / Firebase no configurado)";
+      return;
+    }
+    
+    const visitorsRef = db.collection('visitors');
+    if (typeof visitorsRef.count === 'function') {
+      visitorsRef.count().get().then(countSnapshot => {
+        countEl.textContent = countSnapshot.data().count;
+      }).catch(err => {
+        console.error("Error fetching visitor count via count query:", err);
+        visitorsRef.get().then(snapshot => {
+          countEl.textContent = snapshot.size;
+        }).catch(e => {
+          countEl.textContent = "Error al cargar";
+        });
+      });
+    } else {
+      visitorsRef.get().then(snapshot => {
+        countEl.textContent = snapshot.size;
+      }).catch(e => {
+        countEl.textContent = "Error al cargar";
+      });
+    }
+  }
+
   function openAdminModal() {
     const select = document.getElementById('adminProjectSelect');
     if (select.children.length === 0) {
@@ -2392,6 +2456,7 @@
 
     document.getElementById('adminOverlay').classList.add('open');
     loadProjectLogoPreview();
+    updateVisitorCountDisplay();
   }
 
   function closeAdminModal() {
