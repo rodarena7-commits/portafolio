@@ -476,6 +476,9 @@
       display: flex; align-items: center; justify-content: center;
       font-size: 1.2rem; flex-shrink: 0;
     }
+    .contact-link-icon img {
+      width: 100%; height: 100%; object-fit: cover; border-radius: inherit;
+    }
     .contact-link-text { }
     .contact-link-label { font-weight: 600; font-size: 0.875rem; }
     .contact-link-val { color: var(--text3); font-size: 0.8rem; }
@@ -1946,35 +1949,35 @@
         Si tenés una idea o necesitás ayuda con tu app, no dudes en escribirme.</p>
         <div class="contact-links">
           <a href="mailto:rodrigo.n.arena@hotmail.com" class="contact-link">
-            <div class="contact-link-icon" style="background: rgba(59,130,246,0.15);">📧</div>
+            <div class="contact-link-icon" id="contactEmailIcon" style="background: rgba(59,130,246,0.15);">📧</div>
             <div class="contact-link-text">
               <div class="contact-link-label">Email</div>
               <div class="contact-link-val">rodrigo.n.arena@hotmail.com</div>
             </div>
           </a>
           <a href="https://i.pinimg.com/736x/7b/f9/0c/7bf90c9ee9932cd0d44c772f7a579f51.jpg" target="_blank" class="contact-link" id="contactWhatsappLink" style="border-color: rgba(37,211,102,0.2);">
-            <div class="contact-link-icon" style="background: rgba(37,211,102,0.15); color: #25d366;">💬</div>
+            <div class="contact-link-icon" id="contactWhatsappIcon" style="background: rgba(37,211,102,0.15); color: #25d366;">💬</div>
             <div class="contact-link-text">
               <div class="contact-link-label" style="color: #25d366;">WhatsApp</div>
               <div class="contact-link-val">+54 11 5866-0344</div>
             </div>
           </a>
           <a href="https://github.com/rodarena7-commits" target="_blank" class="contact-link">
-            <div class="contact-link-icon" style="background: rgba(255,255,255,0.05);">🐙</div>
+            <div class="contact-link-icon" id="contactGithub1Icon" style="background: rgba(255,255,255,0.05);">🐙</div>
             <div class="contact-link-text">
               <div class="contact-link-label">GitHub Principal</div>
               <div class="contact-link-val">@rodarena7-commits</div>
             </div>
           </a>
           <a href="https://github.com/Ssteier2016" target="_blank" class="contact-link">
-            <div class="contact-link-icon" style="background: rgba(255,255,255,0.05);">🐙</div>
+            <div class="contact-link-icon" id="contactGithub2Icon" style="background: rgba(255,255,255,0.05);">🐙</div>
             <div class="contact-link-text">
               <div class="contact-link-label">GitHub Secundario</div>
               <div class="contact-link-val">@Ssteier2016</div>
             </div>
           </a>
           <a href="https://www.youtube.com/@rodarena7" target="_blank" class="contact-link" id="ytContactLink">
-            <div class="contact-link-icon" style="background: rgba(255,0,0,0.1);">▶</div>
+            <div class="contact-link-icon" id="ytContactIcon" style="background: rgba(255,0,0,0.1);">▶</div>
             <div class="contact-link-text">
               <div class="contact-link-label">YouTube</div>
               <div class="contact-link-val" id="ytContactVal">@rodarena7 · 13.7K suscriptores</div>
@@ -2229,6 +2232,35 @@
         <input type="text" id="adminProfileWhatsappInput" class="admin-input" placeholder="https://wa.me/541158660344 o enlace alternativo" />
       </div>
 
+      <div style="margin-top: 1.5rem; padding: 1rem; background: rgba(255,255,255,0.02); border: 1px solid var(--border); border-radius: 12px;">
+        <strong style="display: block; font-size: 0.9rem; color: var(--accent2); margin-bottom: 1rem;">✨ Iconos de Contacto (URLs de imágenes)</strong>
+        
+        <div class="admin-field" style="margin-bottom: 0.8rem;">
+          <label for="adminEmailImgInput" style="font-size: 0.8rem;">Imagen para Email (Dejar vacío para usar 📧)</label>
+          <input type="text" id="adminEmailImgInput" class="admin-input" style="font-size: 0.8rem; padding: 0.5rem;" placeholder="https://example.com/email-icon.png" />
+        </div>
+        
+        <div class="admin-field" style="margin-bottom: 0.8rem;">
+          <label for="adminWhatsappImgInput" style="font-size: 0.8rem;">Imagen para WhatsApp (Dejar vacío para usar 💬)</label>
+          <input type="text" id="adminWhatsappImgInput" class="admin-input" style="font-size: 0.8rem; padding: 0.5rem;" placeholder="https://example.com/wa-icon.png" />
+        </div>
+        
+        <div class="admin-field" style="margin-bottom: 0.8rem;">
+          <label for="adminGithub1ImgInput" style="font-size: 0.8rem;">Imagen para GitHub Principal (Dejar vacío para usar 🐙)</label>
+          <input type="text" id="adminGithub1ImgInput" class="admin-input" style="font-size: 0.8rem; padding: 0.5rem;" placeholder="https://example.com/gh-icon.png" />
+        </div>
+        
+        <div class="admin-field" style="margin-bottom: 0.8rem;">
+          <label for="adminGithub2ImgInput" style="font-size: 0.8rem;">Imagen para GitHub Secundario (Dejar vacío para usar 🐙)</label>
+          <input type="text" id="adminGithub2ImgInput" class="admin-input" style="font-size: 0.8rem; padding: 0.5rem;" placeholder="https://example.com/gh-icon.png" />
+        </div>
+        
+        <div class="admin-field" style="margin-bottom: 0;">
+          <label for="adminYoutubeImgInput" style="font-size: 0.8rem;">Imagen para YouTube (Dejar vacío para usar ▶)</label>
+          <input type="text" id="adminYoutubeImgInput" class="admin-input" style="font-size: 0.8rem; padding: 0.5rem;" placeholder="https://example.com/yt-icon.png" />
+        </div>
+      </div>
+
       <div class="admin-btn-group" style="margin-top: 2rem;">
         <button class="admin-btn admin-btn-delete" onclick="resetProfileSettings()">Restablecer por Defecto</button>
         <button class="admin-btn admin-btn-save" id="adminProfileSaveBtn" onclick="saveProfileSettings()">Guardar Cambios</button>
@@ -2425,7 +2457,12 @@
     bio2: "Me especializo en el ecosistema JavaScript/TypeScript, trabajando tanto en frontend como en backend. Construí proyectos para comercios, familias, empresas y comunidades — cada uno con sus propios desafíos.",
     skills: ["React", "Node.js", "Firebase", "Tailwind CSS", "JavaScript", "TypeScript", "Vite", "WhatsApp Bots", "Groq AI", "PWA", "Firestore", "Git / GitHub", "Render", "HTML / CSS", "MercadoLibre API", "Google Calendar API"],
     whatsappUrl: "https://i.pinimg.com/736x/7b/f9/0c/7bf90c9ee9932cd0d44c772f7a579f51.jpg",
-    photo: null
+    photo: null,
+    emailImg: "",
+    whatsappImg: "https://i.pinimg.com/736x/7b/f9/0c/7bf90c9ee9932cd0d44c772f7a579f51.jpg",
+    github1Img: "",
+    github2Img: "",
+    youtubeImg: ""
   };
   let profileSettings = { ...defaultProfileSettings };
 
@@ -2620,6 +2657,11 @@
     document.getElementById('adminBio2Input').value = '';
     document.getElementById('adminSkillsInput').value = '';
     document.getElementById('adminProfileWhatsappInput').value = '';
+    document.getElementById('adminEmailImgInput').value = '';
+    document.getElementById('adminWhatsappImgInput').value = '';
+    document.getElementById('adminGithub1ImgInput').value = '';
+    document.getElementById('adminGithub2ImgInput').value = '';
+    document.getElementById('adminYoutubeImgInput').value = '';
     document.getElementById('adminProfilePhotoFileInput').value = '';
     document.getElementById('adminProfilePhotoUrlInput').value = '';
     profilePhotoState = null;
@@ -3494,6 +3536,40 @@
     const waUrl = settings.whatsappUrl || "https://i.pinimg.com/736x/7b/f9/0c/7bf90c9ee9932cd0d44c772f7a579f51.jpg";
     if (contactWa) contactWa.href = waUrl;
     if (floatingWa) floatingWa.href = waUrl;
+
+    // Update contact icons
+    const iconPairs = [
+      { id: 'contactEmailIcon', val: settings.emailImg, defaultEmoji: '📧' },
+      { id: 'contactWhatsappIcon', val: settings.whatsappImg, defaultEmoji: '💬' },
+      { id: 'contactGithub1Icon', val: settings.github1Img, defaultEmoji: '🐙' },
+      { id: 'contactGithub2Icon', val: settings.github2Img, defaultEmoji: '🐙' },
+      { id: 'ytContactIcon', val: settings.youtubeImg, defaultEmoji: '▶' }
+    ];
+
+    iconPairs.forEach(pair => {
+      const el = document.getElementById(pair.id);
+      if (el) {
+        if (pair.val && pair.val.trim()) {
+          el.innerHTML = `<img src="${pair.val.trim()}" alt="Icon" />`;
+          el.style.background = 'none';
+          el.style.color = 'inherit';
+        } else {
+          el.innerHTML = pair.defaultEmoji;
+          if (pair.id === 'contactEmailIcon') el.style.background = 'rgba(59,130,246,0.15)';
+          else if (pair.id === 'contactWhatsappIcon') { el.style.background = 'rgba(37,211,102,0.15)'; el.style.color = '#25d366'; }
+          else if (pair.id === 'contactGithub1Icon' || pair.id === 'contactGithub2Icon') el.style.background = 'rgba(255,255,255,0.05)';
+          else if (pair.id === 'ytContactIcon') { el.style.background = 'rgba(255,0,0,0.1)'; el.style.color = '#ff0000'; }
+        }
+      }
+    });
+
+    if (floatingWa) {
+      if (settings.whatsappImg && settings.whatsappImg.trim()) {
+        floatingWa.innerHTML = `<img src="${settings.whatsappImg.trim()}" style="width: 100%; height: 100%; object-fit: cover; border-radius: 50%;" alt="WhatsApp" />`;
+      } else {
+        floatingWa.innerHTML = `<svg viewBox="0 0 24 24"><path d="M12.031 0C5.39 0 0 5.402 0 12.044c0 2.116.549 4.18 1.59 6.01L0 24l6.135-1.613a11.96 11.96 0 0 0 5.89 1.657h.005c6.64 0 12.03-5.408 12.03-12.049A12.05 12.05 0 0 0 12.031 0zM12.03 22.052a9.98 9.98 0 0 1-5.087-1.39l-.365-.217-3.774.99 1.002-3.68-.237-.378a9.97 9.97 0 0 1-1.528-5.333c0-5.517 4.49-10.01 10.005-10.01a10.01 10.01 0 0 1 7.087 2.936 9.96 9.96 0 0 1 2.923 7.086c-.004 5.52-4.495 10.01-10.022 10.01zm5.503-7.526c-.301-.15-1.782-.88-2.058-.98-.275-.1-.476-.15-.676.15-.2.3-.775.98-.95 1.18-.175.2-.35.225-.65.075-1.206-.6-2.117-1.05-2.954-2.48-.22-.38.22-.35.63-1.166.125-.25.063-.475-.03-.675-.1-.2-.877-2.115-1.2-2.898-.318-.765-.64-.66-.875-.672a3.89 3.89 0 0 0-.74-.012c-.258 0-.677.097-1.03.499-1.144 1.05-1.83 2.128-1.83 2.428 0 .3.06 5.437 5.122 7.625 1.205.52 2.146.83 2.878 1.063.614.19 1.173.164 1.614.099.492-.073 1.503-.615 1.714-1.21.21-.595.21-1.104.148-1.21-.063-.105-.238-.156-.539-.307z"/></svg>`;
+      }
+    }
   }
 
   function loadProfileSettingsInModal() {
@@ -3501,6 +3577,13 @@
     document.getElementById('adminBio2Input').value = profileSettings.bio2 || '';
     document.getElementById('adminSkillsInput').value = (profileSettings.skills || []).join(', ');
     document.getElementById('adminProfileWhatsappInput').value = profileSettings.whatsappUrl || '';
+    
+    // Load contact icon URLs
+    document.getElementById('adminEmailImgInput').value = profileSettings.emailImg || '';
+    document.getElementById('adminWhatsappImgInput').value = profileSettings.whatsappImg || '';
+    document.getElementById('adminGithub1ImgInput').value = profileSettings.github1Img || '';
+    document.getElementById('adminGithub2ImgInput').value = profileSettings.github2Img || '';
+    document.getElementById('adminYoutubeImgInput').value = profileSettings.youtubeImg || '';
     
     document.getElementById('adminProfilePhotoFileInput').value = '';
     document.getElementById('adminProfilePhotoUrlInput').value = '';
@@ -3520,6 +3603,13 @@
     const skillsVal = document.getElementById('adminSkillsInput').value.trim();
     const whatsappVal = document.getElementById('adminProfileWhatsappInput').value.trim();
     
+    // Read contact icon URLs
+    const emailImgVal = document.getElementById('adminEmailImgInput').value.trim();
+    const whatsappImgVal = document.getElementById('adminWhatsappImgInput').value.trim();
+    const github1ImgVal = document.getElementById('adminGithub1ImgInput').value.trim();
+    const github2ImgVal = document.getElementById('adminGithub2ImgInput').value.trim();
+    const youtubeImgVal = document.getElementById('adminYoutubeImgInput').value.trim();
+    
     const skillsArr = skillsVal ? skillsVal.split(',').map(s => s.trim()).filter(Boolean) : [];
     
     const newSettings = {
@@ -3527,6 +3617,11 @@
       bio2: bio2Val,
       skills: skillsArr,
       whatsappUrl: whatsappVal,
+      emailImg: emailImgVal,
+      whatsappImg: whatsappImgVal,
+      github1Img: github1ImgVal,
+      github2Img: github2ImgVal,
+      youtubeImg: youtubeImgVal,
       photo: profilePhotoState
     };
     
