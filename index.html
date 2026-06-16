@@ -302,6 +302,53 @@
       box-shadow: 0 6px 20px rgba(108,99,255,0.5);
     }
 
+    /* ─── FLOATING WHATSAPP ─── */
+    .whatsapp-float {
+      position: fixed;
+      bottom: 2rem;
+      right: 2rem;
+      background: #25d366;
+      color: white;
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 10px 25px rgba(37,211,102,0.4);
+      z-index: 999;
+      text-decoration: none;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .whatsapp-float:hover {
+      transform: scale(1.1) translateY(-5px);
+      box-shadow: 0 15px 30px rgba(37,211,102,0.6);
+      background: #20ba5a;
+    }
+    .whatsapp-float::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border-radius: 50%;
+      border: 2px solid #25d366;
+      animation: wa-pulse 2s infinite;
+      opacity: 0;
+      pointer-events: none;
+    }
+    .whatsapp-float svg {
+      width: 34px;
+      height: 34px;
+      fill: currentColor;
+      transition: transform 0.3s;
+    }
+    .whatsapp-float:hover svg {
+      transform: rotate(10deg);
+    }
+    @keyframes wa-pulse {
+      0% { transform: scale(1); opacity: 1; }
+      100% { transform: scale(1.5); opacity: 0; }
+    }
+
     /* ─── PROJECTS ─── */
     .filter-row {
       display: flex; gap: 0.75rem; flex-wrap: wrap; margin: 2rem 0;
@@ -491,6 +538,13 @@
       .hero-stats { gap: 1.5rem; }
       .youtube-card, .cv-card { flex-direction: column; text-align: center; }
       .cv-card { padding: 2rem 1.5rem; }
+      .whatsapp-float {
+        bottom: 1.5rem; right: 1.5rem;
+        width: 52px; height: 52px;
+      }
+      .whatsapp-float svg {
+        width: 28px; height: 28px;
+      }
       .yt-stats { justify-content: center; }
     }
     @media (max-width: 480px) {
@@ -1896,6 +1950,13 @@
             <div class="contact-link-text">
               <div class="contact-link-label">Email</div>
               <div class="contact-link-val">rodrigo.n.arena@hotmail.com</div>
+            </div>
+          </a>
+          <a href="https://wa.me/541158660344" target="_blank" class="contact-link" style="border-color: rgba(37,211,102,0.2);">
+            <div class="contact-link-icon" style="background: rgba(37,211,102,0.15); color: #25d366;">💬</div>
+            <div class="contact-link-text">
+              <div class="contact-link-label" style="color: #25d366;">WhatsApp</div>
+              <div class="contact-link-val">+54 11 5866-0344</div>
             </div>
           </a>
           <a href="https://github.com/rodarena7-commits" target="_blank" class="contact-link">
@@ -3829,5 +3890,12 @@
   // Initialize custom customizations loading
   loadAllProjectCustomizations();
 </script>
+
+<!-- Floating WhatsApp Button -->
+<a href="https://wa.me/541158660344" target="_blank" class="whatsapp-float" aria-label="Chat on WhatsApp">
+  <svg viewBox="0 0 24 24">
+    <path d="M12.031 0C5.39 0 0 5.402 0 12.044c0 2.116.549 4.18 1.59 6.01L0 24l6.135-1.613a11.96 11.96 0 0 0 5.89 1.657h.005c6.64 0 12.03-5.408 12.03-12.049A12.05 12.05 0 0 0 12.031 0zM12.03 22.052a9.98 9.98 0 0 1-5.087-1.39l-.365-.217-3.774.99 1.002-3.68-.237-.378a9.97 9.97 0 0 1-1.528-5.333c0-5.517 4.49-10.01 10.005-10.01a10.01 10.01 0 0 1 7.087 2.936 9.96 9.96 0 0 1 2.923 7.086c-.004 5.52-4.495 10.01-10.022 10.01zm5.503-7.526c-.301-.15-1.782-.88-2.058-.98-.275-.1-.476-.15-.676.15-.2.3-.775.98-.95 1.18-.175.2-.35.225-.65.075-1.206-.6-2.117-1.05-2.954-2.48-.22-.38.22-.35.63-1.166.125-.25.063-.475-.03-.675-.1-.2-.877-2.115-1.2-2.898-.318-.765-.64-.66-.875-.672a3.89 3.89 0 0 0-.74-.012c-.258 0-.677.097-1.03.499-1.144 1.05-1.83 2.128-1.83 2.428 0 .3.06 5.437 5.122 7.625 1.205.52 2.146.83 2.878 1.063.614.19 1.173.164 1.614.099.492-.073 1.503-.615 1.714-1.21.21-.595.21-1.104.148-1.21-.063-.105-.238-.156-.539-.307z"/>
+  </svg>
+</a>
 </body>
 </html>
