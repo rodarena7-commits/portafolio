@@ -1955,11 +1955,11 @@
               <div class="contact-link-val">rodrigo.n.arena@hotmail.com</div>
             </div>
           </a>
-          <a href="https://i.pinimg.com/736x/7b/f9/0c/7bf90c9ee9932cd0d44c772f7a579f51.jpg" target="_blank" class="contact-link" id="contactWhatsappLink" style="border-color: rgba(37,211,102,0.2);">
+          <a href="https://wa.me/5491158660344" target="_blank" class="contact-link" id="contactWhatsappLink" style="border-color: rgba(37,211,102,0.2);">
             <div class="contact-link-icon" id="contactWhatsappIcon" style="background: rgba(37,211,102,0.15); color: #25d366;">💬</div>
             <div class="contact-link-text">
               <div class="contact-link-label" style="color: #25d366;">WhatsApp</div>
-              <div class="contact-link-val">+54 11 5866-0344</div>
+              <div class="contact-link-val">+54 9 11 5866-0344</div>
             </div>
           </a>
           <a href="https://github.com/rodarena7-commits" target="_blank" class="contact-link">
@@ -2456,7 +2456,7 @@
     bio1: "Soy un desarrollador autodidacta con experiencia creando productos digitales completos: desde aplicaciones web con bases de datos en tiempo real hasta bots de WhatsApp con inteligencia artificial.",
     bio2: "Me especializo en el ecosistema JavaScript/TypeScript, trabajando tanto en frontend como en backend. Construí proyectos para comercios, familias, empresas y comunidades — cada uno con sus propios desafíos.",
     skills: ["React", "Node.js", "Firebase", "Tailwind CSS", "JavaScript", "TypeScript", "Vite", "WhatsApp Bots", "Groq AI", "PWA", "Firestore", "Git / GitHub", "Render", "HTML / CSS", "MercadoLibre API", "Google Calendar API"],
-    whatsappUrl: "https://i.pinimg.com/736x/7b/f9/0c/7bf90c9ee9932cd0d44c772f7a579f51.jpg",
+    whatsappUrl: "https://wa.me/5491158660344",
     photo: null,
     emailImg: "",
     whatsappImg: "https://i.pinimg.com/736x/7b/f9/0c/7bf90c9ee9932cd0d44c772f7a579f51.jpg",
@@ -3533,7 +3533,10 @@
 
     const contactWa = document.getElementById('contactWhatsappLink');
     const floatingWa = document.getElementById('floatingWhatsappLink');
-    const waUrl = settings.whatsappUrl || "https://i.pinimg.com/736x/7b/f9/0c/7bf90c9ee9932cd0d44c772f7a579f51.jpg";
+    let waUrl = settings.whatsappUrl || "https://wa.me/5491158660344";
+    if (waUrl === "https://i.pinimg.com/736x/7b/f9/0c/7bf90c9ee9932cd0d44c772f7a579f51.jpg") {
+      waUrl = "https://wa.me/5491158660344";
+    }
     if (contactWa) contactWa.href = waUrl;
     if (floatingWa) floatingWa.href = waUrl;
 
@@ -3576,7 +3579,11 @@
     document.getElementById('adminBio1Input').value = profileSettings.bio1 || '';
     document.getElementById('adminBio2Input').value = profileSettings.bio2 || '';
     document.getElementById('adminSkillsInput').value = (profileSettings.skills || []).join(', ');
-    document.getElementById('adminProfileWhatsappInput').value = profileSettings.whatsappUrl || '';
+    let waUrlVal = profileSettings.whatsappUrl || '';
+    if (waUrlVal === "https://i.pinimg.com/736x/7b/f9/0c/7bf90c9ee9932cd0d44c772f7a579f51.jpg") {
+      waUrlVal = "https://wa.me/5491158660344";
+    }
+    document.getElementById('adminProfileWhatsappInput').value = waUrlVal;
     
     // Load contact icon URLs
     document.getElementById('adminEmailImgInput').value = profileSettings.emailImg || '';
@@ -4003,7 +4010,7 @@
 </script>
 
 <!-- Floating WhatsApp Button -->
-<a href="https://i.pinimg.com/736x/7b/f9/0c/7bf90c9ee9932cd0d44c772f7a579f51.jpg" target="_blank" class="whatsapp-float" id="floatingWhatsappLink" aria-label="Chat on WhatsApp">
+<a href="https://wa.me/5491158660344" target="_blank" class="whatsapp-float" id="floatingWhatsappLink" aria-label="Chat on WhatsApp">
   <svg viewBox="0 0 24 24">
     <path d="M12.031 0C5.39 0 0 5.402 0 12.044c0 2.116.549 4.18 1.59 6.01L0 24l6.135-1.613a11.96 11.96 0 0 0 5.89 1.657h.005c6.64 0 12.03-5.408 12.03-12.049A12.05 12.05 0 0 0 12.031 0zM12.03 22.052a9.98 9.98 0 0 1-5.087-1.39l-.365-.217-3.774.99 1.002-3.68-.237-.378a9.97 9.97 0 0 1-1.528-5.333c0-5.517 4.49-10.01 10.005-10.01a10.01 10.01 0 0 1 7.087 2.936 9.96 9.96 0 0 1 2.923 7.086c-.004 5.52-4.495 10.01-10.022 10.01zm5.503-7.526c-.301-.15-1.782-.88-2.058-.98-.275-.1-.476-.15-.676.15-.2.3-.775.98-.95 1.18-.175.2-.35.225-.65.075-1.206-.6-2.117-1.05-2.954-2.48-.22-.38.22-.35.63-1.166.125-.25.063-.475-.03-.675-.1-.2-.877-2.115-1.2-2.898-.318-.765-.64-.66-.875-.672a3.89 3.89 0 0 0-.74-.012c-.258 0-.677.097-1.03.499-1.144 1.05-1.83 2.128-1.83 2.428 0 .3.06 5.437 5.122 7.625 1.205.52 2.146.83 2.878 1.063.614.19 1.173.164 1.614.099.492-.073 1.503-.615 1.714-1.21.21-.595.21-1.104.148-1.21-.063-.105-.238-.156-.539-.307z"/>
   </svg>
