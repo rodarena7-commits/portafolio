@@ -733,10 +733,10 @@
   <div class="hero-content fade-in visible">
     <div class="hero-badge">Disponible para proyectos</div>
     <h1 class="hero-title">
-      <span class="name"><span onclick="handleRodrigoClick(event)" style="cursor: pointer; user-select: none;">Rodrigo</span> Arena</span>
-      <span class="role">Desarrollador Full Stack</span>
+      <span class="name" id="heroName" onclick="handleRodrigoClick(event)" style="cursor: pointer; user-select: none;">Rodrigo Arena</span>
+      <span class="role" id="heroRole">Desarrollador Full Stack</span>
     </h1>
-    <p class="hero-desc">
+    <p class="hero-desc" id="heroDesc">
       Creo aplicaciones web, bots inteligentes y sistemas empresariales.
       Apasionado por convertir ideas en productos reales con React, Firebase, Node.js y más.
     </p>
@@ -746,20 +746,20 @@
     </div>
     <div class="hero-stats">
       <div class="stat">
-        <div class="stat-num">12+</div>
-        <div class="stat-label">Proyectos</div>
+        <div class="stat-num" id="heroStat1Num">12+</div>
+        <div class="stat-label" id="heroStat1Label">Proyectos</div>
       </div>
       <div class="stat">
         <div class="stat-num" id="ytSubscribersHero">13.7K</div>
         <div class="stat-label">Suscriptores YouTube</div>
       </div>
       <div class="stat">
-        <div class="stat-num">2</div>
-        <div class="stat-label">Cuentas GitHub</div>
+        <div class="stat-num" id="heroStat3Num">2</div>
+        <div class="stat-label" id="heroStat3Label">Cuentas GitHub</div>
       </div>
       <div class="stat">
-        <div class="stat-num">∞</div>
-        <div class="stat-label">Café por día</div>
+        <div class="stat-num" id="heroStat4Num">∞</div>
+        <div class="stat-label" id="heroStat4Label">Café por día</div>
       </div>
     </div>
   </div>
@@ -2033,6 +2033,7 @@
     <!-- Admin Tabs -->
     <div class="admin-tabs">
       <button class="admin-tab active" id="tabBtnProjects" onclick="switchAdminTab('projects')">📁 Proyectos</button>
+      <button class="admin-tab" id="tabBtnHero" onclick="switchAdminTab('hero')">🏠 Portada</button>
       <button class="admin-tab" id="tabBtnYt" onclick="switchAdminTab('yt')">🎥 YouTube</button>
       <button class="admin-tab" id="tabBtnProfile" onclick="switchAdminTab('profile')">👤 Sobre Mí</button>
     </div>
@@ -2137,6 +2138,70 @@
       <div class="admin-btn-group">
         <button class="admin-btn admin-btn-delete" onclick="deleteProjectCustomizations()">Quitar Personalizados</button>
         <button class="admin-btn admin-btn-save" id="adminSaveBtn" onclick="saveProjectCustomizations()">Guardar Cambios</button>
+      </div>
+    </div>
+
+    <!-- TAB: PORTADA / HERO -->
+    <div class="admin-tab-content" id="adminTabHero">
+      <div class="admin-field">
+        <label for="adminHeroNameInput">Nombre Principal</label>
+        <input type="text" id="adminHeroNameInput" class="admin-input" placeholder="Rodrigo Arena" />
+      </div>
+
+      <div class="admin-field">
+        <label for="adminHeroRoleInput">Título / Rol Profesional</label>
+        <input type="text" id="adminHeroRoleInput" class="admin-input" placeholder="Desarrollador Full Stack" />
+      </div>
+
+      <div class="admin-field">
+        <label for="adminHeroDescInput">Descripción de Portada</label>
+        <textarea id="adminHeroDescInput" class="admin-input" style="height: 100px; resize: vertical; padding: 0.6rem; font-family: inherit; font-size: 0.85rem;" placeholder="Creo aplicaciones web, bots inteligentes..."></textarea>
+      </div>
+
+      <div style="margin-top: 1.5rem; padding: 1rem; background: rgba(255,255,255,0.02); border: 1px solid var(--border); border-radius: 12px;">
+        <strong style="display: block; font-size: 0.9rem; color: var(--accent2); margin-bottom: 1rem;">📊 Estadísticas de Portada (Stats)</strong>
+        
+        <div style="display: grid; grid-template-columns: 1fr 2fr; gap: 0.75rem; margin-bottom: 0.8rem;">
+          <div class="admin-field" style="margin-bottom: 0;">
+            <label for="adminHeroStat1NumInput" style="font-size: 0.8rem;">Stat 1: Valor (ej: 12+)</label>
+            <input type="text" id="adminHeroStat1NumInput" class="admin-input" style="font-size: 0.8rem; padding: 0.5rem;" placeholder="12+" />
+          </div>
+          <div class="admin-field" style="margin-bottom: 0;">
+            <label for="adminHeroStat1LabelInput" style="font-size: 0.8rem;">Stat 1: Etiqueta (ej: Proyectos)</label>
+            <input type="text" id="adminHeroStat1LabelInput" class="admin-input" style="font-size: 0.8rem; padding: 0.5rem;" placeholder="Proyectos" />
+          </div>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 2fr; gap: 0.75rem; margin-bottom: 0.8rem;">
+          <div class="admin-field" style="margin-bottom: 0;">
+            <label for="adminHeroStat3NumInput" style="font-size: 0.8rem;">Stat 2: Valor (ej: 2)</label>
+            <input type="text" id="adminHeroStat3NumInput" class="admin-input" style="font-size: 0.8rem; padding: 0.5rem;" placeholder="2" />
+          </div>
+          <div class="admin-field" style="margin-bottom: 0;">
+            <label for="adminHeroStat3LabelInput" style="font-size: 0.8rem;">Stat 2: Etiqueta (ej: Cuentas GitHub)</label>
+            <input type="text" id="adminHeroStat3LabelInput" class="admin-input" style="font-size: 0.8rem; padding: 0.5rem;" placeholder="Cuentas GitHub" />
+          </div>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 2fr; gap: 0.75rem; margin-bottom: 0;">
+          <div class="admin-field" style="margin-bottom: 0;">
+            <label for="adminHeroStat4NumInput" style="font-size: 0.8rem;">Stat 3: Valor (ej: ∞)</label>
+            <input type="text" id="adminHeroStat4NumInput" class="admin-input" style="font-size: 0.8rem; padding: 0.5rem;" placeholder="∞" />
+          </div>
+          <div class="admin-field" style="margin-bottom: 0;">
+            <label for="adminHeroStat4LabelInput" style="font-size: 0.8rem;">Stat 3: Etiqueta (ej: Café por día)</label>
+            <input type="text" id="adminHeroStat4LabelInput" class="admin-input" style="font-size: 0.8rem; padding: 0.5rem;" placeholder="Café por día" />
+          </div>
+        </div>
+      </div>
+
+      <div style="font-size: 0.75rem; color: var(--text3); margin-top: 1rem;">
+        💡 <em>La estadística del canal de YouTube se sincroniza automáticamente desde la pestaña YouTube.</em>
+      </div>
+
+      <div class="admin-btn-group" style="margin-top: 2rem;">
+        <button class="admin-btn admin-btn-delete" onclick="resetHeroSettings()">Restablecer por Defecto</button>
+        <button class="admin-btn admin-btn-save" id="adminHeroSaveBtn" onclick="saveHeroSettings()">Guardar Cambios</button>
       </div>
     </div>
 
@@ -2466,6 +2531,19 @@
   };
   let profileSettings = { ...defaultProfileSettings };
 
+  const defaultHeroSettings = {
+    name: "Rodrigo Arena",
+    role: "Desarrollador Full Stack",
+    desc: "Creo aplicaciones web, bots inteligentes y sistemas empresariales. Apasionado por convertir ideas en productos reales con React, Firebase, Node.js y más.",
+    stat1Num: "12+",
+    stat1Label: "Proyectos",
+    stat3Num: "2",
+    stat3Label: "Cuentas GitHub",
+    stat4Num: "∞",
+    stat4Label: "Café por día"
+  };
+  let heroSettings = { ...defaultHeroSettings };
+
   const defaultProjectLogos = {};
   const defaultAppUrls = {};
   const defaultProjectNames = {};
@@ -2665,6 +2743,16 @@
     document.getElementById('adminProfilePhotoFileInput').value = '';
     document.getElementById('adminProfilePhotoUrlInput').value = '';
     profilePhotoState = null;
+
+    document.getElementById('adminHeroNameInput').value = '';
+    document.getElementById('adminHeroRoleInput').value = '';
+    document.getElementById('adminHeroDescInput').value = '';
+    document.getElementById('adminHeroStat1NumInput').value = '';
+    document.getElementById('adminHeroStat1LabelInput').value = '';
+    document.getElementById('adminHeroStat3NumInput').value = '';
+    document.getElementById('adminHeroStat3LabelInput').value = '';
+    document.getElementById('adminHeroStat4NumInput').value = '';
+    document.getElementById('adminHeroStat4LabelInput').value = '';
     
     switchAdminTab('projects');
 
@@ -3419,22 +3507,30 @@
 
   function switchAdminTab(tabName) {
     const tabProjectsBtn = document.getElementById('tabBtnProjects');
+    const tabHeroBtn = document.getElementById('tabBtnHero');
     const tabYtBtn = document.getElementById('tabBtnYt');
     const tabProfileBtn = document.getElementById('tabBtnProfile');
     const tabProjectsContent = document.getElementById('adminTabProjects');
+    const tabHeroContent = document.getElementById('adminTabHero');
     const tabYtContent = document.getElementById('adminTabYt');
     const tabProfileContent = document.getElementById('adminTabProfile');
 
     tabProjectsBtn.classList.remove('active');
+    if (tabHeroBtn) tabHeroBtn.classList.remove('active');
     tabYtBtn.classList.remove('active');
     tabProfileBtn.classList.remove('active');
     tabProjectsContent.classList.remove('active');
+    if (tabHeroContent) tabHeroContent.classList.remove('active');
     tabYtContent.classList.remove('active');
     tabProfileContent.classList.remove('active');
 
     if (tabName === 'projects') {
       tabProjectsBtn.classList.add('active');
       tabProjectsContent.classList.add('active');
+    } else if (tabName === 'hero') {
+      if (tabHeroBtn) tabHeroBtn.classList.add('active');
+      if (tabHeroContent) tabHeroContent.classList.add('active');
+      loadHeroSettingsInModal();
     } else if (tabName === 'yt') {
       tabYtBtn.classList.add('active');
       tabYtContent.classList.add('active');
@@ -3659,7 +3755,7 @@
 
   async function resetProfileSettings() {
     if (!confirm("¿Estás seguro de que deseas restablecer la biografía, tecnologías y foto de perfil por defecto?")) return;
-    
+
     try {
       if (useFirebase) {
         await db.collection('site_settings').doc('profile').delete();
@@ -3672,6 +3768,108 @@
       closeAdminModal();
     } catch (err) {
       console.error("Error resetting profile settings:", err);
+      alert("Error al restablecer: " + err.message);
+    }
+  }
+
+  function applyHeroSettingsToPage(settings) {
+    if (!settings) return;
+    const nameEl = document.getElementById('heroName');
+    const roleEl = document.getElementById('heroRole');
+    const descEl = document.getElementById('heroDesc');
+    const stat1NumEl = document.getElementById('heroStat1Num');
+    const stat1LabelEl = document.getElementById('heroStat1Label');
+    const stat3NumEl = document.getElementById('heroStat3Num');
+    const stat3LabelEl = document.getElementById('heroStat3Label');
+    const stat4NumEl = document.getElementById('heroStat4Num');
+    const stat4LabelEl = document.getElementById('heroStat4Label');
+
+    if (nameEl && settings.name) nameEl.textContent = settings.name;
+    if (roleEl && settings.role) roleEl.textContent = settings.role;
+    if (descEl && settings.desc) descEl.textContent = settings.desc;
+    if (stat1NumEl && settings.stat1Num) stat1NumEl.textContent = settings.stat1Num;
+    if (stat1LabelEl && settings.stat1Label) stat1LabelEl.textContent = settings.stat1Label;
+    if (stat3NumEl && settings.stat3Num) stat3NumEl.textContent = settings.stat3Num;
+    if (stat3LabelEl && settings.stat3Label) stat3LabelEl.textContent = settings.stat3Label;
+    if (stat4NumEl && settings.stat4Num) stat4NumEl.textContent = settings.stat4Num;
+    if (stat4LabelEl && settings.stat4Label) stat4LabelEl.textContent = settings.stat4Label;
+  }
+
+  function loadHeroSettingsInModal() {
+    document.getElementById('adminHeroNameInput').value = heroSettings.name || '';
+    document.getElementById('adminHeroRoleInput').value = heroSettings.role || '';
+    document.getElementById('adminHeroDescInput').value = heroSettings.desc || '';
+    document.getElementById('adminHeroStat1NumInput').value = heroSettings.stat1Num || '';
+    document.getElementById('adminHeroStat1LabelInput').value = heroSettings.stat1Label || '';
+    document.getElementById('adminHeroStat3NumInput').value = heroSettings.stat3Num || '';
+    document.getElementById('adminHeroStat3LabelInput').value = heroSettings.stat3Label || '';
+    document.getElementById('adminHeroStat4NumInput').value = heroSettings.stat4Num || '';
+    document.getElementById('adminHeroStat4LabelInput').value = heroSettings.stat4Label || '';
+  }
+
+  async function saveHeroSettings() {
+    const nameVal = document.getElementById('adminHeroNameInput').value.trim();
+    const roleVal = document.getElementById('adminHeroRoleInput').value.trim();
+    const descVal = document.getElementById('adminHeroDescInput').value.trim();
+    const stat1NumVal = document.getElementById('adminHeroStat1NumInput').value.trim();
+    const stat1LabelVal = document.getElementById('adminHeroStat1LabelInput').value.trim();
+    const stat3NumVal = document.getElementById('adminHeroStat3NumInput').value.trim();
+    const stat3LabelVal = document.getElementById('adminHeroStat3LabelInput').value.trim();
+    const stat4NumVal = document.getElementById('adminHeroStat4NumInput').value.trim();
+    const stat4LabelVal = document.getElementById('adminHeroStat4LabelInput').value.trim();
+
+    const newSettings = {
+      name: nameVal || "Rodrigo Arena",
+      role: roleVal || "Desarrollador Full Stack",
+      desc: descVal || "Creo aplicaciones web, bots inteligentes y sistemas empresariales. Apasionado por convertir ideas en productos reales con React, Firebase, Node.js y más.",
+      stat1Num: stat1NumVal || "12+",
+      stat1Label: stat1LabelVal || "Proyectos",
+      stat3Num: stat3NumVal || "2",
+      stat3Label: stat3LabelVal || "Cuentas GitHub",
+      stat4Num: stat4NumVal || "∞",
+      stat4Label: stat4LabelVal || "Café por día"
+    };
+
+    const saveBtn = document.getElementById('adminHeroSaveBtn');
+    saveBtn.textContent = "Guardando..."; saveBtn.disabled = true;
+
+    try {
+      if (useFirebase) {
+        await db.collection('site_settings').doc('hero').set(newSettings);
+      }
+      heroSettings = newSettings;
+      localStorage.setItem('portfolio_hero_settings', JSON.stringify(heroSettings));
+      applyHeroSettingsToPage(heroSettings);
+
+      saveBtn.textContent = "✓ ¡Guardado!";
+      setTimeout(() => {
+        saveBtn.textContent = "Guardar Cambios";
+        saveBtn.disabled = false;
+        closeAdminModal();
+      }, 1000);
+    } catch (err) {
+      console.error("Error saving hero settings:", err);
+      alert("Error al guardar: " + err.message);
+      saveBtn.textContent = "Guardar Cambios";
+      saveBtn.disabled = false;
+    }
+  }
+
+  async function resetHeroSettings() {
+    if (!confirm("¿Estás seguro de que deseas restablecer los textos y estadísticas de la portada por defecto?")) return;
+
+    try {
+      if (useFirebase) {
+        await db.collection('site_settings').doc('hero').delete();
+      }
+      heroSettings = { ...defaultHeroSettings };
+      localStorage.removeItem('portfolio_hero_settings');
+      applyHeroSettingsToPage(heroSettings);
+      loadHeroSettingsInModal();
+      alert("Configuraciones restablecidas correctamente.");
+      closeAdminModal();
+    } catch (err) {
+      console.error("Error resetting hero settings:", err);
       alert("Error al restablecer: " + err.message);
     }
   }
@@ -3885,6 +4083,17 @@
   }
 
   async function loadAllProjectCustomizations() {
+    // Load Hero settings first
+    const heroCached = localStorage.getItem('portfolio_hero_settings');
+    if (heroCached) {
+      try {
+        heroSettings = JSON.parse(heroCached);
+        applyHeroSettingsToPage(heroSettings);
+      } catch (e) { console.error("Error parsing cached hero settings:", e); }
+    } else {
+      applyHeroSettingsToPage(heroSettings);
+    }
+
     // Load profile settings first
     const profileCached = localStorage.getItem('portfolio_profile_settings');
     if (profileCached) {
@@ -3942,6 +4151,14 @@
     }
     if (useFirebase) {
       try {
+        // Fetch Hero settings from Firebase
+        const heroDoc = await db.collection('site_settings').doc('hero').get();
+        if (heroDoc.exists) {
+          heroSettings = heroDoc.data();
+          localStorage.setItem('portfolio_hero_settings', JSON.stringify(heroSettings));
+          applyHeroSettingsToPage(heroSettings);
+        }
+
         // Fetch profile settings from Firebase
         const profileDoc = await db.collection('site_settings').doc('profile').get();
         if (profileDoc.exists) {
