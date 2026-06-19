@@ -2137,7 +2137,18 @@
 
       <div class="admin-btn-group">
         <button class="admin-btn admin-btn-delete" onclick="deleteProjectCustomizations()">Quitar Personalizados</button>
+        <button class="admin-btn admin-btn-delete" style="background: linear-gradient(135deg, #ef4444, #b91c1c);" onclick="deleteProject()">Eliminar Proyecto</button>
         <button class="admin-btn admin-btn-save" id="adminSaveBtn" onclick="saveProjectCustomizations()">Guardar Cambios</button>
+      </div>
+
+      <div id="deletedProjectsSection" style="margin-top: 1.5rem; padding: 1rem; background: rgba(239,68,68,0.05); border: 1px dashed rgba(239,68,68,0.3); border-radius: 12px; display: none;">
+        <strong style="display: block; font-size: 0.85rem; color: #f87171; margin-bottom: 0.5rem;">🗑️ Restaurar Proyectos Eliminados</strong>
+        <div style="display: flex; gap: 0.5rem; align-items: center;">
+          <select id="adminRestoreSelect" class="admin-select" style="font-size: 0.8rem; padding: 0.4rem; height: auto; margin-bottom: 0;">
+            <!-- Populated dynamically -->
+          </select>
+          <button type="button" class="admin-btn admin-btn-save" style="width: auto; padding: 0.4rem 1rem; margin-bottom: 0; background: linear-gradient(135deg, #2563eb, #1d4ed8);" onclick="restoreProject()">Restaurar</button>
+        </div>
       </div>
     </div>
 
@@ -2379,10 +2390,13 @@
   // ─── PROJECT FILTER ───
   function filterProjects(type) {
     document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
-    event.target.classList.add('active');
+    if (event && event.target && event.target.classList) {
+      event.target.classList.add('active');
+    }
     document.querySelectorAll('.project-card').forEach(card => {
+      const isDeletedByAdmin = card.classList.contains('deleted-by-admin');
       const isHiddenByAdmin = card.dataset.hiddenAdmin === 'true';
-      if (isHiddenByAdmin) {
+      if (isDeletedByAdmin || isHiddenByAdmin) {
         card.classList.add('hidden');
       } else if (type === 'all' || card.dataset.type === type) {
         card.classList.remove('hidden');
@@ -2690,15 +2704,7 @@
   }
 
   function openAdminModal() {
-    const select = document.getElementById('adminProjectSelect');
-    if (select.children.length === 0) {
-      projectsData.forEach(p => {
-        const opt = document.createElement('option');
-        opt.value = p.id;
-        opt.textContent = p.name;
-        select.appendChild(opt);
-      });
-    }
+    populateAdminProjectsDropdown();
 
     const label = document.getElementById('dbModeLabel');
     if (useFirebase) {
@@ -2994,8 +3000,9 @@
 
     let currentCustom = customLogos[projectId] || {};
     if (currentCustom.type) {
-      currentCustom = { logo: { type: currentCustom.type, value: currentCustom.value }, appUrl: '', inMaintenance: false, name: '', category: 'default', hidden: false, whatsapp: '', desc: '', tech: '', features: '' };
+      currentCustom = { logo: { type: currentCustom.type, value: currentCustom.value }, appUrl: '', inMaintenance: false, name: '', category: 'default', hidden: false, whatsapp: '', desc: '', tech: '', features: '', deleted: false };
     }
+    currentCustom.deleted = currentCustom.deleted || false;
     if (previewLogoState) { currentCustom.logo = previewLogoState; }
     currentCustom.appUrl = appUrlValue;
     currentCustom.inMaintenance = inMaintenanceValue;
@@ -3007,7 +3014,7 @@
     currentCustom.tech = techValue;
     currentCustom.features = featuresValue;
 
-    if (!previewLogoState && !appUrlValue && !currentCustom.logo && !inMaintenanceValue && !projectNameValue && categoryValue === 'default' && !hiddenValue && !whatsappValue && !descValue && !techValue && !featuresValue) {
+    if (!previewLogoState && !appUrlValue && !currentCustom.logo && !inMaintenanceValue && !projectNameValue && categoryValue === 'default' && !hiddenValue && !whatsappValue && !descValue && !techValue && !featuresValue && !currentCustom.deleted) {
       if (!confirm("No has configurado ningún logo, enlace, mantenimiento, nombre, categoría, visibilidad, WhatsApp, descripción, tecnologías o características. ¿Deseas guardar el proyecto con valores por defecto?")) return;
     }
 
@@ -3030,6 +3037,7 @@
       applyTechToCard(projectId, currentCustom.tech);
       
       saveBtn.textContent = "✓ ¡Guardado!";
+      populateAdminProjectsDropdown();
       setTimeout(() => { saveBtn.textContent = "Guardar Cambios"; saveBtn.disabled = false; closeAdminModal(); }, 1000);
     } catch (err) {
       console.error("Error al guardar cambios:", err);
@@ -3056,6 +3064,7 @@
       applyDescriptionToCard(projectId, '');
       applyFeaturesToCard(projectId, '');
       applyTechToCard(projectId, '');
+      applyDeletedToCard(projectId, false);
       loadProjectLogoPreview();
       alert("Personalizaciones eliminadas correctamente.");
       closeAdminModal();
@@ -3188,25 +3197,197 @@
 
   function applyVisibilityToCard(projectId, hidden) {
     const card = document.querySelector(`.project-card[data-project="${projectId}"]`);
-    if (!card) return;
-    if (hidden) {
-      card.dataset.hiddenAdmin = 'true';
-      card.classList.add('hidden');
-    } else {
-      card.dataset.hiddenAdmin = 'false';
-      const activeFilterBtn = document.querySelector('.filter-btn.active');
-      const activeFilter = activeFilterBtn ? activeFilterBtn.textContent.trim() : 'Todos';
-      
-      let type = 'all';
-      if (activeFilter.includes('E-Commerce')) type = 'ecommerce';
-      else if (activeFilter.includes('Bots')) type = 'bot';
-      else if (activeFilter.includes('Apps')) type = 'app';
-      else if (activeFilter.includes('Sistemas')) type = 'sistema';
-      else if (activeFilter.includes('Juegos')) type = 'juego';
+    if (card) {
+      if (hidden) {
+        card.dataset.hiddenAdmin = 'true';
+        card.classList.add('hidden');
+      } else {
+        card.dataset.hiddenAdmin = 'false';
+        const activeFilterBtn = document.querySelector('.filter-btn.active');
+        const activeFilter = activeFilterBtn ? activeFilterBtn.textContent.trim() : 'Todos';
+        
+        let type = 'all';
+        if (activeFilter.includes('E-Commerce')) type = 'ecommerce';
+        else if (activeFilter.includes('Bots')) type = 'bot';
+        else if (activeFilter.includes('Apps')) type = 'app';
+        else if (activeFilter.includes('Sistemas')) type = 'sistema';
+        else if (activeFilter.includes('Juegos')) type = 'juego';
 
-      if (type === 'all' || card.dataset.type === type) {
-        card.classList.remove('hidden');
+        if (type === 'all' || card.dataset.type === type) {
+          card.classList.remove('hidden');
+        }
       }
+    }
+
+    const botCard = document.querySelector(`.bot-card[data-project="${projectId}"]`);
+    if (botCard) {
+      if (hidden) {
+        botCard.style.setProperty('display', 'none', 'important');
+      } else {
+        botCard.style.removeProperty('display');
+      }
+    }
+  }
+
+  function applyDeletedToCard(projectId, deleted) {
+    const pCard = document.querySelector(`.project-card[data-project="${projectId}"]`);
+    if (pCard) {
+      if (deleted) {
+        pCard.classList.add('deleted-by-admin');
+        pCard.style.setProperty('display', 'none', 'important');
+      } else {
+        pCard.classList.remove('deleted-by-admin');
+        pCard.style.removeProperty('display');
+        
+        const isHidden = pCard.dataset.hiddenAdmin === 'true';
+        if (isHidden) {
+          pCard.classList.add('hidden');
+        } else {
+          const activeFilterBtn = document.querySelector('.filter-btn.active');
+          const activeFilter = activeFilterBtn ? activeFilterBtn.textContent.trim() : 'Todos';
+          let type = 'all';
+          if (activeFilter.includes('E-Commerce')) type = 'ecommerce';
+          else if (activeFilter.includes('Bots')) type = 'bot';
+          else if (activeFilter.includes('Apps')) type = 'app';
+          else if (activeFilter.includes('Sistemas')) type = 'sistema';
+          else if (activeFilter.includes('Juegos')) type = 'juego';
+
+          if (type === 'all' || pCard.dataset.type === type) {
+            pCard.classList.remove('hidden');
+          } else {
+            pCard.classList.add('hidden');
+          }
+        }
+      }
+    }
+
+    const bCard = document.querySelector(`.bot-card[data-project="${projectId}"]`);
+    if (bCard) {
+      if (deleted) {
+        bCard.classList.add('deleted-by-admin');
+        bCard.style.setProperty('display', 'none', 'important');
+      } else {
+        bCard.classList.remove('deleted-by-admin');
+        bCard.style.removeProperty('display');
+      }
+    }
+  }
+
+  function populateAdminProjectsDropdown() {
+    const select = document.getElementById('adminProjectSelect');
+    const restoreSelect = document.getElementById('adminRestoreSelect');
+    const restoreSection = document.getElementById('deletedProjectsSection');
+    if (!select) return;
+    
+    const currentSelectedVal = select.value;
+    select.innerHTML = '';
+    if (restoreSelect) restoreSelect.innerHTML = '';
+    
+    let deletedCount = 0;
+    
+    projectsData.forEach(p => {
+      const isDeleted = customLogos[p.id] && customLogos[p.id].deleted === true;
+      if (isDeleted) {
+        deletedCount++;
+        if (restoreSelect) {
+          const opt = document.createElement('option');
+          opt.value = p.id;
+          opt.textContent = p.name;
+          restoreSelect.appendChild(opt);
+        }
+      } else {
+        const opt = document.createElement('option');
+        opt.value = p.id;
+        const displayName = (customLogos[p.id] && customLogos[p.id].name) || p.name;
+        opt.textContent = displayName;
+        select.appendChild(opt);
+      }
+    });
+    
+    if (currentSelectedVal && [...select.options].some(o => o.value === currentSelectedVal)) {
+      select.value = currentSelectedVal;
+    } else if (select.options.length > 0) {
+      select.selectedIndex = 0;
+    }
+    
+    if (restoreSection) {
+      if (deletedCount > 0) {
+        restoreSection.style.display = 'block';
+      } else {
+        restoreSection.style.display = 'none';
+      }
+    }
+  }
+
+  async function deleteProject() {
+    const projectId = document.getElementById('adminProjectSelect').value;
+    if (!projectId) return;
+    
+    const pName = (customLogos[projectId] && customLogos[projectId].name) || defaultProjectNames[projectId] || projectId;
+    
+    if (!confirm(`¿Estás seguro de que deseas eliminar el proyecto "${pName}" por completo de tu portafolio?`)) return;
+    
+    const saveBtn = document.getElementById('adminSaveBtn');
+    saveBtn.textContent = "Guardando..."; saveBtn.disabled = true;
+    
+    if (!customLogos[projectId]) {
+      customLogos[projectId] = {};
+    }
+    
+    customLogos[projectId].deleted = true;
+    
+    try {
+      if (useFirebase) {
+        await db.collection('project_logos').doc(projectId).set(customLogos[projectId]);
+      }
+      localStorage.setItem('portfolio_custom_logos', JSON.stringify(customLogos));
+      
+      applyDeletedToCard(projectId, true);
+      
+      alert("Proyecto eliminado correctamente.");
+      
+      populateAdminProjectsDropdown();
+      loadProjectLogoPreview();
+      
+      saveBtn.textContent = "Guardar Cambios";
+      saveBtn.disabled = false;
+    } catch (err) {
+      console.error("Error deleting project:", err);
+      alert("Error al eliminar proyecto: " + err.message);
+      saveBtn.textContent = "Guardar Cambios";
+      saveBtn.disabled = false;
+    }
+  }
+  
+  async function restoreProject() {
+    const restoreSelect = document.getElementById('adminRestoreSelect');
+    if (!restoreSelect) return;
+    const projectId = restoreSelect.value;
+    if (!projectId) return;
+    
+    const pName = (customLogos[projectId] && customLogos[projectId].name) || defaultProjectNames[projectId] || projectId;
+    
+    if (!confirm(`¿Deseas restaurar el proyecto "${pName}" y volver a mostrarlo en tu portafolio?`)) return;
+    
+    if (customLogos[projectId]) {
+      customLogos[projectId].deleted = false;
+    }
+    
+    try {
+      if (useFirebase) {
+        await db.collection('project_logos').doc(projectId).set(customLogos[projectId]);
+      }
+      localStorage.setItem('portfolio_custom_logos', JSON.stringify(customLogos));
+      
+      applyDeletedToCard(projectId, false);
+      
+      alert("Proyecto restaurado correctamente.");
+      
+      populateAdminProjectsDropdown();
+      loadProjectLogoPreview();
+    } catch (err) {
+      console.error("Error restoring project:", err);
+      alert("Error al restaurar proyecto: " + err.message);
     }
   }
 
@@ -4133,7 +4314,8 @@
               whatsapp: '',
               desc: '',
               tech: '',
-              features: ''
+              features: '',
+              deleted: false
             }; 
           }
           if (custom.logo) { applyLogoToCard(pid, custom.logo); }
@@ -4146,6 +4328,7 @@
           applyDescriptionToCard(pid, custom.desc);
           applyFeaturesToCard(pid, custom.features);
           applyTechToCard(pid, custom.tech);
+          applyDeletedToCard(pid, custom.deleted || false);
         }
       } catch (e) { console.error("Error parsing cached customizations:", e); }
     }
@@ -4200,7 +4383,8 @@
               whatsapp: '',
               desc: '',
               tech: '',
-              features: ''
+              features: '',
+              deleted: false
             };
           }
           if (custom.logo) {
@@ -4215,6 +4399,7 @@
           applyDescriptionToCard(pid, custom.desc);
           applyFeaturesToCard(pid, custom.features);
           applyTechToCard(pid, custom.tech);
+          applyDeletedToCard(pid, custom.deleted || false);
         }
       } catch (err) {
         console.error("Error syncing with Firebase:", err);
