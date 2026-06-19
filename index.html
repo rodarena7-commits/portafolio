@@ -2170,38 +2170,59 @@
       </div>
 
       <div style="margin-top: 1.5rem; padding: 1rem; background: rgba(255,255,255,0.02); border: 1px solid var(--border); border-radius: 12px;">
-        <strong style="display: block; font-size: 0.9rem; color: var(--accent2); margin-bottom: 1rem;">📊 Estadísticas de Portada (Stats)</strong>
+        <strong style="display: block; font-size: 0.9rem; color: var(--accent2); margin-bottom: 1.2rem;">📊 Estadísticas de Portada (Stats)</strong>
         
-        <div style="display: grid; grid-template-columns: 1fr 2fr; gap: 0.75rem; margin-bottom: 0.8rem;">
-          <div class="admin-field" style="margin-bottom: 0;">
-            <label for="adminHeroStat1NumInput" style="font-size: 0.8rem;">Stat 1: Valor (ej: 12+)</label>
-            <input type="text" id="adminHeroStat1NumInput" class="admin-input" style="font-size: 0.8rem; padding: 0.5rem;" placeholder="12+" />
+        <!-- STAT 1 -->
+        <div style="margin-bottom: 1.2rem; border-bottom: 1px dashed rgba(255,255,255,0.05); padding-bottom: 1rem;">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.6rem;">
+            <span style="font-size: 0.8rem; font-weight: bold; color: var(--text3);">Estadística 1</span>
+            <button type="button" class="admin-btn admin-btn-delete" style="width: auto; padding: 0.15rem 0.4rem; font-size: 0.7rem; margin-bottom: 0; background: linear-gradient(135deg, #ef4444, #b91c1c);" onclick="clearHeroStat(1)">✕ Eliminar</button>
           </div>
-          <div class="admin-field" style="margin-bottom: 0;">
-            <label for="adminHeroStat1LabelInput" style="font-size: 0.8rem;">Stat 1: Etiqueta (ej: Proyectos)</label>
-            <input type="text" id="adminHeroStat1LabelInput" class="admin-input" style="font-size: 0.8rem; padding: 0.5rem;" placeholder="Proyectos" />
-          </div>
-        </div>
-
-        <div style="display: grid; grid-template-columns: 1fr 2fr; gap: 0.75rem; margin-bottom: 0.8rem;">
-          <div class="admin-field" style="margin-bottom: 0;">
-            <label for="adminHeroStat3NumInput" style="font-size: 0.8rem;">Stat 2: Valor (ej: 2)</label>
-            <input type="text" id="adminHeroStat3NumInput" class="admin-input" style="font-size: 0.8rem; padding: 0.5rem;" placeholder="2" />
-          </div>
-          <div class="admin-field" style="margin-bottom: 0;">
-            <label for="adminHeroStat3LabelInput" style="font-size: 0.8rem;">Stat 2: Etiqueta (ej: Cuentas GitHub)</label>
-            <input type="text" id="adminHeroStat3LabelInput" class="admin-input" style="font-size: 0.8rem; padding: 0.5rem;" placeholder="Cuentas GitHub" />
+          <div style="display: grid; grid-template-columns: 1fr 2fr; gap: 0.75rem;">
+            <div class="admin-field" style="margin-bottom: 0;">
+              <label for="adminHeroStat1NumInput" style="font-size: 0.75rem; color: var(--text3);">Valor (ej: 12+)</label>
+              <input type="text" id="adminHeroStat1NumInput" class="admin-input" style="font-size: 0.8rem; padding: 0.5rem;" placeholder="12+" />
+            </div>
+            <div class="admin-field" style="margin-bottom: 0;">
+              <label for="adminHeroStat1LabelInput" style="font-size: 0.75rem; color: var(--text3);">Etiqueta (ej: Proyectos)</label>
+              <input type="text" id="adminHeroStat1LabelInput" class="admin-input" style="font-size: 0.8rem; padding: 0.5rem;" placeholder="Proyectos" />
+            </div>
           </div>
         </div>
 
-        <div style="display: grid; grid-template-columns: 1fr 2fr; gap: 0.75rem; margin-bottom: 0;">
-          <div class="admin-field" style="margin-bottom: 0;">
-            <label for="adminHeroStat4NumInput" style="font-size: 0.8rem;">Stat 3: Valor (ej: ∞)</label>
-            <input type="text" id="adminHeroStat4NumInput" class="admin-input" style="font-size: 0.8rem; padding: 0.5rem;" placeholder="∞" />
+        <!-- STAT 2 -->
+        <div style="margin-bottom: 1.2rem; border-bottom: 1px dashed rgba(255,255,255,0.05); padding-bottom: 1rem;">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.6rem;">
+            <span style="font-size: 0.8rem; font-weight: bold; color: var(--text3);">Estadística 2</span>
+            <button type="button" class="admin-btn admin-btn-delete" style="width: auto; padding: 0.15rem 0.4rem; font-size: 0.7rem; margin-bottom: 0; background: linear-gradient(135deg, #ef4444, #b91c1c);" onclick="clearHeroStat(3)">✕ Eliminar</button>
           </div>
-          <div class="admin-field" style="margin-bottom: 0;">
-            <label for="adminHeroStat4LabelInput" style="font-size: 0.8rem;">Stat 3: Etiqueta (ej: Café por día)</label>
-            <input type="text" id="adminHeroStat4LabelInput" class="admin-input" style="font-size: 0.8rem; padding: 0.5rem;" placeholder="Café por día" />
+          <div style="display: grid; grid-template-columns: 1fr 2fr; gap: 0.75rem;">
+            <div class="admin-field" style="margin-bottom: 0;">
+              <label for="adminHeroStat3NumInput" style="font-size: 0.75rem; color: var(--text3);">Valor (ej: 2)</label>
+              <input type="text" id="adminHeroStat3NumInput" class="admin-input" style="font-size: 0.8rem; padding: 0.5rem;" placeholder="2" />
+            </div>
+            <div class="admin-field" style="margin-bottom: 0;">
+              <label for="adminHeroStat3LabelInput" style="font-size: 0.75rem; color: var(--text3);">Etiqueta (ej: Cuentas GitHub)</label>
+              <input type="text" id="adminHeroStat3LabelInput" class="admin-input" style="font-size: 0.8rem; padding: 0.5rem;" placeholder="Cuentas GitHub" />
+            </div>
+          </div>
+        </div>
+
+        <!-- STAT 3 -->
+        <div style="margin-bottom: 0.2rem;">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.6rem;">
+            <span style="font-size: 0.8rem; font-weight: bold; color: var(--text3);">Estadística 3</span>
+            <button type="button" class="admin-btn admin-btn-delete" style="width: auto; padding: 0.15rem 0.4rem; font-size: 0.7rem; margin-bottom: 0; background: linear-gradient(135deg, #ef4444, #b91c1c);" onclick="clearHeroStat(4)">✕ Eliminar</button>
+          </div>
+          <div style="display: grid; grid-template-columns: 1fr 2fr; gap: 0.75rem;">
+            <div class="admin-field" style="margin-bottom: 0;">
+              <label for="adminHeroStat4NumInput" style="font-size: 0.75rem; color: var(--text3);">Valor (ej: ∞)</label>
+              <input type="text" id="adminHeroStat4NumInput" class="admin-input" style="font-size: 0.8rem; padding: 0.5rem;" placeholder="∞" />
+            </div>
+            <div class="admin-field" style="margin-bottom: 0;">
+              <label for="adminHeroStat4LabelInput" style="font-size: 0.75rem; color: var(--text3);">Etiqueta (ej: Café por día)</label>
+              <input type="text" id="adminHeroStat4LabelInput" class="admin-input" style="font-size: 0.8rem; padding: 0.5rem;" placeholder="Café por día" />
+            </div>
           </div>
         </div>
       </div>
@@ -3965,27 +3986,79 @@
     const stat4NumEl = document.getElementById('heroStat4Num');
     const stat4LabelEl = document.getElementById('heroStat4Label');
 
-    if (nameEl && settings.name) nameEl.textContent = settings.name;
-    if (roleEl && settings.role) roleEl.textContent = settings.role;
-    if (descEl && settings.desc) descEl.textContent = settings.desc;
-    if (stat1NumEl && settings.stat1Num) stat1NumEl.textContent = settings.stat1Num;
-    if (stat1LabelEl && settings.stat1Label) stat1LabelEl.textContent = settings.stat1Label;
-    if (stat3NumEl && settings.stat3Num) stat3NumEl.textContent = settings.stat3Num;
-    if (stat3LabelEl && settings.stat3Label) stat3LabelEl.textContent = settings.stat3Label;
-    if (stat4NumEl && settings.stat4Num) stat4NumEl.textContent = settings.stat4Num;
-    if (stat4LabelEl && settings.stat4Label) stat4LabelEl.textContent = settings.stat4Label;
+    if (nameEl) nameEl.textContent = settings.name !== undefined ? settings.name : "Rodrigo Arena";
+    if (roleEl) roleEl.textContent = settings.role !== undefined ? settings.role : "Desarrollador Full Stack";
+    if (descEl) descEl.textContent = settings.desc !== undefined ? settings.desc : "Creo aplicaciones web, bots inteligentes y sistemas empresariales. Apasionado por convertir ideas en productos reales con React, Firebase, Node.js y más.";
+
+    if (stat1NumEl && stat1LabelEl) {
+      const card = stat1NumEl.closest('.stat');
+      if (card) {
+        const val = settings.stat1Num !== undefined ? settings.stat1Num : "12+";
+        const lbl = settings.stat1Label !== undefined ? settings.stat1Label : "Proyectos";
+        if (val === "" && lbl === "") {
+          card.style.display = 'none';
+        } else {
+          card.style.display = '';
+          stat1NumEl.textContent = val;
+          stat1LabelEl.textContent = lbl;
+        }
+      }
+    }
+
+    if (stat3NumEl && stat3LabelEl) {
+      const card = stat3NumEl.closest('.stat');
+      if (card) {
+        const val = settings.stat3Num !== undefined ? settings.stat3Num : "2";
+        const lbl = settings.stat3Label !== undefined ? settings.stat3Label : "Cuentas GitHub";
+        if (val === "" && lbl === "") {
+          card.style.display = 'none';
+        } else {
+          card.style.display = '';
+          stat3NumEl.textContent = val;
+          stat3LabelEl.textContent = lbl;
+        }
+      }
+    }
+
+    if (stat4NumEl && stat4LabelEl) {
+      const card = stat4NumEl.closest('.stat');
+      if (card) {
+        const val = settings.stat4Num !== undefined ? settings.stat4Num : "∞";
+        const lbl = settings.stat4Label !== undefined ? settings.stat4Label : "Café por día";
+        if (val === "" && lbl === "") {
+          card.style.display = 'none';
+        } else {
+          card.style.display = '';
+          stat4NumEl.textContent = val;
+          stat4LabelEl.textContent = lbl;
+        }
+      }
+    }
+  }
+
+  function clearHeroStat(num) {
+    if (num === 1) {
+      document.getElementById('adminHeroStat1NumInput').value = '';
+      document.getElementById('adminHeroStat1LabelInput').value = '';
+    } else if (num === 3) {
+      document.getElementById('adminHeroStat3NumInput').value = '';
+      document.getElementById('adminHeroStat3LabelInput').value = '';
+    } else if (num === 4) {
+      document.getElementById('adminHeroStat4NumInput').value = '';
+      document.getElementById('adminHeroStat4LabelInput').value = '';
+    }
   }
 
   function loadHeroSettingsInModal() {
     document.getElementById('adminHeroNameInput').value = heroSettings.name || '';
     document.getElementById('adminHeroRoleInput').value = heroSettings.role || '';
     document.getElementById('adminHeroDescInput').value = heroSettings.desc || '';
-    document.getElementById('adminHeroStat1NumInput').value = heroSettings.stat1Num || '';
-    document.getElementById('adminHeroStat1LabelInput').value = heroSettings.stat1Label || '';
-    document.getElementById('adminHeroStat3NumInput').value = heroSettings.stat3Num || '';
-    document.getElementById('adminHeroStat3LabelInput').value = heroSettings.stat3Label || '';
-    document.getElementById('adminHeroStat4NumInput').value = heroSettings.stat4Num || '';
-    document.getElementById('adminHeroStat4LabelInput').value = heroSettings.stat4Label || '';
+    document.getElementById('adminHeroStat1NumInput').value = heroSettings.stat1Num !== undefined ? heroSettings.stat1Num : '12+';
+    document.getElementById('adminHeroStat1LabelInput').value = heroSettings.stat1Label !== undefined ? heroSettings.stat1Label : 'Proyectos';
+    document.getElementById('adminHeroStat3NumInput').value = heroSettings.stat3Num !== undefined ? heroSettings.stat3Num : '2';
+    document.getElementById('adminHeroStat3LabelInput').value = heroSettings.stat3Label !== undefined ? heroSettings.stat3Label : 'Cuentas GitHub';
+    document.getElementById('adminHeroStat4NumInput').value = heroSettings.stat4Num !== undefined ? heroSettings.stat4Num : '∞';
+    document.getElementById('adminHeroStat4LabelInput').value = heroSettings.stat4Label !== undefined ? heroSettings.stat4Label : 'Café por día';
   }
 
   async function saveHeroSettings() {
@@ -4003,12 +4076,12 @@
       name: nameVal || "Rodrigo Arena",
       role: roleVal || "Desarrollador Full Stack",
       desc: descVal || "Creo aplicaciones web, bots inteligentes y sistemas empresariales. Apasionado por convertir ideas en productos reales con React, Firebase, Node.js y más.",
-      stat1Num: stat1NumVal || "12+",
-      stat1Label: stat1LabelVal || "Proyectos",
-      stat3Num: stat3NumVal || "2",
-      stat3Label: stat3LabelVal || "Cuentas GitHub",
-      stat4Num: stat4NumVal || "∞",
-      stat4Label: stat4LabelVal || "Café por día"
+      stat1Num: stat1NumVal,
+      stat1Label: stat1LabelVal,
+      stat3Num: stat3NumVal,
+      stat3Label: stat3LabelVal,
+      stat4Num: stat4NumVal,
+      stat4Label: stat4LabelVal
     };
 
     const saveBtn = document.getElementById('adminHeroSaveBtn');
