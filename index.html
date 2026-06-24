@@ -2037,6 +2037,7 @@
       <button class="admin-tab" id="tabBtnYt" onclick="switchAdminTab('yt')">🎥 YouTube</button>
       <button class="admin-tab" id="tabBtnProfile" onclick="switchAdminTab('profile')">👤 Sobre Mí</button>
       <button class="admin-tab" id="tabBtnMessages" onclick="switchAdminTab('messages')">📬 Mensajes</button>
+      <button class="admin-tab" id="tabBtnAnalytics" onclick="switchAdminTab('analytics')">📈 Analíticas</button>
     </div>
 
     <!-- TAB 1: PROJECTS -->
@@ -2375,6 +2376,39 @@
             Cargando mensajes...
           </div>
         </div>
+      </div>
+    </div>
+
+    <!-- TAB 5: ANALYTICS -->
+    <div class="admin-tab-content" id="adminTabAnalytics">
+      <div class="admin-field" style="margin-bottom: 1.5rem;">
+        <label style="font-size: 1rem; color: var(--accent2); font-weight: bold; margin-bottom: 1rem; display: block;">📈 Estadísticas de Interacción (Clicks)</label>
+        
+        <!-- SECTIONS ANALYTICS -->
+        <div style="background: rgba(255,255,255,0.02); border: 1px solid var(--border); padding: 1.2rem; border-radius: 12px; margin-bottom: 1.2rem;">
+          <strong style="display: block; font-size: 0.9rem; color: var(--accent); margin-bottom: 0.8rem;">📍 Secciones más Visitadas</strong>
+          <div id="analyticsSectionsList" style="display: flex; flex-direction: column; gap: 0.5rem;">
+            <!-- Rendered dynamically -->
+          </div>
+        </div>
+
+        <!-- PROJECTS ANALYTICS -->
+        <div style="background: rgba(255,255,255,0.02); border: 1px solid var(--border); padding: 1.2rem; border-radius: 12px; margin-bottom: 1.2rem;">
+          <strong style="display: block; font-size: 0.9rem; color: var(--accent); margin-bottom: 0.8rem;">📁 Proyectos con más Interacciones</strong>
+          <div id="analyticsProjectsList" style="display: flex; flex-direction: column; gap: 0.5rem;">
+            <!-- Rendered dynamically -->
+          </div>
+        </div>
+
+        <!-- CONTACTS ANALYTICS -->
+        <div style="background: rgba(255,255,255,0.02); border: 1px solid var(--border); padding: 1.2rem; border-radius: 12px; margin-bottom: 1.2rem;">
+          <strong style="display: block; font-size: 0.9rem; color: var(--accent); margin-bottom: 0.8rem;">📞 Canales de Contacto más Clickeados</strong>
+          <div id="analyticsContactsList" style="display: flex; flex-direction: column; gap: 0.5rem;">
+            <!-- Rendered dynamically -->
+          </div>
+        </div>
+
+        <button type="button" class="admin-btn admin-btn-delete" style="margin-top: 1rem;" onclick="resetAnalyticsData()">Restablecer Estadísticas</button>
       </div>
     </div>
 
@@ -3763,23 +3797,27 @@
     const tabYtBtn = document.getElementById('tabBtnYt');
     const tabProfileBtn = document.getElementById('tabBtnProfile');
     const tabMessagesBtn = document.getElementById('tabBtnMessages');
+    const tabAnalyticsBtn = document.getElementById('tabBtnAnalytics');
     const tabProjectsContent = document.getElementById('adminTabProjects');
     const tabHeroContent = document.getElementById('adminTabHero');
     const tabYtContent = document.getElementById('adminTabYt');
     const tabProfileContent = document.getElementById('adminTabProfile');
     const tabMessagesContent = document.getElementById('adminTabMessages');
+    const tabAnalyticsContent = document.getElementById('adminTabAnalytics');
 
     tabProjectsBtn.classList.remove('active');
     if (tabHeroBtn) tabHeroBtn.classList.remove('active');
     tabYtBtn.classList.remove('active');
     tabProfileBtn.classList.remove('active');
     if (tabMessagesBtn) tabMessagesBtn.classList.remove('active');
+    if (tabAnalyticsBtn) tabAnalyticsBtn.classList.remove('active');
     
     tabProjectsContent.classList.remove('active');
     if (tabHeroContent) tabHeroContent.classList.remove('active');
     tabYtContent.classList.remove('active');
     tabProfileContent.classList.remove('active');
     if (tabMessagesContent) tabMessagesContent.classList.remove('active');
+    if (tabAnalyticsContent) tabAnalyticsContent.classList.remove('active');
 
     if (tabName === 'projects') {
       tabProjectsBtn.classList.add('active');
@@ -3800,6 +3838,10 @@
       if (tabMessagesBtn) tabMessagesBtn.classList.add('active');
       if (tabMessagesContent) tabMessagesContent.classList.add('active');
       loadMessagesInModal();
+    } else if (tabName === 'analytics') {
+      if (tabAnalyticsBtn) tabAnalyticsBtn.classList.add('active');
+      if (tabAnalyticsContent) tabAnalyticsContent.classList.add('active');
+      loadAnalyticsInModal();
     }
   }
 
@@ -3914,6 +3956,231 @@
     if (!str) return '';
     return str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#039;");
   }
+
+  // ─── ANALYTICS CLICK TRACKING ───
+  let pendingClicksQueue = {};
+  let clickSyncTimeout = null;
+
+  function trackClick(type, id) {
+    let localAnalytics = { sections: {}, projects: {}, contacts: {} };
+    try {
+      const cached = localStorage.getItem('portfolio_local_analytics');
+      if (cached) localAnalytics = JSON.parse(cached);
+    } catch (_) {}
+    
+    localAnalytics[type] = localAnalytics[type] || {};
+    localAnalytics[type][id] = (localAnalytics[type][id] || 0) + 1;
+    localStorage.setItem('portfolio_local_analytics', JSON.stringify(localAnalytics));
+    
+    if (useFirebase) {
+      queueFirebaseClick(type, id);
+    }
+  }
+
+  function queueFirebaseClick(type, id) {
+    const key = `${type}.${id}`;
+    pendingClicksQueue[key] = (pendingClicksQueue[key] || 0) + 1;
+    
+    if (clickSyncTimeout) clearTimeout(clickSyncTimeout);
+    clickSyncTimeout = setTimeout(flushPendingClicks, 3000);
+  }
+
+  async function flushPendingClicks() {
+    if (Object.keys(pendingClicksQueue).length === 0) return;
+    
+    const updates = {};
+    for (const key in pendingClicksQueue) {
+      updates[key] = firebase.firestore.FieldValue.increment(pendingClicksQueue[key]);
+    }
+    
+    pendingClicksQueue = {};
+    
+    try {
+      await db.collection('site_analytics').doc('clicks').set(updates, { merge: true });
+    } catch (err) {
+      console.error("Error syncing analytics to Firebase:", err);
+    }
+  }
+
+  async function loadAnalyticsInModal() {
+    const secList = document.getElementById('analyticsSectionsList');
+    const projList = document.getElementById('analyticsProjectsList');
+    const contList = document.getElementById('analyticsContactsList');
+    
+    if (!secList || !projList || !contList) return;
+    
+    secList.innerHTML = '<div style="font-size:0.8rem; color:var(--text3);">Cargando...</div>';
+    projList.innerHTML = '<div style="font-size:0.8rem; color:var(--text3);">Cargando...</div>';
+    contList.innerHTML = '<div style="font-size:0.8rem; color:var(--text3);">Cargando...</div>';
+    
+    let stats = { sections: {}, projects: {}, contacts: {} };
+    
+    try {
+      if (useFirebase) {
+        const doc = await db.collection('site_analytics').doc('clicks').get();
+        if (doc.exists) {
+          const data = doc.data();
+          for (const key in data) {
+            const parts = key.split('.');
+            if (parts.length === 2) {
+              const type = parts[0];
+              const id = parts[1];
+              stats[type] = stats[type] || {};
+              stats[type][id] = data[key];
+            }
+          }
+        }
+      } else {
+        const cached = localStorage.getItem('portfolio_local_analytics');
+        if (cached) {
+          stats = JSON.parse(cached);
+        }
+      }
+    } catch (err) {
+      console.error("Error loading analytics:", err);
+      const errMsg = `<div style="font-size:0.8rem; color:var(--red);">⚠️ Error: ${err.message}</div>`;
+      secList.innerHTML = errMsg;
+      projList.innerHTML = errMsg;
+      contList.innerHTML = errMsg;
+      return;
+    }
+    
+    // Render sections
+    renderStatGroup(secList, stats.sections || {}, (id) => {
+      const names = {
+        'sobre-mi': 'Sobre Mí',
+        'cv': 'Mi CV',
+        'youtube': 'YouTube',
+        'proyectos': 'Proyectos',
+        'bots': 'Bots de WhatsApp',
+        'contacto': 'Contacto'
+      };
+      return names[id] || id;
+    }, 'var(--accent)');
+    
+    // Render projects
+    renderStatGroup(projList, stats.projects || {}, (id) => {
+      const isGitHub = id.endsWith('_github');
+      const baseId = isGitHub ? id.substring(0, id.length - 7) : id;
+      const displayName = (customLogos[baseId] && customLogos[baseId].name) || defaultProjectNames[baseId] || baseId;
+      return displayName + (isGitHub ? ' (Repo GitHub)' : ' (Ver App)');
+    }, 'var(--accent2)');
+    
+    // Render contacts
+    renderStatGroup(contList, stats.contacts || {}, (id) => {
+      const names = {
+        'whatsapp_float': 'WhatsApp (Botón Flotante)',
+        'ytContactLink': 'YouTube (Tarjeta)',
+        'github1Link': 'GitHub Principal (Tarjeta)',
+        'github2Link': 'GitHub Secundario (Tarjeta)',
+        'emailLink': 'Email (Tarjeta)',
+        'whatsappContactCard': 'WhatsApp (Tarjeta)',
+        'whatsapp_card': 'WhatsApp (Tarjeta)'
+      };
+      return names[id] || id;
+    }, 'var(--green)');
+  }
+  
+  function renderStatGroup(container, data, nameMapper, color) {
+    container.innerHTML = '';
+    
+    const items = Object.entries(data).sort((a, b) => b[1] - a[1]);
+    
+    if (items.length === 0) {
+      container.innerHTML = '<div style="font-size:0.8rem; color:var(--text3); font-style:italic;">No hay interacciones registradas aún.</div>';
+      return;
+    }
+    
+    const maxVal = items[0][1] || 1;
+    
+    items.forEach(([id, count]) => {
+      const percentage = Math.round((count / maxVal) * 100);
+      const name = nameMapper(id);
+      
+      const row = document.createElement('div');
+      row.style.cssText = 'display: flex; flex-direction: column; gap: 0.25rem; font-size: 0.8rem; margin-bottom: 0.25rem;';
+      row.innerHTML = `
+        <div style="display: flex; justify-content: space-between; color: var(--text);">
+          <span style="font-weight: 500;">${name}</span>
+          <span style="font-weight: bold; color: ${color};">${count} click${count === 1 ? '' : 's'}</span>
+        </div>
+        <div style="width: 100%; height: 6px; background: rgba(255,255,255,0.05); border-radius: 3px; overflow: hidden;">
+          <div style="width: ${percentage}%; height: 100%; background: ${color}; border-radius: 3px;"></div>
+        </div>
+      `;
+      container.appendChild(row);
+    });
+  }
+  
+  async function resetAnalyticsData() {
+    if (!confirm("¿Estás seguro de que deseas restablecer todas las estadísticas de clicks a cero?")) return;
+    
+    try {
+      if (useFirebase) {
+        await db.collection('site_analytics').doc('clicks').delete();
+      }
+      localStorage.removeItem('portfolio_local_analytics');
+      alert("Estadísticas restablecidas correctamente.");
+      loadAnalyticsInModal();
+    } catch (err) {
+      console.error("Error resetting analytics:", err);
+      alert("Error al restablecer estadísticas: " + err.message);
+    }
+  }
+
+  // Global document click event listener for tracking analytics clicks
+  document.addEventListener('click', (e) => {
+    // 1. Check if clicked link is a navigation link
+    const navLink = e.target.closest('#navbar a, #mobileMenu a');
+    if (navLink) {
+      const href = navLink.getAttribute('href');
+      if (href && href.startsWith('#')) {
+        trackClick('sections', href.substring(1));
+      }
+      return;
+    }
+
+    // 2. Check if clicked link is a project card's "Ver App" button or GitHub button
+    const projectLink = e.target.closest('.project-card .project-link');
+    if (projectLink) {
+      const card = projectLink.closest('.project-card');
+      const id = card ? card.dataset.project : '';
+      if (id) {
+        if (projectLink.classList.contains('project-app-btn')) {
+          trackClick('projects', id);
+        } else {
+          trackClick('projects', id + '_github');
+        }
+      }
+      return;
+    }
+    
+    // 3. Check if clicked link is inside a bot card
+    const botLink = e.target.closest('.bot-card a');
+    if (botLink) {
+      const card = botLink.closest('.bot-card');
+      const id = card ? card.dataset.project : '';
+      if (id) {
+        trackClick('projects', id);
+      }
+      return;
+    }
+    
+    // 4. Check if clicked link is a contact card
+    const contactCardLink = e.target.closest('.contact-card');
+    if (contactCardLink) {
+      const id = contactCardLink.id || contactCardLink.getAttribute('href');
+      trackClick('contacts', id || 'unknown');
+      return;
+    }
+    
+    // 5. Check if clicked link is the floating WhatsApp button
+    const floatWa = e.target.closest('#floatingWhatsappLink');
+    if (floatWa) {
+      trackClick('contacts', 'whatsapp_float');
+      return;
+    }
+  });
 
   let profilePhotoState = null;
 
