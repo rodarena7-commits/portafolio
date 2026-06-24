@@ -2036,6 +2036,7 @@
       <button class="admin-tab" id="tabBtnHero" onclick="switchAdminTab('hero')">🏠 Portada</button>
       <button class="admin-tab" id="tabBtnYt" onclick="switchAdminTab('yt')">🎥 YouTube</button>
       <button class="admin-tab" id="tabBtnProfile" onclick="switchAdminTab('profile')">👤 Sobre Mí</button>
+      <button class="admin-tab" id="tabBtnMessages" onclick="switchAdminTab('messages')">📬 Mensajes</button>
     </div>
 
     <!-- TAB 1: PROJECTS -->
@@ -2364,6 +2365,19 @@
       </div>
     </div>
 
+    <!-- TAB 4: MESSAGES -->
+    <div class="admin-tab-content" id="adminTabMessages">
+      <div class="admin-field" style="margin-bottom: 1.5rem;">
+        <label>Mensajes de Contacto Recibidos</label>
+        <div id="adminMessagesList" style="max-height: 400px; overflow-y: auto; display: flex; flex-direction: column; gap: 0.8rem; padding-right: 0.25rem; margin-top: 0.5rem;">
+          <!-- Populated dynamically -->
+          <div style="text-align: center; color: var(--text3); font-size: 0.9rem; padding: 2rem;">
+            Cargando mensajes...
+          </div>
+        </div>
+      </div>
+    </div>
+
     <button class="admin-fb-trigger" onclick="toggleFbPanel()" style="margin-top: 1.5rem;">⚙️ Configuración Firebase</button>
     <div class="admin-fb-panel" id="adminFbPanel">
       <p>Para persistir los logos públicamente para todos los usuarios, crea una base de datos Firebase Firestore y pega tu configuración en <code>index.html</code>:</p>
@@ -2427,13 +2441,44 @@
     });
   }
 
+  async function saveContactMessage(name, email, message) {
+    const timestamp = new Date().toISOString();
+    const msgData = {
+      name: name,
+      email: email,
+      message: message,
+      timestamp: timestamp
+    };
+    
+    try {
+      if (useFirebase) {
+        await db.collection('contact_messages').add(msgData);
+      } else {
+        let localMsgs = [];
+        try {
+          const cached = localStorage.getItem('portfolio_local_messages');
+          if (cached) localMsgs = JSON.parse(cached);
+        } catch (_) {}
+        msgData.id = 'local_' + Math.random().toString(36).substr(2, 9);
+        localMsgs.push(msgData);
+        localStorage.setItem('portfolio_local_messages', JSON.stringify(localMsgs));
+      }
+    } catch (err) {
+      console.error("Error saving contact message:", err);
+    }
+  }
+
   // ─── CONTACT FORM ───
-  function sendEmail(e) {
+  async function sendEmail(e) {
     e.preventDefault();
-    const name = document.getElementById('contactName').value;
-    const email = document.getElementById('contactEmail').value;
-    const msg = document.getElementById('contactMsg').value;
+    const name = document.getElementById('contactName').value.trim();
+    const email = document.getElementById('contactEmail').value.trim();
+    const msg = document.getElementById('contactMsg').value.trim();
     const btn = document.getElementById('submitBtn');
+    
+    // Save contact message asynchronously to database/localStorage
+    await saveContactMessage(name, email, msg);
+    
     const subject = encodeURIComponent(`Portfolio - Mensaje de ${name}`);
     const body = encodeURIComponent(`Nombre: ${name}\nEmail: ${email}\n\nMensaje:\n${msg}`);
     window.open(`mailto:rodrigo.n.arena@hotmail.com?subject=${subject}&body=${body}`);
@@ -2443,6 +2488,11 @@
       btn.textContent = 'Enviar mensaje';
       btn.style.background = '';
     }, 3000);
+    
+    // Clear fields
+    document.getElementById('contactName').value = '';
+    document.getElementById('contactEmail').value = '';
+    document.getElementById('contactMsg').value = '';
   }
 
   // ─── STAGGER ANIMATION FOR CARDS ───
@@ -3712,19 +3762,24 @@
     const tabHeroBtn = document.getElementById('tabBtnHero');
     const tabYtBtn = document.getElementById('tabBtnYt');
     const tabProfileBtn = document.getElementById('tabBtnProfile');
+    const tabMessagesBtn = document.getElementById('tabBtnMessages');
     const tabProjectsContent = document.getElementById('adminTabProjects');
     const tabHeroContent = document.getElementById('adminTabHero');
     const tabYtContent = document.getElementById('adminTabYt');
     const tabProfileContent = document.getElementById('adminTabProfile');
+    const tabMessagesContent = document.getElementById('adminTabMessages');
 
     tabProjectsBtn.classList.remove('active');
     if (tabHeroBtn) tabHeroBtn.classList.remove('active');
     tabYtBtn.classList.remove('active');
     tabProfileBtn.classList.remove('active');
+    if (tabMessagesBtn) tabMessagesBtn.classList.remove('active');
+    
     tabProjectsContent.classList.remove('active');
     if (tabHeroContent) tabHeroContent.classList.remove('active');
     tabYtContent.classList.remove('active');
     tabProfileContent.classList.remove('active');
+    if (tabMessagesContent) tabMessagesContent.classList.remove('active');
 
     if (tabName === 'projects') {
       tabProjectsBtn.classList.add('active');
@@ -3741,7 +3796,123 @@
       tabProfileBtn.classList.add('active');
       tabProfileContent.classList.add('active');
       loadProfileSettingsInModal();
+    } else if (tabName === 'messages') {
+      if (tabMessagesBtn) tabMessagesBtn.classList.add('active');
+      if (tabMessagesContent) tabMessagesContent.classList.add('active');
+      loadMessagesInModal();
     }
+  }
+
+  async function loadMessagesInModal() {
+    const listContainer = document.getElementById('adminMessagesList');
+    if (!listContainer) return;
+    
+    listContainer.innerHTML = `
+      <div style="text-align: center; color: var(--text3); font-size: 0.9rem; padding: 2rem;">
+        Cargando mensajes...
+      </div>
+    `;
+    
+    let messages = [];
+    
+    try {
+      if (useFirebase) {
+        const snapshot = await db.collection('contact_messages').orderBy('timestamp', 'desc').get();
+        snapshot.forEach(doc => {
+          messages.push({
+            id: doc.id,
+            ...doc.data()
+          });
+        });
+      } else {
+        const cached = localStorage.getItem('portfolio_local_messages');
+        if (cached) {
+          messages = JSON.parse(cached);
+          messages.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+        }
+      }
+    } catch (err) {
+      console.error("Error loading contact messages:", err);
+      listContainer.innerHTML = `
+        <div style="text-align: center; color: var(--red); font-size: 0.9rem; padding: 2rem;">
+          ⚠️ Error al cargar: ${err.message}
+        </div>
+      `;
+      return;
+    }
+    
+    if (messages.length === 0) {
+      listContainer.innerHTML = `
+        <div style="text-align: center; color: var(--text3); font-size: 0.9rem; padding: 2rem;">
+          📭 No hay mensajes recibidos aún.
+        </div>
+      `;
+      return;
+    }
+    
+    listContainer.innerHTML = '';
+    
+    messages.forEach(msg => {
+      const card = document.createElement('div');
+      card.style.cssText = 'background: rgba(255,255,255,0.03); border: 1px solid var(--border); padding: 1rem; border-radius: 12px; display: flex; flex-direction: column; gap: 0.5rem; position: relative;';
+      
+      const date = new Date(msg.timestamp).toLocaleString('es-ES', {
+        day: '2-digit', month: '2-digit', year: 'numeric',
+        hour: '2-digit', minute: '2-digit'
+      });
+      
+      const delBtn = document.createElement('button');
+      delBtn.type = 'button';
+      delBtn.className = 'admin-btn admin-btn-delete';
+      delBtn.style.cssText = 'position: absolute; top: 0.75rem; right: 0.75rem; width: auto; padding: 0.25rem 0.5rem; font-size: 0.7rem; margin-bottom: 0; background: linear-gradient(135deg, #ef4444, #b91c1c);';
+      delBtn.textContent = '✕ Eliminar';
+      delBtn.onclick = () => deleteMessage(msg.id);
+      
+      card.appendChild(delBtn);
+      
+      const metaRow = document.createElement('div');
+      metaRow.style.cssText = 'font-size: 0.75rem; color: var(--text3); display: flex; flex-direction: column; gap: 0.15rem;';
+      metaRow.innerHTML = `
+        <span style="font-weight: bold; color: var(--accent2); font-size: 0.85rem;">${escapeHtml(msg.name)}</span>
+        <span>📧 <a href="mailto:${escapeHtml(msg.email)}" style="color: var(--text2); text-decoration: underline;">${escapeHtml(msg.email)}</a></span>
+        <span>📅 ${date}</span>
+      `;
+      card.appendChild(metaRow);
+      
+      const msgText = document.createElement('div');
+      msgText.style.cssText = 'font-size: 0.85rem; color: var(--text); background: rgba(0,0,0,0.2); padding: 0.6rem 0.8rem; border-radius: 8px; white-space: pre-wrap; font-family: inherit; line-height: 1.4; border: 1px solid rgba(255,255,255,0.02);';
+      msgText.textContent = msg.message;
+      card.appendChild(msgText);
+      
+      listContainer.appendChild(card);
+    });
+  }
+  
+  async function deleteMessage(messageId) {
+    if (!confirm("¿Estás seguro de que deseas eliminar este mensaje de forma permanente?")) return;
+    
+    try {
+      if (useFirebase) {
+        await db.collection('contact_messages').doc(messageId).delete();
+      } else {
+        let localMsgs = [];
+        try {
+          const cached = localStorage.getItem('portfolio_local_messages');
+          if (cached) localMsgs = JSON.parse(cached);
+        } catch (_) {}
+        localMsgs = localMsgs.filter(m => m.id !== messageId);
+        localStorage.setItem('portfolio_local_messages', JSON.stringify(localMsgs));
+      }
+      loadMessagesInModal();
+    } catch (err) {
+      console.error("Error deleting contact message:", err);
+      alert("Error al eliminar el mensaje: " + err.message);
+    }
+  }
+  
+  function escapeHtml(str) {
+    if (!str) return '';
+    return str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#039;");
   }
 
   let profilePhotoState = null;
