@@ -1952,7 +1952,7 @@
         <p>Estoy disponible para proyectos freelance, colaboraciones y consultoría.
         Si tenés una idea o necesitás ayuda con tu app, no dudes en escribirme.</p>
         <div class="contact-links">
-          <a href="mailto:rodrigo.n.arena@hotmail.com" class="contact-link">
+          <a href="mailto:rodrigo.n.arena@hotmail.com" class="contact-link" id="emailLink">
             <div class="contact-link-icon" id="contactEmailIcon" style="background: rgba(59,130,246,0.15);">📧</div>
             <div class="contact-link-text">
               <div class="contact-link-label">Email</div>
@@ -1966,14 +1966,14 @@
               <div class="contact-link-val">+54 9 11 5866-0344</div>
             </div>
           </a>
-          <a href="https://github.com/rodarena7-commits" target="_blank" class="contact-link">
+          <a href="https://github.com/rodarena7-commits" target="_blank" class="contact-link" id="github1Link">
             <div class="contact-link-icon" id="contactGithub1Icon" style="background: rgba(255,255,255,0.05);">🐙</div>
             <div class="contact-link-text">
               <div class="contact-link-label">GitHub Principal</div>
               <div class="contact-link-val">@rodarena7-commits</div>
             </div>
           </a>
-          <a href="https://github.com/Ssteier2016" target="_blank" class="contact-link">
+          <a href="https://github.com/Ssteier2016" target="_blank" class="contact-link" id="github2Link">
             <div class="contact-link-icon" id="contactGithub2Icon" style="background: rgba(255,255,255,0.05);">🐙</div>
             <div class="contact-link-text">
               <div class="contact-link-label">GitHub Secundario</div>
@@ -1985,6 +1985,15 @@
             <div class="contact-link-text">
               <div class="contact-link-label">YouTube</div>
               <div class="contact-link-val" id="ytContactVal">@rodarena7 · 13.7K suscriptores</div>
+            </div>
+          </a>
+          <a href="https://www.linkedin.com/in/rodrigo-nahuel-arena" target="_blank" class="contact-link" id="linkedinContactLink" style="border-color: rgba(10,102,194,0.2);">
+            <div class="contact-link-icon" id="contactLinkedinIcon" style="background: rgba(10,102,194,0.15); color: #0a66c2; display: flex; align-items: center; justify-content: center;">
+              <svg viewBox="0 0 24 24" fill="currentColor" style="width: 1.2rem; height: 1.2rem;"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.779-1.75-1.75s.784-1.75 1.75-1.75 1.75.779 1.75 1.75-.784 1.75-1.75 1.75zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg>
+            </div>
+            <div class="contact-link-text">
+              <div class="contact-link-label" style="color: #0a66c2;">LinkedIn</div>
+              <div class="contact-link-val">rodrigo-nahuel-arena</div>
             </div>
           </a>
         </div>
@@ -2335,6 +2344,11 @@
         <input type="text" id="adminProfileWhatsappInput" class="admin-input" placeholder="https://wa.me/541158660344 o enlace alternativo" />
       </div>
 
+      <div class="admin-field">
+        <label for="adminProfileLinkedinInput">Enlace de Contacto LinkedIn</label>
+        <input type="text" id="adminProfileLinkedinInput" class="admin-input" placeholder="https://www.linkedin.com/in/rodrigo-nahuel-arena o enlace alternativo" />
+      </div>
+
       <div style="margin-top: 1.5rem; padding: 1rem; background: rgba(255,255,255,0.02); border: 1px solid var(--border); border-radius: 12px;">
         <strong style="display: block; font-size: 0.9rem; color: var(--accent2); margin-bottom: 1rem;">✨ Iconos de Contacto (URLs de imágenes)</strong>
         
@@ -2358,9 +2372,14 @@
           <input type="text" id="adminGithub2ImgInput" class="admin-input" style="font-size: 0.8rem; padding: 0.5rem;" placeholder="https://example.com/gh-icon.png" />
         </div>
         
-        <div class="admin-field" style="margin-bottom: 0;">
+        <div class="admin-field" style="margin-bottom: 0.8rem;">
           <label for="adminYoutubeImgInput" style="font-size: 0.8rem;">Imagen para YouTube (Dejar vacío para usar ▶)</label>
           <input type="text" id="adminYoutubeImgInput" class="admin-input" style="font-size: 0.8rem; padding: 0.5rem;" placeholder="https://example.com/yt-icon.png" />
+        </div>
+
+        <div class="admin-field" style="margin-bottom: 0;">
+          <label for="adminLinkedinImgInput" style="font-size: 0.8rem;">Imagen para LinkedIn (Dejar vacío para usar Logo SVG)</label>
+          <input type="text" id="adminLinkedinImgInput" class="admin-input" style="font-size: 0.8rem; padding: 0.5rem;" placeholder="https://example.com/linkedin-icon.png" />
         </div>
       </div>
 
@@ -2645,12 +2664,14 @@
     bio2: "Me especializo en el ecosistema JavaScript/TypeScript, trabajando tanto en frontend como en backend. Construí proyectos para comercios, familias, empresas y comunidades — cada uno con sus propios desafíos.",
     skills: ["React", "Node.js", "Firebase", "Tailwind CSS", "JavaScript", "TypeScript", "Vite", "WhatsApp Bots", "Groq AI", "PWA", "Firestore", "Git / GitHub", "Render", "HTML / CSS", "MercadoLibre API", "Google Calendar API"],
     whatsappUrl: "https://wa.me/5491158660344",
+    linkedinUrl: "https://www.linkedin.com/in/rodrigo-nahuel-arena",
     photo: null,
     emailImg: "",
     whatsappImg: "https://i.pinimg.com/736x/7b/f9/0c/7bf90c9ee9932cd0d44c772f7a579f51.jpg",
     github1Img: "",
     github2Img: "",
-    youtubeImg: ""
+    youtubeImg: "",
+    linkedinImg: ""
   };
   let profileSettings = { ...defaultProfileSettings };
 
@@ -4079,7 +4100,9 @@
         'github2Link': 'GitHub Secundario (Tarjeta)',
         'emailLink': 'Email (Tarjeta)',
         'whatsappContactCard': 'WhatsApp (Tarjeta)',
-        'whatsapp_card': 'WhatsApp (Tarjeta)'
+        'whatsapp_card': 'WhatsApp (Tarjeta)',
+        'contactWhatsappLink': 'WhatsApp (Tarjeta)',
+        'linkedinContactLink': 'LinkedIn (Tarjeta)'
       };
       return names[id] || id;
     }, 'var(--green)');
@@ -4171,7 +4194,7 @@
     }
     
     // 4. Check if clicked link is a contact card
-    const contactCardLink = e.target.closest('.contact-card');
+    const contactCardLink = e.target.closest('.contact-link');
     if (contactCardLink) {
       const id = contactCardLink.id || contactCardLink.getAttribute('href');
       trackClick('contacts', id || 'unknown');
@@ -4280,13 +4303,19 @@
     if (contactWa) contactWa.href = waUrl;
     if (floatingWa) floatingWa.href = waUrl;
 
+    const contactLinkedin = document.getElementById('linkedinContactLink');
+    if (contactLinkedin) {
+      contactLinkedin.href = settings.linkedinUrl || "https://www.linkedin.com/in/rodrigo-nahuel-arena";
+    }
+
     // Update contact icons
     const iconPairs = [
       { id: 'contactEmailIcon', val: settings.emailImg, defaultEmoji: '📧' },
       { id: 'contactWhatsappIcon', val: settings.whatsappImg, defaultEmoji: '💬' },
       { id: 'contactGithub1Icon', val: settings.github1Img, defaultEmoji: '🐙' },
       { id: 'contactGithub2Icon', val: settings.github2Img, defaultEmoji: '🐙' },
-      { id: 'ytContactIcon', val: settings.youtubeImg, defaultEmoji: '▶' }
+      { id: 'ytContactIcon', val: settings.youtubeImg, defaultEmoji: '▶' },
+      { id: 'contactLinkedinIcon', val: settings.linkedinImg, defaultEmoji: '👔' }
     ];
 
     iconPairs.forEach(pair => {
@@ -4297,11 +4326,15 @@
           el.style.background = 'none';
           el.style.color = 'inherit';
         } else {
-          el.innerHTML = pair.defaultEmoji;
-          if (pair.id === 'contactEmailIcon') el.style.background = 'rgba(59,130,246,0.15)';
-          else if (pair.id === 'contactWhatsappIcon') { el.style.background = 'rgba(37,211,102,0.15)'; el.style.color = '#25d366'; }
-          else if (pair.id === 'contactGithub1Icon' || pair.id === 'contactGithub2Icon') el.style.background = 'rgba(255,255,255,0.05)';
-          else if (pair.id === 'ytContactIcon') { el.style.background = 'rgba(255,0,0,0.1)'; el.style.color = '#ff0000'; }
+          if (pair.id === 'contactEmailIcon') { el.innerHTML = pair.defaultEmoji; el.style.background = 'rgba(59,130,246,0.15)'; }
+          else if (pair.id === 'contactWhatsappIcon') { el.innerHTML = pair.defaultEmoji; el.style.background = 'rgba(37,211,102,0.15)'; el.style.color = '#25d366'; }
+          else if (pair.id === 'contactGithub1Icon' || pair.id === 'contactGithub2Icon') { el.innerHTML = pair.defaultEmoji; el.style.background = 'rgba(255,255,255,0.05)'; }
+          else if (pair.id === 'ytContactIcon') { el.innerHTML = pair.defaultEmoji; el.style.background = 'rgba(255,0,0,0.1)'; el.style.color = '#ff0000'; }
+          else if (pair.id === 'contactLinkedinIcon') {
+            el.style.background = 'rgba(10,102,194,0.15)';
+            el.style.color = '#0a66c2';
+            el.innerHTML = `<svg viewBox="0 0 24 24" fill="currentColor" style="width: 1.2rem; height: 1.2rem;"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.779-1.75-1.75s.784-1.75 1.75-1.75 1.75.779 1.75 1.75-.784 1.75-1.75 1.75zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg>`;
+          }
         }
       }
     });
@@ -4324,6 +4357,7 @@
       waUrlVal = "https://wa.me/5491158660344";
     }
     document.getElementById('adminProfileWhatsappInput').value = waUrlVal;
+    document.getElementById('adminProfileLinkedinInput').value = profileSettings.linkedinUrl || '';
     
     // Load contact icon URLs
     document.getElementById('adminEmailImgInput').value = profileSettings.emailImg || '';
@@ -4331,6 +4365,7 @@
     document.getElementById('adminGithub1ImgInput').value = profileSettings.github1Img || '';
     document.getElementById('adminGithub2ImgInput').value = profileSettings.github2Img || '';
     document.getElementById('adminYoutubeImgInput').value = profileSettings.youtubeImg || '';
+    document.getElementById('adminLinkedinImgInput').value = profileSettings.linkedinImg || '';
     
     document.getElementById('adminProfilePhotoFileInput').value = '';
     document.getElementById('adminProfilePhotoUrlInput').value = '';
@@ -4349,6 +4384,7 @@
     const bio2Val = document.getElementById('adminBio2Input').value.trim();
     const skillsVal = document.getElementById('adminSkillsInput').value.trim();
     const whatsappVal = document.getElementById('adminProfileWhatsappInput').value.trim();
+    const linkedinVal = document.getElementById('adminProfileLinkedinInput').value.trim();
     
     // Read contact icon URLs
     const emailImgVal = document.getElementById('adminEmailImgInput').value.trim();
@@ -4356,6 +4392,7 @@
     const github1ImgVal = document.getElementById('adminGithub1ImgInput').value.trim();
     const github2ImgVal = document.getElementById('adminGithub2ImgInput').value.trim();
     const youtubeImgVal = document.getElementById('adminYoutubeImgInput').value.trim();
+    const linkedinImgVal = document.getElementById('adminLinkedinImgInput').value.trim();
     
     const skillsArr = skillsVal ? skillsVal.split(',').map(s => s.trim()).filter(Boolean) : [];
     
@@ -4364,11 +4401,13 @@
       bio2: bio2Val,
       skills: skillsArr,
       whatsappUrl: whatsappVal,
+      linkedinUrl: linkedinVal,
       emailImg: emailImgVal,
       whatsappImg: whatsappImgVal,
       github1Img: github1ImgVal,
       github2Img: github2ImgVal,
       youtubeImg: youtubeImgVal,
+      linkedinImg: linkedinImgVal,
       photo: profilePhotoState
     };
     
