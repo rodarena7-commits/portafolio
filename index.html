@@ -927,17 +927,38 @@
           <div class="project-type" style="background: rgba(59,130,246,0.15); color: #60a5fa; border: 1px solid rgba(59,130,246,0.3);">App</div>
         </div>
         <div class="project-body">
+          <div style="background: linear-gradient(135deg, rgba(16, 185, 129, 0.12), rgba(6, 182, 212, 0.12)); border: 1px solid rgba(16, 185, 129, 0.35); border-radius: 12px; padding: 0.85rem; margin-bottom: 1.1rem; display: flex; align-items: center; justify-content: space-between; gap: 0.75rem; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);">
+            <div style="display: flex; flex-direction: column; gap: 0.35rem; flex: 1; min-width: 0;">
+              <div style="display: flex; align-items: center; gap: 0.4rem; font-size: 0.85rem; font-weight: 700; color: #10b981;">
+                <span>📲 Disponible en Google Play</span>
+              </div>
+              <div style="font-size: 0.75rem; color: var(--text2); line-height: 1.35;">
+                Escanéa el código QR o descárgala gratis en tu dispositivo Android.
+              </div>
+              <div>
+                <a href="https://play.google.com/store/apps/details?id=sandbook.myapp&hl=es_AR" target="_blank" class="project-playstore-btn" style="display: inline-flex; align-items: center; justify-content: center; gap: 0.4rem; background: linear-gradient(135deg, #10b981, #059669); color: #ffffff; font-size: 0.75rem; font-weight: 600; padding: 0.45rem 0.85rem; border-radius: 8px; text-decoration: none; margin-top: 0.35rem; box-shadow: 0 2px 10px rgba(16, 185, 129, 0.3); transition: all 0.2s;" onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 4px 15px rgba(16, 185, 129, 0.4)';" onmouseout="this.style.transform='none'; this.style.boxShadow='0 2px 10px rgba(16, 185, 129, 0.3)';">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" style="flex-shrink: 0;"><path d="M3.609 1.814L13.792 12 3.61 22.186a1.996 1.996 0 0 1-.61-1.428V3.242c0-.555.228-1.056.609-1.428zM15.208 13.415l2.072 2.072-12.012 6.945 9.94-9.017zm0-2.83L5.268 1.568l12.012 6.945-2.072 2.072zM18.736 10.3l2.846 1.645a1.003 1.003 0 0 1 0 1.739l-2.846 1.644-2.121-2.122 2.121-2.106z"/></svg>
+                  Descargar en Android
+                </a>
+              </div>
+            </div>
+            <div style="background: #ffffff; padding: 5px; border-radius: 8px; display: flex; align-items: center; justify-content: center; box-shadow: 0 2px 10px rgba(0,0,0,0.25); flex-shrink: 0;" title="Escanéame desde tu móvil para descargar Sandbook en Google Play">
+              <img src="https://api.qrserver.com/v1/create-qr-code/?size=110x110&data=https%3A%2F%2Fplay.google.com%2Fstore%2Fapps%2Fdetails%3Fid%3Dsandbook.myapp%26hl%3Des_AR&color=000000&bgcolor=ffffff&margin=0" alt="QR Sandbook Google Play" style="width: 82px; height: 82px; display: block; border-radius: 4px;" loading="lazy">
+            </div>
+          </div>
           <p class="project-desc">Red social de libros con biblioteca personal, planes de lectura, reseñas, favoritos, escritores, tutorial onboarding y más.</p>
           <div class="project-tags">
+            <span class="project-tag" style="background: rgba(16, 185, 129, 0.15); color: #10b981; border-color: rgba(16, 185, 129, 0.35); font-weight: 600;">📱 Google Play Store</span>
             <span class="project-tag">React</span>
             <span class="project-tag">Firebase</span>
             <span class="project-tag">Tailwind</span>
             <span class="project-tag">PWA</span>
             <span class="project-tag">OpenLibrary</span>
           </div>
-          <div class="project-links">
-            <a href="https://sandbook-web.onrender.com" target="_blank" class="project-link link-demo project-app-btn">🚀 Ver App</a>
-            <a href="https://github.com/rodarena7-commits/sandbook" target="_blank" class="project-link link-github">GitHub</a>
+          <div class="project-links" style="flex-wrap: wrap;">
+            <a href="https://play.google.com/store/apps/details?id=sandbook.myapp&hl=es_AR" target="_blank" class="project-link project-playstore-btn" style="background: linear-gradient(135deg, #10b981, #059669); color: #ffffff; border: 1px solid rgba(16,185,129,0.4); min-width: 120px;">📲 Google Play</a>
+            <a href="https://sandbook-web.onrender.com" target="_blank" class="project-link link-demo project-app-btn" style="min-width: 100px;">🚀 Ver Web</a>
+            <a href="https://github.com/rodarena7-commits/sandbook" target="_blank" class="project-link link-github" style="min-width: 80px;">GitHub</a>
           </div>
         </div>
       </div>
@@ -4089,9 +4110,12 @@
     // Render projects
     renderStatGroup(projList, stats.projects || {}, (id) => {
       const isGitHub = id.endsWith('_github');
-      const baseId = isGitHub ? id.substring(0, id.length - 7) : id;
+      const isPlayStore = id.endsWith('_playstore');
+      let baseId = id;
+      if (isGitHub) baseId = id.substring(0, id.length - 7);
+      else if (isPlayStore) baseId = id.substring(0, id.length - 10);
       const displayName = (customLogos[baseId] && customLogos[baseId].name) || defaultProjectNames[baseId] || baseId;
-      return displayName + (isGitHub ? ' (Repo GitHub)' : ' (Ver App)');
+      return displayName + (isGitHub ? ' (Repo GitHub)' : isPlayStore ? ' (Google Play)' : ' (Ver App)');
     }, 'var(--accent2)');
     
     // Render contacts
@@ -4170,14 +4194,16 @@
       return;
     }
 
-    // 2. Check if clicked link is a project card's "Ver App" button or GitHub button
-    const projectLink = e.target.closest('.project-card .project-link');
+    // 2. Check if clicked link is a project card's button
+    const projectLink = e.target.closest('.project-card .project-link, .project-card .project-playstore-btn');
     if (projectLink) {
       const card = projectLink.closest('.project-card');
       const id = card ? card.dataset.project : '';
       if (id) {
         if (projectLink.classList.contains('project-app-btn')) {
           trackClick('projects', id);
+        } else if (projectLink.classList.contains('project-playstore-btn')) {
+          trackClick('projects', id + '_playstore');
         } else {
           trackClick('projects', id + '_github');
         }
